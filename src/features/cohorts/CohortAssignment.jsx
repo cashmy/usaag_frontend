@@ -1,7 +1,17 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import clsx from "clsx";
-
-import { Grid, Paper, Typography, makeStyles } from "@material-ui/core";
+import {
+  Fab,
+  FormControlLabel,
+  Grid,
+  Paper,
+  Switch,
+  Toolbar,
+  Typography,
+  makeStyles,
+} from "@material-ui/core";
+// Icons
+import AddIcon from "@material-ui/icons/Add";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -20,10 +30,24 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
+  addButton: {
+    position: "absolute",
+    right: "10px",
+  },
+  archiveSwitch: {
+    position: "absolute",
+    right: "10%",
+  },
 }));
 
 export default function CohortAssignment() {
   const classes = useStyles();
+  const [archiveStatus, setArchiveStatus] = useState(false);
+
+  const handleToggle = () => {
+    setArchiveStatus(!archiveStatus);
+    // Request rerender
+  };
 
   return (
     <Fragment>
@@ -31,7 +55,32 @@ export default function CohortAssignment() {
         <Grid container className={classes.container} spacing={10}>
           <Grid item xs={10}>
             <Paper className={classes.paper}>
-              <Typography variant="h4">Cohort Assignments</Typography>
+              <Toolbar>
+                <Typography variant="h4">Cohort Assignments</Typography>
+                <FormControlLabel
+                  className={classes.archiveSwitch}
+                  control={
+                    <Switch
+                      checked={archiveStatus}
+                      onChange={handleToggle}
+                      name="archivedStatus"
+                    />
+                  }
+                  label="Archived"
+                />
+                <Fab
+                  className={classes.addButton}
+                  color="primary"
+                  aria-label="add"
+                  size="small"
+                  onClick={() => {
+                    //   setOpenPopup(true);
+                    //   setRecordForEdit(null);
+                  }}
+                >
+                  <AddIcon />
+                </Fab>
+              </Toolbar>
             </Paper>
           </Grid>
         </Grid>

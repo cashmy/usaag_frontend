@@ -18,6 +18,7 @@ import {
   CssBaseline,
   Divider,
   Drawer,
+  FormControlLabel,
   IconButton,
   List,
   Paper,
@@ -147,6 +148,14 @@ const useStyles = makeStyles((theme) => ({
     backgroundAttachment: "fixed",
     height: "100vh",
   },
+  darkModeSwitch: {
+    position: "absolute",
+    right: "5%",
+  },
+  logOut: {
+    position: "absolute",
+    right: "10px",
+  },
 }));
 
 export default function App() {
@@ -251,14 +260,23 @@ export default function App() {
             <Typography variant="h6" noWrap>
               dCC User Stories At A Glance (USAAG)
             </Typography>
-
-            <MuiSwitch
-              checked={darkMode}
-              onChange={() => setDarkMode(!darkMode)}
-              color="palette.text.primary"
+            <FormControlLabel
+              className={classes.darkModeSwitch}
+              control={
+                <MuiSwitch
+                  checked={darkMode}
+                  onChange={() => setDarkMode(!darkMode)}
+                  // color="palette.text.primary"
+                />
+              }
+              label="Dark Mode"
             />
-            {initialLogin === false && (
-              <IconButton color="inherit" onClick={handleMenuClose}>
+            {initialLogin === true && (
+              <IconButton
+                className={classes.logOut}
+                color="inherit"
+                onClick={handleMenuClose}
+              >
                 <PowerSettingsNewIcon />
               </IconButton>
             )}
