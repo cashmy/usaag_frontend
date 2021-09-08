@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import clsx from "clsx";
 import {
   Avatar,
@@ -187,7 +188,11 @@ export default function InstDashboard() {
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
-                <IconButton aria-label="edit templates">
+                <IconButton
+                  aria-label="edit templates"
+                  component={RouterLink}
+                  to={"cohortAssignment"}
+                >
                   <PeopleIcon />
                 </IconButton>
                 <IconButton

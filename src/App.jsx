@@ -49,6 +49,7 @@ import BackgroundImageLight from "./assets/images/bg-image-light.png";
 import RegistrationSide from "./features/registrationSide/RegistrationSide";
 import SignInSide from "./features/signInSide/SignInSide";
 import InstDashBoard from "./features/dashboards/InstDashboard";
+import CohortAssignment from "./features/cohorts/CohortAssignment";
 
 import { PauseCircleFilledTwoTone } from "@material-ui/icons";
 
@@ -295,14 +296,14 @@ export default function App() {
           <Divider />
           <List>
             {/* Home - Dashboard */}
-            <ListItem button key="Home">
+            <ListItem button component={RouterLink} to={"instDashBoard"}>
               <ListItemIcon className={classes.listItemIcon}>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
             {/* Cohorts */}
-            <ListItem button key="Cohorts">
+            <ListItem button component={RouterLink} to={"cohortAssignment"}>
               <ListItemIcon className={classes.listItemIcon}>
                 <PeopleIcon />
               </ListItemIcon>
@@ -368,6 +369,7 @@ export default function App() {
                 component={RegistrationSide}
               />
               <Route path="/instDashBoard" component={InstDashBoard} />
+              <Route path="/cohortAssignment" component={CohortAssignment} />
               <SignInSide />
             </Switch>
           </Paper>
