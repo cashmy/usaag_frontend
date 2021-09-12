@@ -32,13 +32,20 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   container: {
-    paddingTop: theme.spacing(5),
-    paddingBottom: theme.spacing(4),
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
     justifyContent: "center",
     display: "flex",
   },
+  paper: {
+    padding: theme.spacing(1.5),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+    display: "flex",
+    flexDirection: "column",
+  },
   cardWidth: {
-    maxWidth: 345,
+    maxWidth: theme.spacing(40),
   },
   media: {
     height: 0,
@@ -53,13 +60,6 @@ const useStyles = makeStyles((theme) => ({
   },
   expandOpen: {
     transform: "rotate(180deg)",
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-    display: "flex",
-    flexDirection: "column",
   },
   avatarPrimaryColor: {
     backgroundColor: "#f86e23",
@@ -128,7 +128,8 @@ export default function InstDashboard() {
               />
               <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  Lorem ipsum dolor ...
+                  Master User Story projects. This will server as template to
+                  populate each cohort's student/team projects.
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
@@ -184,7 +185,9 @@ export default function InstDashboard() {
               />
               <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  Lorem ipsum dolor ...
+                  Manage new or archived cohorts. This option will allow you to
+                  assign students to a cohort and to manage project assignments
+                  to individual students or teams.
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
@@ -244,7 +247,8 @@ export default function InstDashboard() {
               />
               <CardContent>
                 <Typography variant="body2" color="textSecondary" component="p">
-                  Lorem ipsum dolor ...
+                  For each class, such as DevOps, FullStack, Web Devlopment,
+                  managed the templates to be assigned to the cohorts.
                 </Typography>
               </CardContent>
 
@@ -273,7 +277,6 @@ export default function InstDashboard() {
           </Grid>
         </Grid>
       </Grid>
-      {/* </Paper> */}
     </React.Fragment>
   );
 }

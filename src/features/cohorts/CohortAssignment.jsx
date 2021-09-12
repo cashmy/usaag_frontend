@@ -1,6 +1,9 @@
 import React, { Fragment, useState } from "react";
-import clsx from "clsx";
+// import clsx from "clsx";
 import {
+  Card,
+  CardHeader,
+  CardContent,
   Fab,
   FormControlLabel,
   Grid,
@@ -53,6 +56,7 @@ export default function CohortAssignment() {
     <Fragment>
       <Grid container className={classes.root} spacing={1}>
         <Grid container className={classes.container} spacing={10}>
+          {/* Header Bar */}
           <Grid item xs={10}>
             <Paper className={classes.paper}>
               <Toolbar>
@@ -82,6 +86,37 @@ export default function CohortAssignment() {
                 </Fab>
               </Toolbar>
             </Paper>
+          </Grid>
+
+          {/* //* CARDS */}
+          {/* Cohorts */}
+          <Grid item xs={3}>
+            <Card>
+              <CardHeader title="Cohorts" />
+              <CardContent>
+                <Typography>Can I have nested cards here?</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* Cohort Members */}
+          <Grid item xs={3}>
+            <Card>
+              <CardHeader title="Cohort Members" />
+              <CardContent>
+                <Typography>Student Cards go here</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* Unassigned Students */}
+          <Grid item xs={3}>
+            <Card>
+              <CardHeader title="UnAssigned Students" />
+              <CardContent>
+                <Typography>Student Cards go here</Typography>
+              </CardContent>
+            </Card>
           </Grid>
         </Grid>
       </Grid>
