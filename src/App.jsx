@@ -8,11 +8,7 @@ import jwtDecode from "jwt-decode";
 
 import clsx from "clsx";
 // import { makeStyles, useTheme } from "@material-ui/core/styles";
-import {
-  createTheme,
-  ThemeProvider,
-  withStyles,
-} from "@material-ui/core/styles";
+import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import {
   AppBar,
   CssBaseline,
@@ -30,7 +26,7 @@ import {
 
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+// mport ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -38,7 +34,7 @@ import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import PeopleIcon from "@material-ui/icons/People";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
-import PersonAddIcon from "@material-ui/icons/PersonAdd";
+// import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import HomeIcon from "@material-ui/icons/Home";
 import PrintIcon from "@material-ui/icons/Print";
 import AccountTreeIcon from "@material-ui/icons/AccountTree";
@@ -51,8 +47,9 @@ import RegistrationSide from "./features/registrationSide/RegistrationSide";
 import SignInSide from "./features/signInSide/SignInSide";
 import InstDashBoard from "./features/dashboards/InstDashboard";
 import CohortAssignment from "./features/cohorts/CohortAssignment";
+import Template from "./features/template/Template";
 
-import { PauseCircleFilledTwoTone } from "@material-ui/icons";
+// import { PauseCircleFilledTwoTone } from "@material-ui/icons";
 
 const drawerWidth = 240;
 
@@ -111,7 +108,7 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.leavingScreen,
     }),
     overflowX: "hidden",
-    width: theme.breakpoints.up(),
+    // width: theme.breakpoints.up(),
     width: theme.spacing(7) + 1,
     [theme.breakpoints.up("sm")]: {
       width: theme.spacing(9) + 1,
@@ -342,7 +339,7 @@ export default function App() {
               <ListItemText primary="Projects" />
             </ListItem>{" "}
             {/* Templates */}
-            <ListItem button key="Templates">
+            <ListItem button component={RouterLink} to={"template"}>
               <ListItemIcon className={classes.listItemIcon}>
                 <AssignmentIcon />
               </ListItemIcon>
@@ -388,6 +385,7 @@ export default function App() {
               />
               <Route path="/instDashBoard" component={InstDashBoard} />
               <Route path="/cohortAssignment" component={CohortAssignment} />
+              <Route path="/template" component={Template} />
               <SignInSide />
             </Switch>
           </Paper>
