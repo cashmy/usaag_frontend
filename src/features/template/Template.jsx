@@ -1,12 +1,7 @@
 import React, { Fragment, useState } from "react";
+import { useLocation } from "react-router-dom";
 // import clsx from 'clsx';
-import {
-  Grid,
-  Paper,
-  Toolbar,
-  Typography,
-  makeStyles,
-} from "@material-ui/core";
+import { Grid, Paper, Typography, makeStyles } from "@material-ui/core";
 import TemplateData from "../../tempData/template-data";
 import { DragDropContext } from "react-beautiful-dnd";
 import TemplateColumn from "./TemplateColumn";
@@ -26,9 +21,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     display: "flex",
   },
-  container: {
+  columnContainer: {
     paddingBottom: theme.spacing(4),
-    justifyContent: "center",
+    justifyContent: "flex-start",
     display: "flex",
     flexDirection: "column",
   },
@@ -42,6 +37,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Template() {
+  const location = useLocation();
+  const recordForEdit = location.state?.recordForEdit;
   const classes = useStyles();
   const [templateData, setTemplateData] = useState(TemplateData);
 
@@ -136,13 +133,13 @@ export default function Template() {
           <Grid item xs={5}>
             <Paper className={classes.paper}>
               <Typography>Template Header</Typography>
-              <TemplateHeaderForm />
+              <TemplateHeaderForm recordForEdit={recordForEdit} />
             </Paper>
           </Grid>
 
           {/* Setup container for Drag Context */}
           <DragDropContext onDragEnd={onDragEnd} className={classes.root}>
-            <Grid item xs={5} container className={classes.container}>
+            <Grid item xs={5} container className={classes.columnContainer}>
               {/* Setup Droppable context columns */}
               {/* Template Detail Column */}
               {templateData.columns.columnOrder.map((columnID) => {

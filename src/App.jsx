@@ -48,6 +48,7 @@ import SignInSide from "./features/signInSide/SignInSide";
 import InstDashBoard from "./features/dashboards/InstDashboard";
 import CohortAssignment from "./features/cohorts/CohortAssignment";
 import Template from "./features/template/Template";
+import TemplateTable from "./features/template/TemplateTable";
 
 // import { PauseCircleFilledTwoTone } from "@material-ui/icons";
 
@@ -339,7 +340,7 @@ export default function App() {
               <ListItemText primary="Projects" />
             </ListItem>{" "}
             {/* Templates */}
-            <ListItem button component={RouterLink} to={"template"}>
+            <ListItem button component={RouterLink} to={"templateTable"}>
               <ListItemIcon className={classes.listItemIcon}>
                 <AssignmentIcon />
               </ListItemIcon>
@@ -386,6 +387,7 @@ export default function App() {
               <Route path="/instDashBoard" component={InstDashBoard} />
               <Route path="/cohortAssignment" component={CohortAssignment} />
               <Route path="/template" component={Template} />
+              <Route path="/templateTable" component={TemplateTable} />
               <SignInSide />
             </Switch>
           </Paper>

@@ -95,6 +95,7 @@ export default function InstDashboard() {
     <React.Fragment>
       <Grid container className={classes.root} spacing={1}>
         <Grid container className={classes.container} spacing={10}>
+          {/* Heading */}
           <Grid item xs={10}>
             <Paper className={classes.paper}>
               <Typography variant="h4">Instructor Home Page</Typography>
@@ -133,7 +134,11 @@ export default function InstDashboard() {
                 </Typography>
               </CardContent>
               <CardActions disableSpacing>
-                <IconButton aria-label="edit templates">
+                <IconButton
+                  aria-label="edit templates"
+                  component={RouterLink}
+                  to={"templateTable"}
+                >
                   <AssignmentIcon />
                 </IconButton>
                 <IconButton
@@ -192,7 +197,7 @@ export default function InstDashboard() {
               </CardContent>
               <CardActions disableSpacing>
                 <IconButton
-                  aria-label="edit templates"
+                  aria-label="edit cohorts"
                   component={RouterLink}
                   to={"cohortAssignment"}
                 >

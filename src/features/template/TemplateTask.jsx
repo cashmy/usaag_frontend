@@ -13,12 +13,15 @@ const useStyles = makeStyles((theme) => ({
     // color: theme.palette.getContrastText(theme.palette.text.primary),
   },
   taskColorStandard: {
-    backgroundColor: theme.palette.text.primary,
-    color: theme.palette.getContrastText(theme.palette.text.primary),
+    backgroundColor:
+      theme.palette.type === "dark"
+        ? theme.palette.text.primary
+        : theme.palette.info.main,
+    color: theme.palette.getContrastText(theme.palette.info.main),
   },
   taskColorDragging: {
-    backgroundColor: theme.palette.background.paper,
-    color: theme.palette.getContrastText(theme.palette.background.paper),
+    backgroundColor: "#757575",
+    color: theme.palette.getContrastText("#757575"),
   },
   paper: {
     color: theme.palette.text.secondary,
@@ -27,6 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TemplateTask(props) {
   const classes = useStyles();
+
   return (
     <Fragment>
       <Draggable draggableId={props.task.id} index={props.index}>

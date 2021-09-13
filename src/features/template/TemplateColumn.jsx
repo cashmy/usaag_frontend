@@ -28,14 +28,14 @@ const useStyles = makeStyles((theme) => ({
   taskList: {
     padding: theme.spacing(1),
   },
-  taskListStandard: {
-    backgroundColor: theme.palette.background.paper,
-    // color: theme.palette.getContrastText(theme.palette.text.secondary),
-  },
-  taskListDragging: {
-    backgroundColor: "#bdbdbd",
-    // color: theme.palette.getContrastText(theme.palette.background.paper),
-  },
+  //   taskListStandard: {
+  //     backgroundColor: theme.palette.background.paper,
+  //     // color: theme.palette.getContrastText(theme.palette.text.secondary),
+  //   },
+  //   taskListDragging: {
+  //     backgroundColor: "#bdbdbd",
+  //     // color: theme.palette.getContrastText(theme.palette.background.paper),
+  //   },
 }));
 
 export default function Column(props) {
@@ -58,8 +58,8 @@ export default function Column(props) {
                 item
                 xs={10}
                 className={clsx(classes.tasklist, {
-                  [classes.taskListStandard]: !snapshot.isDraggingOver,
-                  [classes.taskListDragging]: snapshot.isDraggingOver,
+                  //   [classes.taskListStandard]: !snapshot.isDraggingOver,
+                  //   [classes.taskListDragging]: snapshot.isDraggingOver,
                 })}
                 ref={provided.innerRef}
                 {...provided.droppableProps}

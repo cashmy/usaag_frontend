@@ -1,7 +1,19 @@
 import React, { useEffect } from "react";
-import { Grid } from "@material-ui/core";
+import { useHistory } from "react-router-dom";
+import { Grid, Typography, makeStyles } from "@material-ui/core";
 import Controls from "../../components/controls/Controls";
 import { useForm, Form } from "../../components/useForm";
+
+// * Styling
+const useStyles = makeStyles((theme) => ({
+  container: {
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(3),
+  },
+  gridTextItem: {
+    paddingLeft: theme.spacing(1),
+  },
+}));
 
 // * Initial Fields Values
 const initialFValues = {
@@ -11,8 +23,8 @@ const initialFValues = {
   technologyStack: "",
   goal: "",
   specialNotes: "",
-  totalPoints: "",
-  totalWeightedPoints: "",
+  totalPoints: 0,
+  totalWeightedPoints: 0,
   versionMain: 1,
   versionMinor: 0,
   versionSub: 0,
@@ -21,6 +33,8 @@ const initialFValues = {
 
 // *** MAIN FUNCTION: TemplateHeaderForm
 export default function TemplateHeaderForm(props) {
+  const classes = useStyles();
+  const history = useHistory();
   const { addOrEdit, recordForEdit } = props;
   const { values, setValues, errors, setErrors, handleInputChange, resetForm } =
     useForm(initialFValues);
@@ -70,8 +84,8 @@ export default function TemplateHeaderForm(props) {
 
   return (
     <Form>
-      <Grid container alignItems="flex-start" spacing={2}>
-        <Grid item xs={11}>
+      <Grid container spacing={2} className={classes.container}>
+        <Grid item xs={12}>
           <Controls.Input
             name="name"
             label="Name"
@@ -79,14 +93,54 @@ export default function TemplateHeaderForm(props) {
             onChange={handleInputChange}
             error={errors.name}
           />
-          <Controls.Input
-            name="abbreviation"
-            label="Abbreviation"
-            value={values.abbreviation}
-            onChange={handleInputChange}
-            error={errors.abbreviation}
-            fullWidth={false}
-          />
+          <Grid container direction="row">
+            <Grid container item xs={6} alignContent="flex-start">
+              <Controls.Input
+                name="abbreviation"
+                label="Abbreviation"
+                value={values.abbreviation}
+                onChange={handleInputChange}
+                error={errors.abbreviation}
+              />
+            </Grid>
+            <Grid direction="row" container xs={6} alignItems="center">
+              <Grid item xs={3}>
+                <Typography className={classes.gridTextItem}>
+                  Version:
+                </Typography>
+              </Grid>
+              <Grid item xs={3}>
+                <Controls.Input
+                  name="versionMain"
+                  label=""
+                  value={values.versionMain}
+                  onChange={handleInputChange}
+                  error={errors.versionMain}
+                  fullWidth={false}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <Controls.Input
+                  name="versionMinor"
+                  label=""
+                  value={values.versionMinor}
+                  onChange={handleInputChange}
+                  error={errors.versionMinor}
+                  fullWidth={false}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <Controls.Input
+                  name="versionSub"
+                  label=""
+                  value={values.versionSub}
+                  onChange={handleInputChange}
+                  error={errors.versionSub}
+                  fullWidth={false}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
           <Controls.Input
             name="technologyStack"
             label="Technology Stack"
@@ -94,8 +148,43 @@ export default function TemplateHeaderForm(props) {
             onChange={handleInputChange}
             error={errors.technologyStack}
           />
+          <Controls.Input
+            name="goal"
+            label="Goal"
+            value={values.goal}
+            onChange={handleInputChange}
+            error={errors.goal}
+            multiline
+            rows={4}
+          />
+          <Controls.Input
+            name="specialNotes"
+            label="Special Notes/Instructions"
+            value={values.specialNotes}
+            onChange={handleInputChange}
+            error={errors.specialNotes}
+            multiline
+            rows={4}
+          />
+          <Grid container direction="row" alignItems="center">
+            <Grid container item xs={6} alignContent="flex-start">
+              <Typography className={classes.gridTextItem}>
+                Total Points: {values.totalPoints}
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Controls.Input
+                name="totalWeightedPoints"
+                label="Wghtd Pts"
+                value={values.totalWeightedPoints}
+                onChange={handleInputChange}
+                error={errors.totalWeightedPoints}
+                fullWidth={true}
+              />
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid styles={{ display: "flex" }}>
+        <Grid item xs={11} styles={{ display: "flex" }}>
           <div styles={{ display: "flex" }}>
             <Controls.Button
               type="submit"
@@ -103,6 +192,11 @@ export default function TemplateHeaderForm(props) {
               onClick={handleSubmit}
             />
             <Controls.Button color="default" text="Reset" onClick={resetForm} />
+            <Controls.Button
+              color="default"
+              text="Cancel"
+              onClick={() => history.goBack()}
+            />
           </div>
         </Grid>
       </Grid>
