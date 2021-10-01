@@ -41,6 +41,15 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     right: "10%",
   },
+  cohortCard: {
+    marginBottom: theme.spacing(3),
+    // backgroundColor: "#bdbdbd"
+  },
+  studentCard: {
+    marginBottom: theme.spacing(3),
+    backgroundColor: "#bdbdbd",
+    color: theme.palette.primary.contrastText
+  }
 }));
 
 export default function CohortAssignment() {
@@ -94,7 +103,28 @@ export default function CohortAssignment() {
             <Card>
               <CardHeader title="Cohorts" />
               <CardContent>
-                <Typography>Can I have nested cards here?</Typography>
+
+                <Card raised={true} className={classes.cohortCard} style={{backgroundColor: "red"}}>
+                  <CardContent>
+                    <Typography>Cohort 1</Typography>
+                  </CardContent>
+                </Card>
+                <Card raised={true} className={classes.cohortCard} style={{backgroundColor: "blue"}}>
+                  <CardContent>
+                    <Typography>Cohort 2</Typography>
+                  </CardContent>
+                </Card>
+                <Card raised={true} className={classes.cohortCard} style={{backgroundColor: "green"}}>
+                  <CardContent>
+                    <Typography>Cohort 3</Typography>
+                  </CardContent>
+                </Card>
+                <Card raised={true} className={classes.cohortCard} style={{backgroundColor: "purple"}}>
+                  <CardContent>
+                    <Typography>Cohort 4</Typography>
+                  </CardContent>
+                </Card>
+
               </CardContent>
             </Card>
           </Grid>
@@ -102,9 +132,19 @@ export default function CohortAssignment() {
           {/* Cohort Members */}
           <Grid item xs={3}>
             <Card>
-              <CardHeader title="Cohort Members" />
+              <CardHeader title="Cohort Members" subheader="Count: 2" />
               <CardContent>
-                <Typography>Student Cards go here</Typography>
+                {/* <Typography>Student Cards go here</Typography> */}
+                <Card raised={true} className={classes.studentCard}>
+                  <CardContent>
+                    <Typography>Assigned Student card 1</Typography>
+                  </CardContent>
+                </Card>
+                <Card raised={true} className={classes.studentCard}>
+                  <CardContent>
+                    <Typography>Assigned Student card 2</Typography>
+                  </CardContent>
+                </Card>
               </CardContent>
             </Card>
           </Grid>
@@ -112,9 +152,14 @@ export default function CohortAssignment() {
           {/* Unassigned Students */}
           <Grid item xs={3}>
             <Card>
-              <CardHeader title="UnAssigned Students" />
+              <CardHeader title="UnAssigned Students" subheader="Count: 1"/>
               <CardContent>
-                <Typography>Student Cards go here</Typography>
+                {/* <Typography>Student Cards go here</Typography> */}
+                <Card raised={true} className={classes.studentCard}>
+                  <CardContent>
+                    <Typography>Student card</Typography>
+                  </CardContent>
+                </Card>
               </CardContent>
             </Card>
           </Grid>
