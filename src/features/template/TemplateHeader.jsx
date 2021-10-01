@@ -3,6 +3,11 @@ import { useHistory } from "react-router-dom";
 import { Grid, Typography, makeStyles } from "@material-ui/core";
 import Controls from "../../components/controls/Controls";
 import { useForm, Form } from "../../components/useForm";
+// Redux
+import {
+  useAddTemplateHeaderMutation,
+  useUpdateTemplateHeaderMutation,
+} from "./templateHeaderSlice";
 
 // * Styling
 const useStyles = makeStyles((theme) => ({
@@ -29,13 +34,14 @@ const initialFValues = {
   versionMinor: 0,
   versionSub: 0,
   notionScript: "",
+  archived: false,
 };
 
 // *** MAIN FUNCTION: TemplateHeaderForm
 export default function TemplateHeaderForm(props) {
   const classes = useStyles();
   const history = useHistory();
-  const { addOrEdit, recordForEdit } = props;
+  const { recordForEdit } = props;
   const { values, setValues, errors, setErrors, handleInputChange, resetForm } =
     useForm(initialFValues);
 
@@ -64,10 +70,19 @@ export default function TemplateHeaderForm(props) {
       return Object.values(temp).every((x) => x === "");
   };
 
+  // RTK Data reqests
+  const [addTemplateHeader] = useAddTemplateHeaderMutation();
+  const [updateTemplateHeader] = useUpdateTemplateHeaderMutation();
+
   // SaveSubmit Callback handler - event driven
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (validate()) addOrEdit(values, resetForm);
+    // Validate is successful then execute add or edit of data
+
+    if (validate()) {
+      if (values.id === 0) addTemplateHeader(values);
+      else updateTemplateHeader(values);
+    }
   };
 
   // If "Edit" mode then update form with current field values
@@ -194,7 +209,7 @@ export default function TemplateHeaderForm(props) {
             <Controls.Button color="default" text="Reset" onClick={resetForm} />
             <Controls.Button
               color="default"
-              text="Cancel"
+              text="Exit"
               onClick={() => history.goBack()}
             />
           </div>
