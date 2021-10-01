@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, Link as RouterLink } from "react-router-dom";
+import clsx from "clsx";
 import {
   Card,
   CardActions,
@@ -27,18 +28,18 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SearchIcon from "@material-ui/icons/Search";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import { red } from "@material-ui/core/colors";
 
 // Wrapped Components
 import Controls from "../../components/controls/Controls";
 
 // Redux
-// import {
-//   useAddTemplateHeaderMutation,
-//   useDeleteTemplateHeaderMutation,
-//   useFetchAllTemplateHeadersQuery,
-//   useUpdateTemplateHeaderMutation,
-// } from "./templateHeaderSlice";
-import TemplateHeaderData from "../../tempData/template-header-data";
+import {
+  //   useAddTemplateHeaderMutation,
+  useDeleteTemplateHeaderMutation,
+  useFetchAllTemplateHeadersQuery,
+  //   useUpdateTemplateHeaderMutation,
+} from "./templateHeaderSlice";
 
 // Primary CRUD Child Component
 import Template from "./Template";
@@ -59,7 +60,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1.4),
   },
   cardContainer: {
-    marginLeft: theme.spacing(17.5),
+    marginLeft: theme.spacing(17),
+    marginRight: theme.spacing(17),
     justifyContent: "flex-start",
     display: "flex",
   },
@@ -92,6 +94,9 @@ const useStyles = makeStyles((theme) => ({
   cardDetails: {
     // width: "250px",
   },
+  archivedColor: {
+    backgroundColor: theme.palette.error,
+  },
 }));
 
 // ?? DO I EVEN NEED THIS ??
@@ -111,46 +116,22 @@ export default function TemplateTable() {
   const classes = useStyles();
   const history = useHistory();
   const bull = <span className={classes.bullet}>•</span>;
-  const [templateHeaderData, setTemplateHeaderData] = useState([
-    {
-      id: 0,
-      name: "Robots vs. Dinosaurs",
-      abbreviation: "RvD",
-      technologyStack: "Python",
-      goal: "This is the goal of the project",
-      specialNotes: "Do the items marked in grey LAST",
-      totalPoints: 100,
-      totalWeightedPoints: 80,
-      archived: false,
-      versionMain: 2,
-      versionMinor: 1,
-      versionSub: 5,
-      notionScript: "",
-    },
-    {
-      id: 1,
-      name: "Most Wanted",
-      abbreviation: "MW",
-      technologyStack: "JavaScript",
-      goal: "To look up a specific person",
-      specialNotes: "Uses recursion. Be sure to watch the videos",
-      totalPoints: 75,
-      totalWeightedPoints: 60,
-      archived: false,
-      versionMain: 1,
-      versionMinor: 2,
-      versionSub: 1,
-      notionScript: "",
-    },
-  ]);
+  const [loadData, setLoadData] = useState(false);
   const [archiveStatus, setArchiveStatus] = useState(false);
-  const [recordForEdit, setRecordForEdit] = useState(null);
   // Initialize with a default filter of all records, bypasses initial load error
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
       return items;
     },
   });
+  // RTK Data reqests
+  const { data = [], refetch } = useFetchAllTemplateHeadersQuery({
+    status: archiveStatus,
+    reload: loadData,
+    refetchOnMountOrArgChange: true,
+    skip: false,
+  });
+  const [deleteTemplateHeader] = useDeleteTemplateHeaderMutation();
 
   // Modal Window state variables
   const [openPopup, setOpenPopup] = useState(false);
@@ -164,18 +145,6 @@ export default function TemplateTable() {
     title: "",
     subTitle: "",
   });
-
-  // RTK Data reqests
-  //   const { data = [] } = useFetchAllTemplateHeadersQuery({
-  //     refetchOnMountOrArgChange: true,
-  //     skip: false,
-  //   });
-  //   const [addTemplateHeader] = useAddTemplateHeaderMutation();
-  //   const [updateTemplateHeader] = useUpdateTemplateHeaderMutation();
-  //   const [deleteTemplateHeader] = useDeleteTemplateHeaderMutation();
-
-  //   const { TblContainer, TblHead, TblPagination, recordsAfterPagingAndSorting } =
-  //     useTable(data, columnCells, filterFn);
 
   const handleSearch = (e) => {
     let target = e.target;
@@ -199,22 +168,6 @@ export default function TemplateTable() {
     });
   };
 
-  const addOrEdit = (template, resetForm) => {
-    if (template.id === 0) {
-      console.log("Template data to add: ", template);
-      //  addTemplateHeader(template);
-    } else {
-      //  updateTemplateHeader(template);
-    }
-    resetForm();
-    setRecordForEdit(null);
-    setNotify({
-      isOpen: true,
-      message: "Submitted Successfully",
-      type: "success",
-    });
-  };
-
   const handleEdit = (record) => {
     console.log("Record param: ", record);
     history.push({
@@ -225,13 +178,13 @@ export default function TemplateTable() {
     });
   };
 
-  const handleDelete = (id) => {
+  const onDelete = (id) => {
     setConfirmDialog({
       ...confirmDialog,
       isOpen: false,
     });
-    // deleteTemplateHeader(id);
-
+    deleteTemplateHeader(id);
+    setLoadData(!loadData);
     setNotify({
       isOpen: true,
       message: "Record deleted",
@@ -239,20 +192,27 @@ export default function TemplateTable() {
     });
   };
 
+  // Toggles between Active and Archived status display
   const handleToggle = () => {
     setArchiveStatus(!archiveStatus);
-    // Request rerender
   };
 
+  // Changes the archive status of a given record
   const handleArchive = (id) => {
     // priorAuth.PAArchived = !archiveStatus;
     // PriorAuthService.updatePA(priorAuth);
     alert(`Changing archive status for ${id}!`);
   };
 
+  // Helper function to format the version int a short readable format
   const formatVersion = (main, minor, sub) => {
     return main.toString() + "." + minor.toString() + "." + sub.toString();
   };
+
+  useEffect(() => {
+    // trigger rerender if data changes
+    console.log("Inside useEffect", loadData);
+  }, [data]);
 
   return (
     <React.Fragment>
@@ -301,16 +261,16 @@ export default function TemplateTable() {
                   label="Archived"
                 />
                 <Fab
-                  aria-label="edit templates"
                   component={RouterLink}
                   to={"template"}
+                  // to={{ pathname: "template", state: { recordForEdit: recordForEdit}, }}
                   className={classes.addButton}
                   color="primary"
-                  aria-label="add"
+                  aria-label="add a template"
                   size="small"
-                  onClick={() => {
-                    setRecordForEdit(null);
-                  }}
+                  // onClick={() => {
+                  //   setRecordForEdit(null);
+                  // }}
                 >
                   <AddIcon />
                 </Fab>
@@ -322,14 +282,14 @@ export default function TemplateTable() {
         </Grid>
 
         {/* Card Grid */}
-        <Grid container className={classes.cardContainer} spacing={3}>
+        <Grid container className={classes.cardContainer} spacing={2}>
           {/* // TODO Map function goes here  */}
           {/* {recordsAfterPagingAndSorting().map((item) => (
           ))} */}
-          {console.log("Data: ", templateHeaderData)}
-          {templateHeaderData.map((item) => (
+          {console.log("Data: ", data)}
+          {data.map((item, index) => (
             <Grid item xl={2}>
-              <Card key={item.id} className={classes.cardDetails}>
+              <Card key={index} className={classes.cardDetails}>
                 <CardContent>
                   <Typography
                     className={classes.title}
@@ -351,7 +311,13 @@ export default function TemplateTable() {
                     Tot/Weighted Pts: -- {item.totalPoints}/
                     {item.totalWeightedPoints}
                   </Typography>
-                  <Typography variant="caption" component="p" align="right">
+                  <Typography
+                    variant="caption"
+                    component="p"
+                    align="right"
+                    // className={clsx({ [classes.archivedColor]: archiveStatus })}
+                    color={archiveStatus ? "error" : "textPrimary"}
+                  >
                     <br />
                     Version:{" "}
                     {formatVersion(
@@ -373,7 +339,15 @@ export default function TemplateTable() {
                   <IconButton
                     aria-label="delete template"
                     onClick={() => {
-                      handleDelete(item.id);
+                      setConfirmDialog({
+                        isOpen: true,
+                        title:
+                          "Are you sure you want to delete this Template and all of its Detail?",
+                        subTitle: "You can't undo this action.",
+                        onConfirm: () => {
+                          onDelete(item.id);
+                        },
+                      });
                     }}
                   >
                     <DeleteIcon />
@@ -393,6 +367,11 @@ export default function TemplateTable() {
           ))}
         </Grid>
       </Grid>
+      <Controls.Notification notify={notify} setNotify={setNotify} />
+      <Controls.ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
     </React.Fragment>
   );
 }
