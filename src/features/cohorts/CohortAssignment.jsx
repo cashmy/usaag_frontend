@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 // Icons
 import AddIcon from "@material-ui/icons/Add";
+import CommonCardActions from "../../components/commonCardActions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,10 +56,59 @@ const useStyles = makeStyles((theme) => ({
 export default function CohortAssignment() {
   const classes = useStyles();
   const [archiveStatus, setArchiveStatus] = useState(false);
-
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: "",
+    subTitle: "",
+  });
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
   const handleToggle = () => {
     setArchiveStatus(!archiveStatus);
     // Request rerender
+  };
+  const handleEdit = (record) => {
+    console.log("Record param: ", record);
+    // history.push({
+    //   pathname: "/template",
+    //   state: {
+    //     recordForEdit: record,
+    //   },
+    // });
+  };
+  const handleDelete = (id) =>{
+    setConfirmDialog({
+      isOpen: true,
+      title:
+        "Are you sure you want to delete this Cohort and all of its Detail?",
+      subTitle: "You can't undo this action.",
+      onConfirm: () => {
+        onDelete(id);
+      },
+    })
+  }
+
+  const onDelete = (id) => {
+    setConfirmDialog({
+      ...confirmDialog,
+      isOpen: false,
+    });
+    // deleteTemplateHeader(id);
+    // setLoadData(!loadData);
+    setNotify({
+      isOpen: true,
+      message: "Record deleted",
+      type: "error",
+    });
+  };
+  // Changes the archive status of a given record
+  const handleArchive = (id) => {
+    // priorAuth.PAArchived = !archiveStatus;
+    // PriorAuthService.updatePA(priorAuth);
+    alert(`Changing archive status for ${id}!`);
   };
 
   return (
@@ -103,23 +153,35 @@ export default function CohortAssignment() {
             <Card>
               <CardHeader title="Cohorts" />
               <CardContent>
-
-                <Card raised={true} className={classes.cohortCard} style={{backgroundColor: "red"}}>
-                  <CardContent>
-                    <Typography>Cohort 1</Typography>
-                  </CardContent>
+                {/* Map cohort cards here */}
+                <Card raised={true} className={classes.cohortCard} style={{ backgroundColor: "red" }}>
+                  <CardHeader title="Cohort 1" />
+                  <CommonCardActions 
+                    archiveStatus={archiveStatus}
+                    item={'1'}
+                    handleArchive={handleArchive}
+                    handleDelete={handleDelete}
+                    handleEdit={handleEdit}
+                    recordName="Cohort"
+                  />
                 </Card>
-                <Card raised={true} className={classes.cohortCard} style={{backgroundColor: "blue"}}>
-                  <CardContent>
-                    <Typography>Cohort 2</Typography>
-                  </CardContent>
+                <Card raised={true} className={classes.cohortCard} style={{ backgroundColor: "blue" }}>
+                <CardHeader title="Cohort 2" />
+                  <CommonCardActions 
+                    archiveStatus={archiveStatus}
+                    item={'2'}
+                    handleArchive={handleArchive}
+                    handleDelete={handleDelete}
+                    handleEdit={handleEdit}
+                    recordName="Cohort"
+                  />
                 </Card>
-                <Card raised={true} className={classes.cohortCard} style={{backgroundColor: "green"}}>
+                <Card raised={true} className={classes.cohortCard} style={{ backgroundColor: "green" }}>
                   <CardContent>
                     <Typography>Cohort 3</Typography>
                   </CardContent>
                 </Card>
-                <Card raised={true} className={classes.cohortCard} style={{backgroundColor: "purple"}}>
+                <Card raised={true} className={classes.cohortCard} style={{ backgroundColor: "purple" }}>
                   <CardContent>
                     <Typography>Cohort 4</Typography>
                   </CardContent>
@@ -152,7 +214,7 @@ export default function CohortAssignment() {
           {/* Unassigned Students */}
           <Grid item xs={3}>
             <Card>
-              <CardHeader title="UnAssigned Students" subheader="Count: 1"/>
+              <CardHeader title="UnAssigned Students" subheader="Count: 1" />
               <CardContent>
                 {/* <Typography>Student Cards go here</Typography> */}
                 <Card raised={true} className={classes.studentCard}>
