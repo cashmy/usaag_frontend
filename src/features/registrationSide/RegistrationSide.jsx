@@ -68,8 +68,7 @@ export default function SignInSide() {
       //   password: data.password,
       //   email: data.email,
       // phoneNumber: data.phoneNumber,
-      // currencyCode: data.currencyCode,
-      // isSupplier: data.isSupplier,
+
       // });
       // if (response.data.token !== null) {
       //   window.location.href = "/login";

@@ -288,8 +288,8 @@ export default function TemplateTable() {
           ))} */}
           {console.log("Data: ", data)}
           {data.map((item, index) => (
-            <Grid item xl={2}>
-              <Card key={index} className={classes.cardDetails}>
+            <Grid item xl={2} key={index} >
+              <Card className={classes.cardDetails}>
                 <CardContent>
                   <Typography
                     className={classes.title}
