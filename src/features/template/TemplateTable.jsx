@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useHistory, Link as RouterLink } from "react-router-dom";
-import clsx from "clsx";
 import {
   Card,
   CardActions,
@@ -27,8 +26,6 @@ import UnarchiveIcon from "@material-ui/icons/Unarchive";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SearchIcon from "@material-ui/icons/Search";
-import AssignmentIcon from "@material-ui/icons/Assignment";
-import { red } from "@material-ui/core/colors";
 
 // Wrapped Components
 import Controls from "../../components/controls/Controls";
@@ -40,10 +37,6 @@ import {
   useFetchAllTemplateHeadersQuery,
   //   useUpdateTemplateHeaderMutation,
 } from "./templateHeaderSlice";
-
-// Primary CRUD Child Component
-import Template from "./Template";
-import { FormatAlignRight, VerticalAlignCenter } from "@material-ui/icons";
 
 // * Styling
 const useStyles = makeStyles((theme) => ({
@@ -99,18 +92,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// ?? DO I EVEN NEED THIS ??
-const columnCells = [
-  { id: "abbreviation", label: "Abbrev" },
-  { id: "name", label: "Name" },
-  { id: "technologyStack", label: "Technology Stack" },
-  { id: "totalPoints", label: "Tot Pts", disableSorting: true },
-  { id: "totalWeightedPoints", label: "Wtd Pts", disableSorting: true },
-  { id: "versionMain", label: "Version" },
-  { id: "versionMinor", label: "Minor" },
-  { id: "versionSub", label: "Sub" },
-  { id: "actions", label: "Actions", disableSorting: true },
-];
 
 export default function TemplateTable() {
   const classes = useStyles();
@@ -125,7 +106,7 @@ export default function TemplateTable() {
     },
   });
   // RTK Data reqests
-  const { data = [], refetch } = useFetchAllTemplateHeadersQuery({
+  const { data = [] } = useFetchAllTemplateHeadersQuery({
     status: archiveStatus,
     reload: loadData,
     refetchOnMountOrArgChange: true,
@@ -134,7 +115,7 @@ export default function TemplateTable() {
   const [deleteTemplateHeader] = useDeleteTemplateHeaderMutation();
 
   // Modal Window state variables
-  const [openPopup, setOpenPopup] = useState(false);
+  // const [openPopup, setOpenPopup] = useState(false);
   const [notify, setNotify] = useState({
     isOpen: false,
     message: "",
@@ -219,7 +200,7 @@ export default function TemplateTable() {
       <Grid container className={classes.root} spacing={1}>
         {/* Header Bar */}
         <Grid container className={classes.headingContainer} spacing={2}>
-          <Grid item xl={4} direction="row" alignItems="center">
+          <Grid item xl={4} >
             <Paper className={classes.paper}>
               {/* <Grid item xs={1}>
                 <AssignmentIcon

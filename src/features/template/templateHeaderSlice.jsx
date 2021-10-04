@@ -5,7 +5,7 @@ export const apiTemplateHeaderSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://localhost:44319/api/TemplateHeader",
     prepareHeaders(headers) {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
       // headers.localStorage("authorization", `Bearer ${token}`);
       return headers;
     },

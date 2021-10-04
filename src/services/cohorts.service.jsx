@@ -22,15 +22,22 @@ class CohortService {
 
   updateCohort = (data) => {
     axios
-      .put(API_URL + `/${data.clinicId}`, data, { headers: authHeader() })
+      .put(API_URL + `/${data.id}`, data, { headers: authHeader() })
       .then((response) => {
-          if (response.data) {
-              console.log("Response: ", response.data)
-          }
-
           return response.data;
       });
   };
+
+  patchCohortSts = (id, sts) => {
+    let data ={
+      'archived': sts
+    }
+    axios
+      .patch(API_URL + `/${id}`, data, { headers: authHeader() })
+      .then((response) => {
+          return response.data;
+      });
+  }
 
   deleteCohort = (id) => {
     return axios.delete(API_URL + `/${id}`, { headers: authHeader() });
