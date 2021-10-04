@@ -1,5 +1,4 @@
-import React, { Fragment, useState } from "react";
-// import clsx from "clsx";
+import React, { Fragment, useState, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -10,13 +9,18 @@ import {
   Paper,
   Switch,
   Toolbar,
+  Tooltip,
   Typography,
   makeStyles,
 } from "@material-ui/core";
 // Icons
 import AddIcon from "@material-ui/icons/Add";
+// Child components
 import CommonCardActions from "../../components/commonCardActions";
+// Service Layer
+import CohortService from "../../services/cohorts.service";
 
+// * Styling
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -44,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cohortCard: {
     marginBottom: theme.spacing(3),
-    // backgroundColor: "#bdbdbd"
+    // color: theme.palette.contrastText,
   },
   studentCard: {
     marginBottom: theme.spacing(3),
@@ -53,8 +57,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+// * Main Component
 export default function CohortAssignment() {
   const classes = useStyles();
+  // const [loadData, setLoadData] = useState(true);
+  const [records, setRecords] = useState([]);
   const [archiveStatus, setArchiveStatus] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
@@ -66,9 +73,25 @@ export default function CohortAssignment() {
     message: "",
     type: "",
   });
+
+  useEffect(() => {
+    getCohorts();
+  }, [archiveStatus]);
+
+  async function getCohorts(e) {
+    console.log("Getting cohort data")
+    try {
+      const response = await CohortService.getCohortsBySts(archiveStatus);
+      setRecords(response.data);
+      // setLoadData(false);
+    } catch (e) {
+      console.log("API call unsuccessful", e);
+    }
+  }
+
   const handleToggle = () => {
     setArchiveStatus(!archiveStatus);
-    // Request rerender
+    // setLoadData(true)
   };
   const handleEdit = (record) => {
     console.log("Record param: ", record);
@@ -79,7 +102,7 @@ export default function CohortAssignment() {
     //   },
     // });
   };
-  const handleDelete = (id) =>{
+  const handleDelete = (id) => {
     setConfirmDialog({
       isOpen: true,
       title:
@@ -89,8 +112,7 @@ export default function CohortAssignment() {
         onDelete(id);
       },
     })
-  }
-
+  };
   const onDelete = (id) => {
     setConfirmDialog({
       ...confirmDialog,
@@ -104,45 +126,54 @@ export default function CohortAssignment() {
       type: "error",
     });
   };
-  // Changes the archive status of a given record
-  const handleArchive = (id) => {
+  // TODO: Update archive status
+  const handleArchive = (item) => {
+    // Changes the archive status of a given record
     // priorAuth.PAArchived = !archiveStatus;
     // PriorAuthService.updatePA(priorAuth);
-    alert(`Changing archive status for ${id}!`);
+    alert(`Changing archive status for ${item.abbreviation} - ${item.name}!`);
   };
+  // TODO: handle student assignment here
+  const handleAssign = (id) => {
+  }
 
   return (
     <Fragment>
       <Grid container className={classes.root} spacing={1}>
         <Grid container className={classes.container} spacing={10}>
-          {/* Header Bar */}
+          {/* //* Header Bar */}
           <Grid item xs={10}>
             <Paper className={classes.paper}>
               <Toolbar>
                 <Typography variant="h4">Cohort Assignments</Typography>
-                <FormControlLabel
-                  className={classes.archiveSwitch}
-                  control={
-                    <Switch
-                      checked={archiveStatus}
-                      onChange={handleToggle}
-                      name="archivedStatus"
-                    />
-                  }
-                  label="Archived"
-                />
-                <Fab
-                  className={classes.addButton}
-                  color="primary"
-                  aria-label="add"
-                  size="small"
-                  onClick={() => {
-                    //   setOpenPopup(true);
-                    //   setRecordForEdit(null);
-                  }}
-                >
-                  <AddIcon />
-                </Fab>
+                <Tooltip title="Toggle archive status">
+                  <FormControlLabel
+                    className={classes.archiveSwitch}
+                    control={
+                      <Switch
+                        aria-label="toggle archive status"
+                        checked={archiveStatus}
+                        onChange={handleToggle}
+                        name="archivedStatus"
+                      />
+                    }
+                    label="Archived"
+                  />
+                </Tooltip>
+                <Tooltip title="Add a Cohort">
+                  <Fab
+                    className={classes.addButton}
+                    color="primary"
+                    aria-label="Add a cohort"
+                    size="small"
+                    onClick={() => {
+                      //   setOpenPopup(true);
+                      //   setRecordForEdit(null);
+                    }}
+                  >
+                    <AddIcon />
+                  </Fab>
+                </Tooltip>
               </Toolbar>
             </Paper>
           </Grid>
@@ -154,39 +185,27 @@ export default function CohortAssignment() {
               <CardHeader title="Cohorts" />
               <CardContent>
                 {/* Map cohort cards here */}
-                <Card raised={true} className={classes.cohortCard} style={{ backgroundColor: "red" }}>
-                  <CardHeader title="Cohort 1" />
-                  <CommonCardActions 
-                    archiveStatus={archiveStatus}
-                    item={'1'}
-                    handleArchive={handleArchive}
-                    handleDelete={handleDelete}
-                    handleEdit={handleEdit}
-                    recordName="Cohort"
-                  />
-                </Card>
-                <Card raised={true} className={classes.cohortCard} style={{ backgroundColor: "blue" }}>
-                <CardHeader title="Cohort 2" />
-                  <CommonCardActions 
-                    archiveStatus={archiveStatus}
-                    item={'2'}
-                    handleArchive={handleArchive}
-                    handleDelete={handleDelete}
-                    handleEdit={handleEdit}
-                    recordName="Cohort"
-                  />
-                </Card>
-                <Card raised={true} className={classes.cohortCard} style={{ backgroundColor: "green" }}>
-                  <CardContent>
-                    <Typography>Cohort 3</Typography>
-                  </CardContent>
-                </Card>
-                <Card raised={true} className={classes.cohortCard} style={{ backgroundColor: "purple" }}>
-                  <CardContent>
-                    <Typography>Cohort 4</Typography>
-                  </CardContent>
-                </Card>
-
+                {/* {console.log("Item:", item)} */}
+                {records.map((item, index) => (
+                  <Card
+                    raised={true}
+                    className={classes.cohortCard}
+                    style={{ backgroundColor: `${item.cpkColor}`, color: `${item.textColor}` }}>
+                    <CardHeader
+                      title={item.abbreviation + " - " + item.name}
+                      aria-label={`card for ${item.name}`} />
+                    <CommonCardActions
+                      archiveStatus={archiveStatus}
+                      item={item}
+                      handleArchive={handleArchive}
+                      handleDelete={handleDelete}
+                      handleEdit={handleEdit}
+                      handleAssign={handleAssign}
+                      recordName="Cohort"
+                      color={item.textColor}
+                    />
+                  </Card>
+                ))}
               </CardContent>
             </Card>
           </Grid>
@@ -225,6 +244,7 @@ export default function CohortAssignment() {
               </CardContent>
             </Card>
           </Grid>
+        
         </Grid>
       </Grid>
     </Fragment>
