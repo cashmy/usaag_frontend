@@ -64,6 +64,7 @@ export default function CohortAssignment() {
   // State Variables
   const classes = useStyles();
   const [loadData, setLoadData] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [records, setRecords] = useState([]);
   const [recordForEdit, setRecordForEdit] = useState(null);
   const [openPopup, setOpenPopup] = useState(false);
@@ -83,10 +84,14 @@ export default function CohortAssignment() {
     getCohorts();
   }, [archiveStatus, loadData]);
 
-  async function getCohorts(e) {
+  const getCohorts = async (e) => {
     try {
-      const response = await CohortService.getCohortsBySts(archiveStatus);
-      setRecords(response.data);
+      setIsLoading(true);
+      const response = await CohortService
+        .getCohortsBySts(archiveStatus)
+        .then();
+      setRecords(response.data)
+      setIsLoading(false)
     } catch (e) {
       console.log("API call unsuccessful", e);
     }
@@ -204,28 +209,32 @@ export default function CohortAssignment() {
               <CardHeader title="Cohorts" />
               <CardContent>
                 {/* Map cohort cards here */}
-                {/* {console.log("Item:", item)} */}
-                {records.map((item, index) => (
-                  <Card
-                    key={index}
-                    raised={true}
-                    className={classes.cohortCard}
-                    style={{ backgroundColor: `${item.cpkColor}`, color: `${item.textColor}` }}>
-                    <CardHeader
-                      title={item.abbreviation + " - " + item.name}
-                      aria-label={`card for ${item.name}`} />
-                    <CommonCardActions
-                      archiveStatus={archiveStatus}
-                      item={item}
-                      handleArchive={handleArchive}
-                      handleDelete={handleDelete}
-                      handleEdit={handleEdit}
-                      handleAssign={handleAssign}
-                      recordName="Cohort"
-                      color={item.textColor}
-                    />
-                  </Card>
-                ))}
+                {isLoading ? (
+                  <Typography> Loading ... </Typography>
+                ) : (
+                  records.map((item, index) => (
+                    <Card
+                      key={index}
+                      raised={true}
+                      className={classes.cohortCard}
+                      style={{ backgroundColor: `${item.cpkColor}`, color: `${item.textColor}` }}>
+                      <CardHeader
+                        title={item.abbreviation + " - " + item.name}
+                        aria-label={`card for ${item.name}`} />
+                      <CommonCardActions
+                        archiveStatus={archiveStatus}
+                        item={item}
+                        handleArchive={handleArchive}
+                        handleDelete={handleDelete}
+                        handleEdit={handleEdit}
+                        handleAssign={handleAssign}
+                        recordName="Cohort"
+                        color={item.textColor}
+                      />
+                    </Card>
+                  ))
+                )
+                }
               </CardContent>
             </Card>
           </Grid>
