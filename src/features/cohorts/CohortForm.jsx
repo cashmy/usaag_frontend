@@ -2,8 +2,6 @@ import React, { useEffect } from 'react';
 import { Grid } from '@material-ui/core';
 import Controls from '../../components/controls/Controls';
 import { useForm, Form } from '../../components/useForm';
-// Service Layer
-import CohortService from "../../services/cohorts.service";
 
 const initialFValues = {
     id: 0,
@@ -15,22 +13,22 @@ const initialFValues = {
     archived: false,
 }
 
-
 export default function CohortForm(props) {
-    
+
     const {addOrEdit, recordForEdit} = props
 
     // Validation function (to be passed as a callback)
-    // TODO: Consider/research using a Switch/Case statement instead
     const validate = (fieldValues = values) => {
         let temp = {...errors};
         if('name' in fieldValues) 
-            temp.name = fieldValues.clinicName ? "" : "This field is required." 
+            temp.name = fieldValues.name ? "" : "This field is required." 
         if('abbreviation' in fieldValues)
                 temp.abbreviation = fieldValues.abbreviation.length ? "" : "This field is required."
+        if('abbreviation' in fieldValues && temp.abbreviation === "")
+                temp.abbreviation = fieldValues.abbreviation.length < 4 ? "" : "Max of 3 letters - use abbrievation."
         if('slackChannel' in fieldValues)
                 temp.slackChannel = fieldValues.slackChannel.length ? "" : "This field is required."
-        if('textColor' in textColor)
+        if('textColor' in fieldValues)
             temp.textColor = fieldValues.textColor ? "" : "This field is required."
         setErrors({
             ...temp
@@ -57,7 +55,6 @@ export default function CohortForm(props) {
         if(validate())
             addOrEdit(values, resetForm);
     };
-
 
     useEffect(() => {
         if(recordForEdit != null) 

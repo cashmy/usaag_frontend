@@ -17,6 +17,8 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 // Child components
 import CommonCardActions from "../../components/commonCardActions";
+import Controls from "../../components/controls/Controls";
+import CohortForm from "./CohortForm";
 // Service Layer
 import CohortService from "../../services/cohorts.service";
 
@@ -59,9 +61,12 @@ const useStyles = makeStyles((theme) => ({
 
 // * Main Component
 export default function CohortAssignment() {
+  // State Variables
   const classes = useStyles();
-  // const [loadData, setLoadData] = useState(true);
+  const [loadData, setLoadData] = useState(true);
   const [records, setRecords] = useState([]);
+  const [recordForEdit, setRecordForEdit] = useState(null);
+  const [openPopup, setOpenPopup] = useState(false);
   const [archiveStatus, setArchiveStatus] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState({
     isOpen: false,
@@ -76,31 +81,56 @@ export default function CohortAssignment() {
 
   useEffect(() => {
     getCohorts();
-  }, [archiveStatus]);
+  }, [archiveStatus, loadData]);
 
   async function getCohorts(e) {
-    console.log("Getting cohort data")
     try {
       const response = await CohortService.getCohortsBySts(archiveStatus);
       setRecords(response.data);
-      // setLoadData(false);
     } catch (e) {
       console.log("API call unsuccessful", e);
     }
   }
 
+  const addOrEdit = (cohort, resetForm) => {
+    if (cohort.id === 0) {
+      CohortService.addCohort(cohort);
+      setLoadData(!loadData); // Request reload of data
+    } else {
+      CohortService.updateCohort(cohort);
+      setLoadData(!loadData); // Request reload of data
+    }
+    resetForm();
+    setRecordForEdit(null);
+    setOpenPopup(false); // Close Popup modal
+    setNotify({
+      isOpen: true,
+      message: "Submitted Successfully",
+      type: "success",
+    });
+  };
+  const openInPopup = (item) => {
+    setRecordForEdit(item);
+    setOpenPopup(true);
+  };
   const handleToggle = () => {
     setArchiveStatus(!archiveStatus);
-    // setLoadData(true)
   };
   const handleEdit = (record) => {
-    console.log("Record param: ", record);
-    // history.push({
-    //   pathname: "/template",
-    //   state: {
-    //     recordForEdit: record,
-    //   },
-    // });
+    openInPopup(record)
+  };
+  const onDelete = (id) => {
+    setConfirmDialog({
+      ...confirmDialog,
+      isOpen: false,
+    });
+    CohortService.deleteCohort(id)
+    setLoadData(!loadData); // Request reload of data
+    setNotify({
+      isOpen: true,
+      message: "Record deleted",
+      type: "error",
+    });
   };
   const handleDelete = (id) => {
     setConfirmDialog({
@@ -113,25 +143,14 @@ export default function CohortAssignment() {
       },
     })
   };
-  const onDelete = (id) => {
-    setConfirmDialog({
-      ...confirmDialog,
-      isOpen: false,
-    });
-    // deleteTemplateHeader(id);
-    // setLoadData(!loadData);
+  const handleArchive = (item) => {
+    CohortService.patchCohortSts(item.id, !archiveStatus)
+    setLoadData(!loadData); // Request reload of data
     setNotify({
       isOpen: true,
-      message: "Record deleted",
-      type: "error",
+      message: "Archive status changed",
+      type: "success",
     });
-  };
-  // TODO: Update archive status
-  const handleArchive = (item) => {
-    // Changes the archive status of a given record
-    // priorAuth.PAArchived = !archiveStatus;
-    // PriorAuthService.updatePA(priorAuth);
-    alert(`Changing archive status for ${item.abbreviation} - ${item.name}!`);
   };
   // TODO: handle student assignment here
   const handleAssign = (id) => {
@@ -140,9 +159,9 @@ export default function CohortAssignment() {
   return (
     <Fragment>
       <Grid container className={classes.root} spacing={1}>
-        <Grid container className={classes.container} spacing={10}>
+        <Grid container className={classes.container} spacing={2}>
           {/* //* Header Bar */}
-          <Grid item xs={10}>
+          <Grid item xs={11}>
             <Paper className={classes.paper}>
               <Toolbar>
                 <Typography variant="h4">Cohort Assignments</Typography>
@@ -167,8 +186,8 @@ export default function CohortAssignment() {
                     aria-label="Add a cohort"
                     size="small"
                     onClick={() => {
-                      //   setOpenPopup(true);
-                      //   setRecordForEdit(null);
+                      setOpenPopup(true);
+                      setRecordForEdit(null);
                     }}
                   >
                     <AddIcon />
@@ -188,6 +207,7 @@ export default function CohortAssignment() {
                 {/* {console.log("Item:", item)} */}
                 {records.map((item, index) => (
                   <Card
+                    key={index}
                     raised={true}
                     className={classes.cohortCard}
                     style={{ backgroundColor: `${item.cpkColor}`, color: `${item.textColor}` }}>
@@ -211,7 +231,7 @@ export default function CohortAssignment() {
           </Grid>
 
           {/* Cohort Members */}
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <Card>
               <CardHeader title="Cohort Members" subheader="Count: 2" />
               <CardContent>
@@ -231,7 +251,7 @@ export default function CohortAssignment() {
           </Grid>
 
           {/* Unassigned Students */}
-          <Grid item xs={3}>
+          <Grid item xs={4}>
             <Card>
               <CardHeader title="UnAssigned Students" subheader="Count: 1" />
               <CardContent>
@@ -244,9 +264,23 @@ export default function CohortAssignment() {
               </CardContent>
             </Card>
           </Grid>
-        
+
         </Grid>
       </Grid>
+
+      {/* //* POP-ups and Notifications */}
+      <Controls.Popup
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        title="Cohort Form"
+      >
+        <CohortForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
+      </Controls.Popup>
+      <Controls.Notification notify={notify} setNotify={setNotify} />
+      <Controls.ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
     </Fragment>
   );
 }
