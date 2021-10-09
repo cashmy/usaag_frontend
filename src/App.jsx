@@ -49,6 +49,7 @@ import InstDashBoard from "./features/dashboards/InstDashboard";
 import CohortAssignment from "./features/cohorts/CohortAssignment";
 import Template from "./features/template/Template";
 import TemplateTable from "./features/template/TemplateTable";
+import CurriculumThemeTable from "./features/curriculums/CurriculumThemeTable";
 
 // import { PauseCircleFilledTwoTone } from "@material-ui/icons";
 
@@ -326,7 +327,7 @@ export default function App() {
               <ListItemText primary="Cohorts" />
             </ListItem>
             {/* Curriculum */}
-            <ListItem button key="Curriculum">
+            <ListItem button component={RouterLink} to={"curriculumThemes"}>
               <ListItemIcon className={classes.listItemIcon}>
                 <MenuBookIcon />
               </ListItemIcon>
@@ -388,6 +389,7 @@ export default function App() {
               <Route path="/cohortAssignment" component={CohortAssignment} />
               <Route path="/template" component={Template} />
               <Route path="/templateTable" component={TemplateTable} />
+              <Route path="/curriculumThemes" component={CurriculumThemeTable} />
               <SignInSide />
             </Switch>
           </Paper>

@@ -258,7 +258,10 @@ export default function InstDashboard() {
               </CardContent>
 
               <CardActions disableSpacing>
-                <IconButton aria-label="edit templates">
+                <IconButton 
+                  aria-label="edit curriculum themes"
+                  component={RouterLink}
+                  to={"curriculumThemes"}>
                   <MenuBookIcon />
                 </IconButton>
                 <IconButton

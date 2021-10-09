@@ -1,8 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
 import {
-  Card,
-  CardHeader,
-  CardContent,
   Fab,
   FormControlLabel,
   Grid,
@@ -16,11 +13,10 @@ import {
 // Icons
 import AddIcon from "@material-ui/icons/Add";
 // Child components
-import CommonCardActions from "../../components/commonCardActions";
 import Controls from "../../components/controls/Controls";
-import CohortForm from "./CohortForm";
+import CurriculumThemeForm from "./CurriculumThemeForm";
 // Service Layer
-import CohortService from "../../services/cohorts.service";
+import CurriculumThemesService from "../../services/curriculumThemes.service";
 // import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
 
 // import { Scrollable, useScrollable } from 'nice-scrollbars';
@@ -51,19 +47,10 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     right: "10%",
   },
-  cohortCard: {
-    marginBottom: theme.spacing(3),
-    // color: theme.palette.contrastText,
-  },
-  studentCard: {
-    marginBottom: theme.spacing(3),
-    backgroundColor: "#bdbdbd",
-    color: theme.palette.primary.contrastText
-  }
 }));
 
 // * Main Component
-export default function CohortAssignment() {
+export default function CurriculumThemeTable() {
   // State Variables
   const classes = useStyles();
   // const scrollable = useScrollable();
@@ -85,14 +72,14 @@ export default function CohortAssignment() {
   });
 
   useEffect(() => {
-    getCohorts();
+    getCurriculumThemes();
   }, [archiveStatus, loadData]);
 
-  const getCohorts = async (e) => {
+  const getCurriculumThemes = async (e) => {
     try {
       setIsLoading(true);
-      const response = await CohortService
-        .getCohortsBySts(archiveStatus)
+      const response = await CurriculumThemesService
+        .getCurriculumThemesBySts(archiveStatus)
         .then();
       setRecords(response.data)
       setIsLoading(false)
@@ -101,12 +88,13 @@ export default function CohortAssignment() {
     }
   }
 
-  const addOrEdit = (cohort, resetForm) => {
-    if (cohort.id === 0) {
-      CohortService.addCohort(cohort);
+  const addOrEdit = (curriculumTheme, resetForm) => {
+    console.log("Add/Edit", curriculumTheme)
+    if (curriculumTheme.id === 0) {
+      CurriculumThemesService.addCurriculumTheme(curriculumTheme);
       setLoadData(!loadData); // Request reload of data
     } else {
-      CohortService.updateCohort(cohort);
+      CurriculumThemesService.updateCurriculumTheme(curriculumTheme);
       setLoadData(!loadData); // Request reload of data
     }
     resetForm();
@@ -133,7 +121,7 @@ export default function CohortAssignment() {
       ...confirmDialog,
       isOpen: false,
     });
-    CohortService.deleteCohort(id)
+    CurriculumThemesService.deleteCurruiculum(id)
     setLoadData(!loadData); // Request reload of data
     setNotify({
       isOpen: true,
@@ -145,7 +133,7 @@ export default function CohortAssignment() {
     setConfirmDialog({
       isOpen: true,
       title:
-        "Are you sure you want to delete this Cohort and all of its Detail?",
+        "Are you sure you want to delete this Curriculum Theme and all of its Detail?",
       subTitle: "You can't undo this action.",
       onConfirm: () => {
         onDelete(id);
@@ -153,7 +141,7 @@ export default function CohortAssignment() {
     })
   };
   const handleArchive = (item) => {
-    CohortService.patchCohortSts(item.id, !archiveStatus)
+    CurriculumThemesService.patchCurriculumThemeSts(item.id, !archiveStatus)
     setLoadData(!loadData); // Request reload of data
     setNotify({
       isOpen: true,
@@ -161,9 +149,6 @@ export default function CohortAssignment() {
       type: "success",
     });
   };
-  // TODO: handle student assignment here
-  const handleAssign = (id) => {
-  }
 
   return (
     <Fragment>
@@ -173,7 +158,7 @@ export default function CohortAssignment() {
           <Grid item xs={11}>
             <Paper className={classes.paper}>
               <Toolbar>
-                <Typography variant="h4">Cohort Assignments</Typography>
+                <Typography variant="h4">Currriculums</Typography>
                 <Tooltip title="Toggle archive status">
                   <FormControlLabel
                     className={classes.archiveSwitch}
@@ -188,11 +173,11 @@ export default function CohortAssignment() {
                     label="Archived"
                   />
                 </Tooltip>
-                <Tooltip title="Add a Cohort">
+                <Tooltip title="Add a Curriculum">
                   <Fab
                     className={classes.addButton}
                     color="primary"
-                    aria-label="Add a cohort"
+                    aria-label="add a curriculum"
                     size="small"
                     onClick={() => {
                       setOpenPopup(true);
@@ -206,79 +191,7 @@ export default function CohortAssignment() {
             </Paper>
           </Grid>
 
-          {/* //* CARDS */}
-          {/* Cohorts */}
-          <Grid item xs={3}>
-            <Card>
-              <CardHeader title="Cohorts" />
-              <CardContent>
-
-                {/* Map cohort cards here */}
-                {isLoading ? (
-                  <Typography> Loading ... </Typography>
-                ) : (
-                  records.map((item, index) => (
-                    <Card
-                      key={index}
-                      raised={true}
-                      className={classes.cohortCard}
-                      style={{ backgroundColor: `${item.cpkColor}`, color: `${item.textColor}` }}>
-                      <CardHeader
-                        title={item.abbreviation + " - " + item.name}
-                        aria-label={`card for ${item.name}`} />
-                      <CommonCardActions
-                        archiveStatus={archiveStatus}
-                        item={item}
-                        handleArchive={handleArchive}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        handleAssign={handleAssign}
-                        recordName="Cohort"
-                        color={item.textColor}
-                      />
-                    </Card>
-                  ))
-                )
-                }
-
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* Cohort Members */}
-          <Grid item xs={4}>
-            <Card>
-              <CardHeader title="Cohort Members" subheader="Count: 2" />
-              <CardContent>
-                {/* <Typography>Student Cards go here</Typography> */}
-                <Card raised={true} className={classes.studentCard}>
-                  <CardContent>
-                    <Typography>Assigned Student card 1</Typography>
-                  </CardContent>
-                </Card>
-                <Card raised={true} className={classes.studentCard}>
-                  <CardContent>
-                    <Typography>Assigned Student card 2</Typography>
-                  </CardContent>
-                </Card>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          {/* Unassigned Students */}
-          <Grid item xs={4}>
-            <Card>
-              <CardHeader title="UnAssigned Students" subheader="Count: 1" />
-              <CardContent>
-                {/* <Typography>Student Cards go here</Typography> */}
-                <Card raised={true} className={classes.studentCard}>
-                  <CardContent>
-                    <Typography>Student card</Typography>
-                  </CardContent>
-                </Card>
-              </CardContent>
-            </Card>
-          </Grid>
+          {/* // TODO Add table here */}
 
         </Grid>
       </Grid>
@@ -287,9 +200,9 @@ export default function CohortAssignment() {
       <Controls.Popup
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
-        title="Cohort Form"
+        title="Curriculum Theme Form"
       >
-        <CohortForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
+        <CurriculumThemeForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
       </Controls.Popup>
       <Controls.Notification notify={notify} setNotify={setNotify} />
       <Controls.ConfirmDialog
