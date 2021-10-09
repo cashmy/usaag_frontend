@@ -9,6 +9,7 @@ import Notification from "./Notification";
 import Popup from "./Popup";
 import RadioGroup from "./RadioGroup";
 import Select from "./Select";
+import Switch from "./Switch";
 
 const Controls = {
   ActionButton,
@@ -22,6 +23,7 @@ const Controls = {
   Popup,
   RadioGroup,
   Select,
+  Switch,
 };
 
 export default Controls;
