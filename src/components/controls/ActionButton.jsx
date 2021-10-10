@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
             color: theme.palette.secondary.main
         }
     },
-    // Console errros will be logged if the following colors are used. 
+    // Console errors will be logged if the following colors are used. 
     // The program will compile and run successfully though.
     // Material-ui standards define the use of primary, secondary, and default only.
     error: {

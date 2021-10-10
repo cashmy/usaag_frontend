@@ -69,9 +69,7 @@ export default function CurriculumThemeForm(props) {
     // SaveSubmit Callback handler - event driven
     const handleSubmit = (event) => {
         event.preventDefault();
-        let result = validate()
-        console.log("Result of validation: ", result)
-        if (result)
+        if (validate())
             addOrEdit(values, resetForm);
     };
 

@@ -20,7 +20,7 @@ import ArchiveIcon from "@material-ui/icons/Archive";
 import UnarchiveIcon from "@material-ui/icons/Unarchive";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteIcon from "@material-ui/icons/Delete";
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import SearchIcon from '@material-ui/icons/Search';
 // Child components
 import Controls from "../../components/controls/Controls";
@@ -36,6 +36,9 @@ import CurriculumThemesService from "../../services/curriculumThemes.service";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+  },
+  multiLineDesc: {
+    width: '25%',
   },
   container: {
     paddingTop: theme.spacing(5),
@@ -57,6 +60,10 @@ const useStyles = makeStyles((theme) => ({
   archiveSwitch: {
     position: "absolute",
     right: "10%",
+  },
+  searchInput: {
+    width: '25%',
+    marginLeft: theme.spacing(5),
   },
 }));
 
@@ -80,6 +87,8 @@ export default function CurriculumThemeTable() {
   const [records, setRecords] = useState([]);
   const [recordForEdit, setRecordForEdit] = useState(null);
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
+  const theadColor = "#d600f9"; // bright purple-pink
+  const theadText = "#ffffff"; // white
   const [openPopup, setOpenPopup] = useState(false);
   const [archiveStatus, setArchiveStatus] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState({
@@ -115,7 +124,7 @@ export default function CurriculumThemeTable() {
     TblHead,
     TblPagination,
     recordsAfterPagingAndSorting
-  } = useTable(records, columnCells, filterFn);
+  } = useTable(records, columnCells, filterFn, theadColor, theadText);
 
   const handleSearch = e => {
     let target = e.target;
@@ -126,15 +135,23 @@ export default function CurriculumThemeTable() {
         if (target.value === "")
           return items;
         else
-          return items.filter(x => (
-            x.cptDescription.toLowerCase().includes(target.value.toLowerCase())
-          ))
+          return items.filter(
+            (x) =>
+              x.name
+                .toLowerCase()
+                .includes(target.value.toLowerCase()) ||
+              x.technologyStack
+                .toLowerCase()
+                .includes(target.value.toLowerCase()) ||
+              x.level
+                .toLowerCase()
+                .includes(target.value.toLowerCase())
+          )
       }
     })
   }
 
   const addOrEdit = (curriculumTheme, resetForm) => {
-    console.log("Add/Edit", curriculumTheme)
     if (curriculumTheme.id === 0) {
       CurriculumThemesService.addCurriculumTheme(curriculumTheme);
       setLoadData(!loadData); // Request reload of data
@@ -194,7 +211,9 @@ export default function CurriculumThemeTable() {
       type: "success",
     });
   };
+  const handleDetails = (item) => {
 
+  }
   return (
     <Fragment>
       <Grid container className={classes.root} spacing={1}>
@@ -203,7 +222,8 @@ export default function CurriculumThemeTable() {
           <Grid item xs={11}>
             <Paper className={classes.paper}>
               <Toolbar>
-                <Typography variant="h4">Currriculums</Typography>
+                <Typography variant="h4">Currriculum Themes</Typography>
+
                 <Controls.Input
                   label="Search Name, Tech Stack, Level"
                   fullWidth={false}
@@ -215,6 +235,7 @@ export default function CurriculumThemeTable() {
                   }}
                   onChange={handleSearch}
                 />
+
                 <Tooltip title="Toggle archive status">
                   <FormControlLabel
                     className={classes.archiveSwitch}
@@ -279,14 +300,19 @@ export default function CurriculumThemeTable() {
                             <DeleteIcon fontSize="small" />
                           </Controls.ActionButton>
                           <Controls.ActionButton
-
-
+                            color="warning"
                             onClick={() => {
                               handleArchive(item);
                             }}
                           >
                             {!archiveStatus && <ArchiveIcon />}
                             {archiveStatus && <UnarchiveIcon />}
+                          </Controls.ActionButton>
+                          <Controls.ActionButton
+                            color="info"
+                            onClick={() => handleDetails(item.id)}
+                          >
+                            <AssignmentIcon fontSize="small" />
                           </Controls.ActionButton>
                         </TableCell>
                       </TableRow>

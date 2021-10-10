@@ -14,21 +14,22 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     "& thead th": {
       fontWeight: "600",
-      color: theme.palette.primary.contrastText,
-      backgroundColor: theme.palette.primary.light,
+      color: props => props[1],
+      backgroundColor: props => props[0],
     },
     "& tbody td": {
       fontWeight: "300",
     },
     "& tbody tr:hover": {
-      backgroundColor: "#fffbf2",
+      backgroundColor: theme.palette.action.hover,
       cursor: "pointer",
     },
   },
 }));
 
-export default function useTable(records, columnCells, filterFn) {
-  const classes = useStyles();
+export default function useTable(records, columnCells, filterFn, ...props) {
+  console.log("props:", props)
+  const classes = useStyles(props);
 
   const pages = [5, 10, 25, { label: "All", value: -1 }];
   const [page, setPage] = useState(0);
@@ -37,7 +38,9 @@ export default function useTable(records, columnCells, filterFn) {
   const [orderBy, setOrderBy] = useState();
 
   const TblContainer = (props) => (
-    <Table className={classes.table}>{props.children}</Table>
+    <Table className={classes.table}
+          //  style={{backgroundColor: "purple"}}
+    >{props.children}</Table>
   );
 
   const TblHead = (props) => {
