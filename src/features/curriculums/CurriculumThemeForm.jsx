@@ -7,8 +7,7 @@ import { useForm, Form } from '../../components/useForm';
 const initialFValues = {
     id: 0,
     name: '',
-    // abbreviation: '',
-    level: 'beginner',
+    level: 'Beginner',
     technologyStack: '',
     numberOfWeeks: 3,
     daysInWeek: 5,
@@ -38,11 +37,11 @@ export default function CurriculumThemeForm(props) {
                 : "This field is required."
         if ('numberOfWeeks' in fieldValues)
             temp.numberOfWeeks = fieldValues.numberOfWeeks
-                ? 0 | "0"
+                ? ""
                 : "This field is required."
         if ('daysInWeek' in fieldValues)
             temp.daysInWeek = fieldValues.daysInWeek
-                ? 0
+                ? ""
                 : "This field is required."
         if ('daysInWeek' in fieldValues && temp.daysInWeek === "0")
             temp.daysInWeek = fieldValues.daysInWeek < 8
@@ -70,7 +69,9 @@ export default function CurriculumThemeForm(props) {
     // SaveSubmit Callback handler - event driven
     const handleSubmit = (event) => {
         event.preventDefault();
-        if (validate())
+        let result = validate()
+        console.log("Result of validation: ", result)
+        if (result)
             addOrEdit(values, resetForm);
     };
 
@@ -106,9 +107,9 @@ export default function CurriculumThemeForm(props) {
                         onChange={handleInputChange}
                         error={errors.level}
                         options={[
-                            { id: "beginner", title: "Beginner" },
-                            { id: "intermediate", title: "Intermediate" },
-                            { id: "advanced", title: "Advanced" },
+                            { id: "Beginner", title: "Beginner" },
+                            { id: "Intermediate", title: "Intermediate" },
+                            { id: "Advanced", title: "Advanced" },
                         ]}
                     />
                 </Grid>
