@@ -20,7 +20,7 @@ class CurriculumThemesService {
     return axios.post(API_URL, data, { headers: authHeader() });
   };
 
-  updateCurriculmTheme = (data) => {
+  updateCurriculumTheme = (data) => {
     axios
       .put(API_URL + `/${data.id}`, data, { headers: authHeader() })
       .then((response) => {
