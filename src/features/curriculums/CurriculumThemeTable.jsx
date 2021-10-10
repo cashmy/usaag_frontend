@@ -253,7 +253,9 @@ export default function CurriculumThemeTable() {
               <TblContainer>
                 <TblHead />
                 <TableBody>
-                  {
+                  {isLoading ? (
+                    <Typography> Loading ... </Typography>
+                  ) : (
                     recordsAfterPagingAndSorting().map(item => (
                       <TableRow key={item.id}>
                         <TableCell>{item.name}</TableCell>
@@ -277,7 +279,7 @@ export default function CurriculumThemeTable() {
                             <DeleteIcon fontSize="small" />
                           </Controls.ActionButton>
                           <Controls.ActionButton
-                         
+
 
                             onClick={() => {
                               handleArchive(item);
@@ -289,6 +291,7 @@ export default function CurriculumThemeTable() {
                         </TableCell>
                       </TableRow>
                     ))
+                  )
                   }
                 </TableBody>
               </TblContainer>
