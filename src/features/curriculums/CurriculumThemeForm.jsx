@@ -63,6 +63,7 @@ export default function CurriculumThemeForm(props) {
         errors,
         setErrors,
         handleInputChange,
+        handleToggleChange,
         resetForm,
     } = useForm(initialFValues);
 
@@ -130,7 +131,7 @@ export default function CurriculumThemeForm(props) {
                     name="dayTimeStatus"
                     label="Day Time Status"
                     value={values.dayTimeStatus}
-                    onChange={handleInputChange}
+                    onChange={handleToggleChange}
                 />
             </Grid>
             </Grid>

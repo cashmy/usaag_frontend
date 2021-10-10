@@ -14,6 +14,16 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
     if (validateOnChange) validate({ [name]: value });
   };
 
+  const handleToggleChange = (event) => {
+    const { name } = event.target;
+    const value = event.target.checked;
+    setValues({
+      ...values,
+      [name]: value,
+    });
+    if (validateOnChange) validate({ [name]: value });
+  };
+
   const resetForm = () => {
     setValues(initialFValues);
     setErrors({});
@@ -25,6 +35,7 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
     errors,
     setErrors,
     handleInputChange,
+    handleToggleChange,
     resetForm,
   };
 }
