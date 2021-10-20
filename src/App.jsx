@@ -50,7 +50,8 @@ import CohortAssignment from "./features/cohorts/CohortAssignment";
 import Template from "./features/template/Template";
 import TemplateTable from "./features/template/TemplateTable";
 import CurriculumThemeTable from "./features/curriculums/CurriculumThemeTable";
-
+import CurriculumDetail from "./features/curriculums/CurriculumDetailTable";
+import ComponentTester from "./features/componentTester/componentTester";
 // import { PauseCircleFilledTwoTone } from "@material-ui/icons";
 
 const drawerWidth = 240;
@@ -265,7 +266,7 @@ export default function App() {
                 <MuiSwitch
                   checked={darkMode}
                   onChange={() => setDarkMode(!darkMode)}
-                  // color="palette.text.primary"
+                // color="palette.text.primary"
                 />
               }
               label="Dark Mode"
@@ -390,6 +391,8 @@ export default function App() {
               <Route path="/template" component={Template} />
               <Route path="/templateTable" component={TemplateTable} />
               <Route path="/curriculumThemes" component={CurriculumThemeTable} />
+              <Route path="/curriculumDetail" component={CurriculumDetail} />
+              <Route path="/componentTester" component={ComponentTester} />
               <SignInSide />
             </Switch>
           </Paper>
