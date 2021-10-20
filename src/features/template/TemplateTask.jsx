@@ -3,6 +3,7 @@ import { Draggable } from "react-beautiful-dnd";
 import { Grid, makeStyles } from "@material-ui/core";
 import clsx from "clsx";
 
+// * Styling
 const useStyles = makeStyles((theme) => ({
   container: {
     border: "1px solid lightgrey",

@@ -1,37 +1,85 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from "react-router-dom";
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
-import { IconButton, Paper, makeStyles, Fab } from '@material-ui/core';
+import {
+    Fab,
+    Grid,
+    IconButton,
+    Paper,
+    Toolbar,
+    Tooltip,
+    Typography,
+    makeStyles,
+} from '@material-ui/core';
 // Icons
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 // Wrapped Components
 import Controls from '../../components/controls/Controls';
-import PageHeader from '../../components/PageHeader/PageHeader';
 // Service Layer
-// import PatientService from '../../services/patient.service';
+import CurriculumDetailService from '../../services/curriculumDetail.service';
 // Primary CRUD Child Component
-// import PatientForm from './PatientForm';
 
 // ***** Styles *****
 const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    container: {
+        paddingTop: theme.spacing(5),
+        paddingBottom: theme.spacing(3),
+        justifyContent: "center",
+        display: "flex",
+    },
+    headingContainer: {
+        paddingTop: theme.spacing(3),
+        paddingBottom: theme.spacing(3),
+        justifyContent: "center",
+        display: "flex",
+    },
+    titleContainer: {
+        padding: theme.spacing(1.4),
+    },
     pageContent: {
-        margin: theme.spacing(5),
+        marginTop: theme.spacing(3),
+        marginRight: theme.spacing(7),
+        marginLeft: theme.spacing(7),
         padding: theme.spacing(3)
     },
-    searchInput: {
-        width: '25%',
-    },
-    multiLineDesc: {
-        width: '25%',
-    },
+    // searchInput: {
+    //     width: '25%',
+    // },
+    // multiLineDesc: {
+    //     width: '25%',
+    // },
     addButton: {
         position: 'absolute',
         right: '10px',
     },
+    backButton: {
+        position: 'absolute',
+        right: '60px',
+    },
     toolbar: {
         justifyContent: 'flex-end',
-    }
+    },
+    paper: {
+        padding: theme.spacing(1.5),
+        textAlign: "center",
+        color: theme.palette.text.secondary,
+        display: "flex",
+        flexDirection: "column",
+    },
+    titlePaper: {
+        padding: theme.spacing(1.5),
+        textAlign: "center",
+        backgroundColor: "purple",
+        color: "white",
+        display: "flex",
+        flexDirection: "column",
+    },
 }
 ))
 
@@ -45,15 +93,23 @@ const handleDeleteRow = (id) => {
 }
 
 // ***** Table Header Declarations & Helper Functions *****
+function getTempHdrName(params) { return params.row.templateHeader.name }
 const columns = [
-    { field: 'id', headerName: 'Theme Id', width: 90, hide: true },
-    { field: 'assignmentSequence', headerName: 'Seq', width: 45 },
-    { field: 'dayToAssign', headerName: 'Day', width: 45 },
-    { field: 'projectDays', headerName: 'Proj Days', width: 45 },
-    { field: 'lectureTopics', headerName: 'Lecture Topics', width: 150 },
+    { field: 'themeId', headerName: "Theme Id", width: 120, hide: true },
+    { field: 'id', headerName: 'Id', width: 90, hide: true },
+    { field: 'assignmentSequence', headerName: 'Seq', width: 110 },
+    { field: 'lectureTopics', headerName: 'Lecture Topics', width: 500, editable: true },
+    { field: 'dayToAssign', headerName: 'Day', width: 110, editable: true },
+    { field: 'projectDays', headerName: 'Proj Days', width: 140, editable: true },
     { field: 'headerId', headerName: 'Project Id', width: 90, hide: true },
-    { field: 'name', headerName: 'Project Name', width: 150 },
-    { field: 'notes', headerName: 'Notes', width: 150 },
+    {
+        field: 'templateHeader.name',
+        headerName: 'Project Name',
+        width: 250,
+        valueGetter: getTempHdrName,
+        sortComparator: (v1, v2) => v1.toString().localeCompare(v2.toString())
+    },
+    { field: 'notes', headerName: 'Notes', width: 350, editable: true },
     {
         field: 'actions',
         headerName: 'Actions',
@@ -80,9 +136,12 @@ const columns = [
 ]
 
 // ***** Main Function *****
-export default function CurriculumDetail() {
+export default function CurriculumDetail(props) {
+    const currThemeId = props.location.state.recordForEdit.id;
+    const currThemeName = props.location.state.recordForEdit.name;
     const classes = useStyles();
-    const [mode, setMode] = useState("");
+    const history = useHistory();
+    // const [mode, setMode] = useState("");
     const [records, setRecords] = useState([])
     const [loadData, setLoadData] = useState(true)
     const [recordForEdit, setRecordForEdit] = useState(null);
@@ -92,12 +151,13 @@ export default function CurriculumDetail() {
 
 
     useEffect(() => {
-        getPatients();
-    }, [loadData])
+        // console.log("Curr Detail Props: ", props.location.state.recordForEdit)
+        getCurriculumDtls(currThemeId)
+    }, [loadData, props])
 
-    async function getPatients(e) {
+    async function getCurriculumDtls(id) {
         try {
-            const response = await PatientService.getAllPatients();
+            const response = await CurriculumDetailService.getCurriculumDetails(id);
             setRecords(response.data);
             setLoadData(false)
         }
@@ -105,11 +165,12 @@ export default function CurriculumDetail() {
             console.log('API call unsuccessful', e)
         }
     }
-
+    // const handleSearch = () => {
+    //
+    // }
     const mapRecords = () => {
         let mapResult = records.map((record, i) => {
-            // Need "id" only for DataGrid to work (operates as key)
-            record.id = record.themeId
+            // console.log("Data Record: ", record)
             return record;
         });
         return mapResult
@@ -120,43 +181,93 @@ export default function CurriculumDetail() {
     //     setOpenPopup(true)
     // }
 
-    const addOrEdit = (record, resetForm) => {
-        if (mode === "ADD") {
-            PatientService.addPatient(record)
-            setLoadData(true); // Request reload of data
-        }
-        else {
-            PatientService.updatePatient(record)
-            setLoadData(true); // Request reload of data
-        }
-        resetForm()
-        setMode("")
-        setRecordForEdit(null)
-        setOpenPopup(false) // Close Popup modal
-        setNotify({
-            isOpen: true,
-            message: 'Submitted Successfully',
-            type: 'success'
-        })
+    // const addOrEdit = (record, resetForm) => {
+    //     if (mode === "ADD") {
+    //         CurriculumDetailService.addCurriculumDetail(record)
+    //         setLoadData(true); // Request reload of data
+    //     }
+    //     else {
+    //         CurriculumDetailService.updateCurriculumDetail(record)
+    //         setLoadData(true); // Request reload of data
+    //     }
+    //     resetForm()
+    //     setMode("")
+    //     setRecordForEdit(null)
+    //     setOpenPopup(false) // Close Popup modal
+    //     setNotify({
+    //         isOpen: true,
+    //         message: 'Submitted Successfully',
+    //         type: 'success'
+    //     })
+    // }
+
+    const returnToParent = () => {
+        history.push({
+            pathname: "/curriculumThemes",
+        });
     }
 
     return (
         <React.Fragment>
-            <PageHeader
-                title="Patients"
-                subtitle="List of patients"
-                icon={<PatientIcon />}
-                isSvg={true}
-            />
+
+            {/* //* Header Bar */}
+            <Grid container className={classes.root} spacing={1}>
+                <Grid container className={classes.container} spacing={3}>
+                    <Grid item xl={4}>
+                        <Paper className={classes.titlePaper}>
+                            <Grid item md={12} className={classes.titleContainer}>
+                                <Typography variant="h4">Curriculum Detail: </Typography>
+                            </Grid>
+                        </Paper>
+                    </Grid>
+                    <Grid item xs={7}>
+                        <Paper className={classes.paper}>
+                            <Toolbar>
+                                <Typography variant="h4">{currThemeName.substr(0, 30)} </Typography>
+                                <Tooltip title="Return to Curriculum Header">
+                                    <Fab
+                                        className={classes.backButton}
+                                        color="secondary"
+                                        aria-label="return to curriculum detail"
+                                        size="small"
+                                        onClick={returnToParent}
+                                    >
+                                        <ArrowBackIcon />
+                                    </Fab>
+                                </Tooltip>
+                                <Tooltip title="Add Curriculum Detail">
+                                    <Fab
+                                        className={classes.addButton}
+                                        color="primary"
+                                        aria-label="add a curriculum detail record"
+                                        size="small"
+                                        onClick={() => {
+                                            setOpenPopup(true);
+                                            setRecordForEdit(null);
+                                        }}
+                                    >
+                                        <AddIcon />
+                                    </Fab>
+                                </Tooltip>
+
+                            </Toolbar>
+                        </Paper>
+                    </Grid>
+                </Grid>
+            </Grid>
+
+            {/* // * Data Grid Table */}
             <Paper className={classes.pageContent}>
                 <div style={{ height: 400, width: '100%' }}>
                     <DataGrid
                         classes={{
                             toolbar: classes.toolbar,
                         }}
+                        editMode="row"
                         rows={mapRecords()}
                         columns={columns}
-                        pageSize={5}
+                        pageSize={10}
+                        rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                         // checkboxSelection 
                         components={{
                             Toolbar: GridToolbar,
@@ -165,7 +276,8 @@ export default function CurriculumDetail() {
                 </div>
             </Paper >
 
-            <Controls.Popup openPopup={openPopup} setOpenPopup={setOpenPopup} title="Patient Form" >
+            {/* // * Dialogs, Modals, & Popups */}
+            <Controls.Popup openPopup={openPopup} setOpenPopup={setOpenPopup} title="Add Curriculum Detail" >
                 {/* <PatientForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} /> */}
             </Controls.Popup>
             <Controls.Notification notify={notify} setNotify={setNotify} />

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authHeader from "./authHeader";
 
-const API_URL = "https://localhost:44319/api/curriculumTemplateList";
+const API_URL = "https://localhost:44319/api/curriculumDetail";
 
 class CurriculumDetailService {
 

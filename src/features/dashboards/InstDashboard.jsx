@@ -66,8 +66,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.getContrastText("#f86e23"),
   },
   avatarSecondaryColor: {
-    backgroundColor: "#00e676",
-    color: theme.palette.getContrastText("#00e676"),
+    backgroundColor: "#00a152",
+    color: theme.palette.getContrastText("#00a152"),
   },
   avatarTertiaryColor: {
     backgroundColor: "#d600f9",

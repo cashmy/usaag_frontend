@@ -51,10 +51,6 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     right: "10%",
   },
-  cohortColumn: {
-    maxHeight: "80vh",
-    // overflow: "auto",
-  },
   cohortCard: {
     marginBottom: theme.spacing(3),
     // color: theme.palette.contrastText,
@@ -214,11 +210,10 @@ export default function CohortAssignment() {
           {/* //* CARDS */}
           {/* Cohorts */}
           <Grid item xs={3}>
-            <Card className={classes.cohortColumn}>
-              <CardHeader title="Cohorts" />
-
+            <Card>
+              <CardHeader title="Cohorts" subheader="Count: 2" />
               <Scrollbars
-                style={{ height: '80vh' }}
+                style={{ height: '70vh' }}
               >
                 <CardContent>
 
@@ -257,36 +252,44 @@ export default function CohortAssignment() {
 
           {/* Cohort Members */}
           <Grid item xs={4}>
-            <Card className={classes.cohortColumn}>
+            <Card>
               <CardHeader title="Cohort Members" subheader="Count: 2" />
-              <CardContent>
-                {/* <Typography>Student Cards go here</Typography> */}
-                <Card raised={true} className={classes.studentCard}>
-                  <CardContent>
-                    <Typography>Assigned Student card 1</Typography>
-                  </CardContent>
-                </Card>
-                <Card raised={true} className={classes.studentCard}>
-                  <CardContent>
-                    <Typography>Assigned Student card 2</Typography>
-                  </CardContent>
-                </Card>
-              </CardContent>
+              <Scrollbars
+                style={{ height: '70vh' }}
+              >
+                <CardContent>
+                  {/* <Typography>Student Cards go here</Typography> */}
+                  <Card raised={true} className={classes.studentCard}>
+                    <CardContent>
+                      <Typography>Assigned Student card 1</Typography>
+                    </CardContent>
+                  </Card>
+                  <Card raised={true} className={classes.studentCard}>
+                    <CardContent>
+                      <Typography>Assigned Student card 2</Typography>
+                    </CardContent>
+                  </Card>
+                </CardContent>
+              </Scrollbars>
             </Card>
           </Grid>
 
           {/* Unassigned Students */}
           <Grid item xs={4}>
-            <Card className={classes.cohortColumn}>
+            <Card>
               <CardHeader title="UnAssigned Students" subheader="Count: 1" />
-              <CardContent>
-                {/* <Typography>Student Cards go here</Typography> */}
-                <Card raised={true} className={classes.studentCard}>
-                  <CardContent>
-                    <Typography>Student card</Typography>
-                  </CardContent>
-                </Card>
-              </CardContent>
+              <Scrollbars
+                style={{ height: '70vh' }}
+              >
+                <CardContent>
+                  {/* <Typography>Student Cards go here</Typography> */}
+                  <Card raised={true} className={classes.studentCard}>
+                    <CardContent>
+                      <Typography>Student card</Typography>
+                    </CardContent>
+                  </Card>
+                </CardContent>
+              </Scrollbars>
             </Card>
           </Grid>
 

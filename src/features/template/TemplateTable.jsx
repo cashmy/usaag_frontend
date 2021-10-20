@@ -80,6 +80,14 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
+  titlePaper: {
+    padding: theme.spacing(1.5),
+    textAlign: "center",
+    backgroundColor: "#00a152",
+    color: theme.palette.getContrastText("#00a152"),
+    display: "flex",
+    flexDirection: "column",
+},
   iconSecondaryColor: {
     backgroundColor: "#00e676",
     color: theme.palette.getContrastText("#00e676"),
@@ -150,7 +158,7 @@ export default function TemplateTable() {
   };
 
   const handleEdit = (record) => {
-    console.log("Record param: ", record);
+    // console.log("Record param: ", record);
     history.push({
       pathname: "/template",
       state: {
@@ -190,25 +198,19 @@ export default function TemplateTable() {
     return main.toString() + "." + minor.toString() + "." + sub.toString();
   };
 
+  // trigger rerender if data changes
   useEffect(() => {
-    // trigger rerender if data changes
     console.log("Inside useEffect", loadData);
   }, [data]);
 
   return (
     <React.Fragment>
       <Grid container className={classes.root} spacing={1}>
-        {/* Header Bar */}
+        {/* //* Header Bar */}
         <Grid container className={classes.headingContainer} spacing={2}>
           <Grid item xl={4} >
-            <Paper className={classes.paper}>
-              {/* <Grid item xs={1}>
-                <AssignmentIcon
-                  fontSize="large"
-                  className={classes.iconSecondaryColor}
-                />
-              </Grid> */}
-              <Grid item md={11} className={classes.titleContainer}>
+            <Paper className={classes.titlePaper}>
+              <Grid item md={12} className={classes.titleContainer}>
                 <Typography variant="h4">User Story Templates</Typography>
               </Grid>
             </Paper>
@@ -256,13 +258,11 @@ export default function TemplateTable() {
                   <AddIcon />
                 </Fab>
               </Toolbar>
-
-              {/* <Typography variant="h6">Search Bar goes here</Typography> */}
             </Paper>
           </Grid>
         </Grid>
 
-        {/* Card Grid */}
+        {/* //* Card Grid */}
         <Grid container className={classes.cardContainer} spacing={2}>
           {/* // TODO Map function goes here  */}
           {/* {recordsAfterPagingAndSorting().map((item) => (
@@ -348,6 +348,8 @@ export default function TemplateTable() {
           ))}
         </Grid>
       </Grid>
+
+      {/* //* Dialogs, Modals, and Popups */}
       <Controls.Notification notify={notify} setNotify={setNotify} />
       <Controls.ConfirmDialog
         confirmDialog={confirmDialog}

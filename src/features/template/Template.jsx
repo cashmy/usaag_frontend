@@ -7,6 +7,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import TemplateColumn from "./TemplateColumn";
 import TemplateHeaderForm from "./TemplateHeader";
 
+// * Styling
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -42,6 +43,7 @@ export default function Template() {
   const classes = useStyles();
   const [templateData, setTemplateData] = useState(TemplateData);
 
+  // * Handle "Dragging"
   // Note: This is an "optimistic Update" so it is not waiting on the server.
   // A "PATCH" will be called via an endpoint at the end of this state managed update.
   const onDragEnd = (result) => {
@@ -64,6 +66,7 @@ export default function Template() {
 
     console.log("===> Destination Index: ", destination.index);
 
+    // * Moving within a list
     if (startColumn === finishColumn) {
       const newTasksIds = Array.from(startColumn.taskIds);
       newTasksIds.splice(source.index, 1); // remove one item at specific index
@@ -88,7 +91,7 @@ export default function Template() {
       return;
     }
 
-    // Moving from list to another
+    // * Moving from list to another
     const startTaskIds = Array.from(startColumn.taskIds);
     startTaskIds.splice(source.index, 1); // remove one item at specific index in startColumn
     const newStart = {
@@ -128,7 +131,7 @@ export default function Template() {
           </Grid>
         </Grid>
 
-        {/* Template Header and Details */}
+        {/* //* Template Header and Details */}
         <Grid container className={classes.projectContainer} spacing={2}>
           <Grid item xs={5}>
             <Paper className={classes.paper}>
@@ -141,7 +144,8 @@ export default function Template() {
           <DragDropContext onDragEnd={onDragEnd} className={classes.root}>
             <Grid item xs={5} container className={classes.columnContainer}>
               {/* Setup Droppable context columns */}
-              {/* Template Detail Column */}
+
+              {/* //* Template Detail Column */}
               {templateData.columns.columnOrder.map((columnID) => {
                 const column = templateData.columns[columnID];
                 console.log("Column: ", column);

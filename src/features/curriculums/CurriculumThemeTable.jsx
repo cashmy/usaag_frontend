@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import {
   InputAdornment,
   Fab,
@@ -25,7 +26,8 @@ import SearchIcon from '@material-ui/icons/Search';
 // Child components
 import Controls from "../../components/controls/Controls";
 import CurriculumThemeForm from "./CurriculumThemeForm";
-import useTable from "../../components/useTable"
+// import CurriculumDetailTable from "./CurriculumDetailTable";
+import useTable from "../../components/useTable";
 // Service Layer
 import CurriculumThemesService from "../../services/curriculumThemes.service";
 // import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
@@ -81,6 +83,7 @@ const columnCells = [
 export default function CurriculumThemeTable() {
   // State Variables
   const classes = useStyles();
+  const history = useHistory();
   // const scrollable = useScrollable();
   const [loadData, setLoadData] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -178,6 +181,7 @@ export default function CurriculumThemeTable() {
   const handleEdit = (record) => {
     openInPopup(record)
   };
+  
   const onDelete = (id) => {
     setConfirmDialog({
       ...confirmDialog,
@@ -211,9 +215,17 @@ export default function CurriculumThemeTable() {
       type: "success",
     });
   };
-  const handleDetails = (item) => {
-
+  const handleDetails = (record) => {
+    history.push({
+      pathname: "/curriculumDetail",
+      state: {
+        recordForEdit: record,
+      },
+    });
   }
+
+  
+
   return (
     <Fragment>
       <Grid container className={classes.root} spacing={1}>
@@ -310,7 +322,7 @@ export default function CurriculumThemeTable() {
                           </Controls.ActionButton>
                           <Controls.ActionButton
                             color="info"
-                            onClick={() => handleDetails(item.id)}
+                            onClick={() => handleDetails(item)}
                           >
                             <AssignmentIcon fontSize="small" />
                           </Controls.ActionButton>
