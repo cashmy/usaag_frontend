@@ -21,9 +21,9 @@ import Controls from "../../components/controls/Controls";
 import CohortForm from "./CohortForm";
 // Service Layer
 import CohortService from "../../services/cohorts.service";
-// import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
+import { Scrollbars } from 'react-custom-scrollbars'
 
-// import { Scrollable, useScrollable } from 'nice-scrollbars';
+
 
 // * Styling
 const useStyles = makeStyles((theme) => ({
@@ -50,6 +50,10 @@ const useStyles = makeStyles((theme) => ({
   archiveSwitch: {
     position: "absolute",
     right: "10%",
+  },
+  cohortColumn: {
+    maxHeight: "80vh",
+    // overflow: "auto",
   },
   cohortCard: {
     marginBottom: theme.spacing(3),
@@ -89,6 +93,7 @@ export default function CohortAssignment() {
   }, [archiveStatus, loadData]);
 
   const getCohorts = async (e) => {
+    console.log("Cohorts - Inside getCohorts")
     try {
       setIsLoading(true);
       const response = await CohortService
@@ -209,45 +214,50 @@ export default function CohortAssignment() {
           {/* //* CARDS */}
           {/* Cohorts */}
           <Grid item xs={3}>
-            <Card>
+            <Card className={classes.cohortColumn}>
               <CardHeader title="Cohorts" />
-              <CardContent>
 
-                {/* Map cohort cards here */}
-                {isLoading ? (
-                  <Typography> Loading ... </Typography>
-                ) : (
-                  records.map((item, index) => (
-                    <Card
-                      key={index}
-                      raised={true}
-                      className={classes.cohortCard}
-                      style={{ backgroundColor: `${item.cpkColor}`, color: `${item.textColor}` }}>
-                      <CardHeader
-                        title={item.abbreviation + " - " + item.name}
-                        aria-label={`card for ${item.name}`} />
-                      <CommonCardActions
-                        archiveStatus={archiveStatus}
-                        item={item}
-                        handleArchive={handleArchive}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        handleAssign={handleAssign}
-                        recordName="Cohort"
-                        color={item.textColor}
-                      />
-                    </Card>
-                  ))
-                )
-                }
+              <Scrollbars
+                style={{ height: '80vh' }}
+              >
+                <CardContent>
 
-              </CardContent>
+                  {/* Map cohort cards here */}
+                  {isLoading ? (
+                    <Typography> Loading ... </Typography>
+                  ) : (
+                    records.map((item, index) => (
+                      <Card
+                        key={index}
+                        raised={true}
+                        className={classes.cohortCard}
+                        style={{ backgroundColor: `${item.cpkColor}`, color: `${item.textColor}` }}>
+                        <CardHeader
+                          title={item.abbreviation + " - " + item.name}
+                          aria-label={`card for ${item.name}`} />
+                        <CommonCardActions
+                          archiveStatus={archiveStatus}
+                          item={item}
+                          handleArchive={handleArchive}
+                          handleDelete={handleDelete}
+                          handleEdit={handleEdit}
+                          handleAssign={handleAssign}
+                          recordName="Cohort"
+                          color={item.textColor}
+                        />
+                      </Card>
+                    ))
+                  )
+                  }
+
+                </CardContent>
+              </Scrollbars>
             </Card>
           </Grid>
 
           {/* Cohort Members */}
           <Grid item xs={4}>
-            <Card>
+            <Card className={classes.cohortColumn}>
               <CardHeader title="Cohort Members" subheader="Count: 2" />
               <CardContent>
                 {/* <Typography>Student Cards go here</Typography> */}
@@ -267,7 +277,7 @@ export default function CohortAssignment() {
 
           {/* Unassigned Students */}
           <Grid item xs={4}>
-            <Card>
+            <Card className={classes.cohortColumn}>
               <CardHeader title="UnAssigned Students" subheader="Count: 1" />
               <CardContent>
                 {/* <Typography>Student Cards go here</Typography> */}
