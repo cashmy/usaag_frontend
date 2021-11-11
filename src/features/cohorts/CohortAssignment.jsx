@@ -21,9 +21,8 @@ import Controls from "../../components/controls/Controls";
 import CohortForm from "./CohortForm";
 // Service Layer
 import CohortService from "../../services/cohorts.service";
+import StudentService from "../../services/students.service";
 import { Scrollbars } from 'react-custom-scrollbars'
-
-
 
 // * Styling
 const useStyles = makeStyles((theme) => ({
@@ -68,8 +67,11 @@ export default function CohortAssignment() {
   const classes = useStyles();
   // const scrollable = useScrollable();
   const [loadData, setLoadData] = useState(true);
+  const [loadStudentData, setLoadStudentData] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingStudents, setIsLoadingStudents] = useState(false);
   const [records, setRecords] = useState([]);
+  const [studentRecords, setStudentRecords] = useState([])
   const [recordForEdit, setRecordForEdit] = useState(null);
   const [openPopup, setOpenPopup] = useState(false);
   const [archiveStatus, setArchiveStatus] = useState(false);
@@ -88,6 +90,10 @@ export default function CohortAssignment() {
     getCohorts();
   }, [archiveStatus, loadData]);
 
+  useEffect(() => {
+    getAllUnassignedStudents();
+  }, [loadStudentData])
+
   const getCohorts = async (e) => {
     console.log("Cohorts - Inside getCohorts")
     try {
@@ -98,7 +104,18 @@ export default function CohortAssignment() {
       setRecords(response.data)
       setIsLoading(false)
     } catch (e) {
-      console.log("API call unsuccessful", e);
+      console.log("Cohorts API call unsuccessful:", e);
+    }
+  }
+  const getAllUnassignedStudents = async (e) => {
+    try {
+      setIsLoadingStudents(true);
+      const response = await StudentService
+        .getUnassignedStudents();
+      setStudentRecords(response.data)
+      setIsLoadingStudents(false);
+    } catch (e) {
+      console.log("Students API call unsuccessful: ", e)
     }
   }
 
@@ -211,7 +228,7 @@ export default function CohortAssignment() {
           {/* Cohorts */}
           <Grid item xs={3}>
             <Card>
-              <CardHeader title="Cohorts" subheader="Count: 2" />
+              <CardHeader title="Cohorts" subheader={`Count: ${records.length}`} />
               <Scrollbars
                 style={{ height: '70vh' }}
               >
@@ -277,17 +294,28 @@ export default function CohortAssignment() {
           {/* Unassigned Students */}
           <Grid item xs={4}>
             <Card>
-              <CardHeader title="UnAssigned Students" subheader="Count: 1" />
+              <CardHeader title="UnAssigned Students" subheader={`Count: ${studentRecords.length}`} />
               <Scrollbars
                 style={{ height: '70vh' }}
               >
                 <CardContent>
                   {/* <Typography>Student Cards go here</Typography> */}
-                  <Card raised={true} className={classes.studentCard}>
-                    <CardContent>
-                      <Typography>Student card</Typography>
-                    </CardContent>
-                  </Card>
+                  {/* Map cohort cards here */}
+                  {isLoadingStudents ? (
+                    <Typography> Loading Students ... </Typography>
+                  ) : (studentRecords.length == 0 ? (
+                    <Typography> No new students available </Typography>
+                  ) : (
+                    studentRecords.map((item, index) => (
+                      <Card raised={true} className={classes.studentCard}>
+                        <CardContent>
+                          <Typography key={index} > {item.firstName} {item.lastName} </Typography>
+                        </CardContent>
+                      </Card>
+                    )))
+                  )
+                  }
+                  {/* <Typography>Student card</Typography> */}
                 </CardContent>
               </Scrollbars>
             </Card>
