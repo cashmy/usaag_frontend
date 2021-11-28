@@ -3,6 +3,10 @@ import authHeader from "./authHeader";
 
 const API_URL = "https://localhost:44319/api/curriculumTypes";
 
+
+// ** Until full CRUD is implemented for this file, 
+// ** The only calls will be 'getCurriculumType' and 'getCurriculumTypesbySts'
+
 class CurriculumTypesService {
   // Activate this next endpoint only if needed
   // getAllCurriculumTypes = () => {
