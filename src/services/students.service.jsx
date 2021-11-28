@@ -12,6 +12,10 @@ class StudentService {
     return axios.get(API_URL + '/unassigned', { headers: authHeader() })
   };
 
+  getStudentsByCohort = (cohortId) => {
+    return axios.get(API_URL + `/cohort/${cohortId}`, { headers: authHeader() })
+  }
+
   getStudentssBySts = (status) => {
     return axios.get(API_URL + `/archive/${status}`, { headers: authHeader() });
   };

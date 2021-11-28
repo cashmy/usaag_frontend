@@ -258,7 +258,7 @@ export default function CurriculumDetail(props) {
 
             {/* // * Data Grid Table */}
             <Paper className={classes.pageContent}>
-                <div style={{ height: 400, width: '100%' }}>
+                <div style={{ height: 590, width: '100%' }}>
                     <DataGrid
                         classes={{
                             toolbar: classes.toolbar,

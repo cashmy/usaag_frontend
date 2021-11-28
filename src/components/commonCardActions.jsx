@@ -56,7 +56,7 @@ export default function CommonCardActions(props) {
                         style={{ color: `${color}` }}
                         aria-label={`assign items to ${recordName}`}
                         onClick={() => {
-                            handleAssign(item.id);
+                            handleAssign(item);
                         }}
                     >
                         <AssignmentIndIcon />
