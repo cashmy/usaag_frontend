@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import { Grid, Typography, makeStyles } from "@material-ui/core";
 import Controls from "../../components/controls/Controls";
 import { useForm, Form } from "../../components/useForm";
@@ -40,7 +40,6 @@ const initialFValues = {
 // *** MAIN FUNCTION: TemplateHeaderForm
 export default function TemplateHeaderForm(props) {
   const classes = useStyles();
-  const history = useHistory();
   const { recordForEdit } = props;
   const { values, setValues, errors, setErrors, handleInputChange, resetForm } =
     useForm(initialFValues);
@@ -210,7 +209,8 @@ export default function TemplateHeaderForm(props) {
             <Controls.Button
               color="default"
               text="Exit"
-              onClick={() => history.goBack()}
+              component={RouterLink}
+              to={"templateTable"}
             />
           </div>
         </Grid>
