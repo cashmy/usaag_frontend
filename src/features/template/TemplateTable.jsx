@@ -198,11 +198,6 @@ export default function TemplateTable() {
     return main.toString() + "." + minor.toString() + "." + sub.toString();
   };
 
-  // trigger rerender if data changes
-  useEffect(() => {
-    console.log("Inside useEffect", loadData);
-  }, [data]);
-
   return (
     <React.Fragment>
       <Grid container className={classes.root} spacing={1}>
@@ -267,7 +262,6 @@ export default function TemplateTable() {
           {/* // TODO Map function goes here  */}
           {/* {recordsAfterPagingAndSorting().map((item) => (
           ))} */}
-          {console.log("Data: ", data)}
           {data.map((item, index) => (
             <Grid item xl={2} key={index} >
               <Card className={classes.cardDetails}>

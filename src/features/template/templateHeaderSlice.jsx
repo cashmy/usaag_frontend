@@ -20,7 +20,7 @@ export const apiTemplateHeaderSlice = createApi({
         query(body) {
           return `/archive/${body.status}`;
         },
-        providesTag: (result, err, arg) => ["TempHeaders"],
+        providesTags: ["TempHeaders"],
       }),
 
       // Add a Template Header
@@ -30,7 +30,7 @@ export const apiTemplateHeaderSlice = createApi({
           method: "POST",
           body,
         }),
-        invalidatesTags: (result, err, arg) => ["TempHeaders"],
+        invalidatesTags: ["TempHeaders"],
       }),
 
       // Update A Template Header
@@ -51,7 +51,7 @@ export const apiTemplateHeaderSlice = createApi({
             method: "DELETE",
           };
         },
-        invalidatesTags: (result, err, arg) => ["TempHeaders"],
+        invalidatesTags: ["TempHeaders"],
       }),
     };
   },
@@ -59,7 +59,6 @@ export const apiTemplateHeaderSlice = createApi({
 
 export const {
   useFetchAllTemplateHeadersQuery,
-  // useFetchTemplateHeaderQuery,
   useAddTemplateHeaderMutation,
   useUpdateTemplateHeaderMutation,
   useDeleteTemplateHeaderMutation,

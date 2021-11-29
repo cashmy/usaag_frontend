@@ -18,6 +18,7 @@ export const apiTemplateDetailSlice = createApi({
         query(id) {
           return `/${id}`;
         },
+        providesTags: (result, err, arg) => ["TempDetails"],
       }),
 
       // Add a Template Detail
@@ -27,6 +28,7 @@ export const apiTemplateDetailSlice = createApi({
           method: "POST",
           body,
         }),
+        invalidatesTags: ["TempDetails"],
       }),
 
       // Update A Template Detail
@@ -36,6 +38,7 @@ export const apiTemplateDetailSlice = createApi({
           method: "PUT",
           body,
         }),
+        invalidatesTags: ["TempDetails"],
       }),
 
       // Delete a Template Header
@@ -46,6 +49,7 @@ export const apiTemplateDetailSlice = createApi({
             method: "DELETE",
           };
         },
+        invalidatesTags: ["TempDetails"],
       }),
     };
   },
