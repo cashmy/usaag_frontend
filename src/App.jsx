@@ -393,6 +393,7 @@ export default function App() {
               <Route path="/curriculumThemes" component={CurriculumThemeTable} />
               <Route path="/curriculumDetail" component={CurriculumDetail} />
               <Route path="/componentTester" component={ComponentTester} />
+              {/* Temporary call to component until Auth is added */}
               <SignInSide />
             </Switch>
           </Paper>
