@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
 import { Grid } from '@material-ui/core';
 import Controls from '../../components/controls/Controls';
 import { useForm, Form } from '../../components/useForm';
 // Service Layer
 import CurriculumTypesService from '../../services/curriculumTypes.service';
+// Redux (RTK)
+import { useFetchAllTemplateHeadersQuery } from "../template/templateHeaderSlice";
 
 const initialFValues = {
     id: 0,                  // Record Id
     themeId: 0,             // Curriculum Theme Id
     lectureTopics: '',      // Topic of this item
     currTypeId: "2",        // Curr Type Id (defaults to 2 = Lecture)
-    assignmentSequence: 0,  // Used to seq/re-seq order of execution
+    assignmentSequence: 10,  // Used to seq/re-seq order of execution
     dayToAssign: 0,         // Start day of this item
     headerId: "",         // User Story Template Header Id (opt)
     projectDays: 1,         // Length of days for this item
@@ -20,13 +21,20 @@ const initialFValues = {
 }
 
 // * Main component
-export default function CurriculumThemeForm(props) {
+export default function CurriculumDetailForm(props) {
 
     const { addOrEdit, recordForEdit } = props;
     const [nextSequence, setNextSequence] = useState(initialFValues.assignmentSequence + 10);
     const [currTypes, setCurrTypes] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const history = useHistory();
+    // RTK Data reqests
+    const { data = [] } = useFetchAllTemplateHeadersQuery({
+        status: false,
+        refetchOnMountOrArgChange: true,
+        skip: false,
+    });
+    const [projData, setProjData] = useState([])
+
     // State variables for 'useForm'
     const {
         values,
@@ -71,9 +79,12 @@ export default function CurriculumThemeForm(props) {
             resetForm()
         else setValues({ ...recordForEdit })
     };
-    
-    const handleClose = () => {
-    };
+
+    // const handleClose = () => {
+    // };
+    useEffect(() => {
+        setProjData(data)
+    }, [])
 
     // Default form field values to incoming data record
     useEffect(() => {
@@ -84,6 +95,7 @@ export default function CurriculumThemeForm(props) {
     }, [recordForEdit])
 
     // Rtv Curriculum Types on initial load for Select/DropDown list
+    // TODO: Consider switching this to RTK and cache the results
     useEffect(() => {
         getCurrTypes();
     }, []);
@@ -113,7 +125,7 @@ export default function CurriculumThemeForm(props) {
                         onChange={handleInputChange}
                         error={errors.lectureTopics}
                     />
-                    <Grid container direction="row">
+                    <Grid container direction="row" spacing={2}>
                         <Grid item xs={6} alignContent="flex-start">
                             <Controls.Select
                                 name="currTypeId"
@@ -154,21 +166,30 @@ export default function CurriculumThemeForm(props) {
                         value={values.headerId}
                         onChange={handleInputChange}
                         error={errors.headerId}
-                        options={currTypes.map(currType => (
-                            { id: `"${currType.id}"`, title: `"${currType.name}"` }
+                        options={data.map(item => (
+                            { id: `${item.id}`, title: `${item.name}` }
                         ))
                         }
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={9}>
                     <Controls.Input
                         name="notes"
-                        label="Days in Week"
+                        label="Notes"
                         value={values.notes}
                         onChange={handleInputChange}
                         error={errors.notes}
                         multiline
                         rows={4}
+                    />
+                </Grid>
+                <Grid item xs={3}>
+                    <Controls.Input
+                        name="assignmentSequence"
+                        label="Assignment Sequence"
+                        value={values.assignmentSequence}
+                        onChange={handleInputChange}
+                        error={errors.assignmentSequence}
                     />
                 </Grid>
             </Grid>
@@ -184,11 +205,11 @@ export default function CurriculumThemeForm(props) {
                         text="Reset"
                         onClick={handleReset}
                     />
-                    <Controls.Button
+                    {/* <Controls.Button
                         color="default"
                         text="Exit"
                         onClick={handleClose}
-                    />
+                    /> */}
                 </div>
             </Grid>
         </Form >
