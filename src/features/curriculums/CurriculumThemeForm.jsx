@@ -73,6 +73,12 @@ export default function CurriculumThemeForm(props) {
             addOrEdit(values, resetForm);
     };
 
+    const handleReset = () => {
+        if (recordForEdit == null)
+            resetForm()
+        else setValues({...recordForEdit})
+    }
+
     useEffect(() => {
         if (recordForEdit != null)
             setValues({
@@ -144,7 +150,7 @@ export default function CurriculumThemeForm(props) {
                     <Controls.Button
                         color="default"
                         text="Reset"
-                        onClick={resetForm}
+                        onClick={handleReset}
                     />
                 </div>
             </Grid>

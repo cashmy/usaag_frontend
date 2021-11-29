@@ -21,6 +21,7 @@ import Controls from '../../components/controls/Controls';
 // Service Layer
 import CurriculumDetailService from '../../services/curriculumDetail.service';
 // Primary CRUD Child Component
+import CurriculumDetailForm from "./CurriculumDetailForm";
 
 // ***** Styles *****
 const useStyles = makeStyles((theme) => ({
@@ -86,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
 // ***** Event Handlers *****
 const handleEditRow = (id) => {
     alert(`Editing Row for : ${id}`)
-
+    // openInPopup(record)
 }
 const handleDeleteRow = (id) => {
     alert(`Deleting Row for : ${id}`)
@@ -109,7 +110,7 @@ const columns = [
         valueGetter: getTempHdrName,
         sortComparator: (v1, v2) => v1.toString().localeCompare(v2.toString())
     },
-    { field: 'notes', headerName: 'Notes', width: 350, editable: true },
+    { field: 'notes', headerName: 'Notes', width: 150, editable: true },
     {
         field: 'actions',
         headerName: 'Actions',
@@ -149,7 +150,6 @@ export default function CurriculumDetail(props) {
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
 
-
     useEffect(() => {
         // console.log("Curr Detail Props: ", props.location.state.recordForEdit)
         getCurriculumDtls(currThemeId)
@@ -176,30 +176,29 @@ export default function CurriculumDetail(props) {
         return mapResult
     }
 
-    // const openInPopup = item => {
-    //     setRecordForEdit(item)
-    //     setOpenPopup(true)
-    // }
+    const openInPopup = item => {
+        setRecordForEdit(item)
+        setOpenPopup(true)
+    }
 
-    // const addOrEdit = (record, resetForm) => {
-    //     if (mode === "ADD") {
-    //         CurriculumDetailService.addCurriculumDetail(record)
-    //         setLoadData(true); // Request reload of data
-    //     }
-    //     else {
-    //         CurriculumDetailService.updateCurriculumDetail(record)
-    //         setLoadData(true); // Request reload of data
-    //     }
-    //     resetForm()
-    //     setMode("")
-    //     setRecordForEdit(null)
-    //     setOpenPopup(false) // Close Popup modal
-    //     setNotify({
-    //         isOpen: true,
-    //         message: 'Submitted Successfully',
-    //         type: 'success'
-    //     })
-    // }
+    const addOrEdit = (record, resetForm) => {
+        if (record.id === 0) {
+            CurriculumDetailService.addCurriculumDetail(record)
+            setLoadData(true); // Request reload of data
+        }
+        else {
+            CurriculumDetailService.updateCurriculumDetail(record)
+            setLoadData(true); // Request reload of data
+        }
+        resetForm()
+        setRecordForEdit(null)
+        setOpenPopup(false) // Close Popup modal
+        setNotify({
+            isOpen: true,
+            message: 'Submitted Successfully',
+            type: 'success'
+        })
+    }
 
     const returnToParent = () => {
         history.push({
@@ -278,7 +277,7 @@ export default function CurriculumDetail(props) {
 
             {/* // * Dialogs, Modals, & Popups */}
             <Controls.Popup openPopup={openPopup} setOpenPopup={setOpenPopup} title="Add Curriculum Detail" >
-                {/* <PatientForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} /> */}
+                <CurriculumDetailForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
             </Controls.Popup>
             <Controls.Notification notify={notify} setNotify={setNotify} />
             <Controls.ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
