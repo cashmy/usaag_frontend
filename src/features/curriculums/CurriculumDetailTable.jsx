@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
-import { DataGrid, GridToolbar } from '@material-ui/data-grid';
+import Chip from '@material-ui/core/Chip'
 import {
+    InputAdornment,
     Fab,
+    FormControlLabel,
     Grid,
     IconButton,
     Paper,
+    TableBody,
+    TableRow,
+    TableCell,
     Toolbar,
     Tooltip,
     Typography,
@@ -13,11 +18,13 @@ import {
 } from '@material-ui/core';
 // Icons
 import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import DeleteIcon from '@material-ui/icons/Delete';
+import SearchIcon from '@material-ui/icons/Search';
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 // Wrapped Components
 import Controls from '../../components/controls/Controls';
+import useTable from "../../components/useTable";
 // Service Layer
 import CurriculumDetailService from '../../services/curriculumDetail.service';
 // Primary CRUD Child Component
@@ -49,12 +56,12 @@ const useStyles = makeStyles((theme) => ({
         marginLeft: theme.spacing(7),
         padding: theme.spacing(3)
     },
-    // searchInput: {
-    //     width: '25%',
-    // },
-    // multiLineDesc: {
-    //     width: '25%',
-    // },
+    searchInput: {
+        width: '25%',
+    },
+    multiLineDesc: {
+        width: '25%',
+    },
     addButton: {
         position: 'absolute',
         right: '10px',
@@ -81,107 +88,105 @@ const useStyles = makeStyles((theme) => ({
         display: "flex",
         flexDirection: "column",
     },
+    searchInput: {
+        width: '25%',
+        marginLeft: theme.spacing(5),
+    },
 }
 ))
 
-// ***** Event Handlers *****
-const handleEditRow = (id) => {
-    alert(`Editing Row for : ${id}`)
-    // openInPopup(record)
-}
-const handleDeleteRow = (id) => {
-    alert(`Deleting Row for : ${id}`)
-}
-
-// ***** Table Header Declarations & Helper Functions *****
-function getTempHdrName(params) { return params.row.templateHeader.name }
-const columns = [
-    { field: 'themeId', headerName: "Theme Id", width: 120, hide: true },
-    { field: 'id', headerName: 'Id', width: 90, hide: true },
-    { field: 'assignmentSequence', headerName: 'Seq', width: 110 },
-    { field: 'lectureTopics', headerName: 'Lecture Topics', width: 500, editable: true },
-    { field: 'dayToAssign', headerName: 'Day', width: 110, editable: true },
-    { field: 'projectDays', headerName: 'Proj Days', width: 140, editable: true },
-    { field: 'headerId', headerName: 'Project Id', width: 90, hide: true },
-    {
-        field: 'templateHeader.name',
-        headerName: 'Project Name',
-        width: 250,
-        valueGetter: getTempHdrName,
-        sortComparator: (v1, v2) => v1.toString().localeCompare(v2.toString())
-    },
-    { field: 'notes', headerName: 'Notes', width: 150, editable: true },
-    {
-        field: 'actions',
-        headerName: 'Actions',
-        width: 150,
-        renderCell: (params) => (
-            <div>
-                <IconButton
-                    aria-label="edit"
-                    onClick={() => handleEditRow(params.row.id)}
-                    color="primary"
-                >
-                    <EditIcon />
-                </IconButton>
-                <IconButton
-                    aria-label="delete"
-                    onClick={() => handleDeleteRow(params.row.id)}
-                    color="secondary"
-                >
-                    <DeleteIcon />
-                </IconButton>
-            </div>
-        ),
-    }
+// * Table Columns
+const columnCells = [
+    { id: 'assignmentSequence', label: 'Seq' },
+    { id: 'lectureTopics', label: 'Topics' },
+    { id: 'curriculumtype.name', label: 'Type' },
+    { id: 'dayToAssign', label: 'Day' },
+    { id: 'projectDays', label: 'Nbr Days' },
+    { id: 'templateheader.name', label: 'Project' },
+    { id: 'notes', label: 'Notes' },
+    { id: 'actions', label: 'Actions', disableSorting: true },
 ]
 
 // ***** Main Function *****
 export default function CurriculumDetail(props) {
-    const currThemeId = props.location.state.recordForEdit.id;
-    const currThemeName = props.location.state.recordForEdit.name;
+    const themeInfo = {
+        'currThemeId': props.location.state.recordForEdit.id,
+        'currThemeName': props.location.state.recordForEdit.name
+    }
     const classes = useStyles();
     const history = useHistory();
     // const [mode, setMode] = useState("");
     const [records, setRecords] = useState([])
     const [loadData, setLoadData] = useState(true)
+    const [isLoading, setIsLoading] = useState(false);
     const [recordForEdit, setRecordForEdit] = useState(null);
+    const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
+    const theadColor = "purple"; // purple
+    const theadText = "#ffffff"; // white
     const [openPopup, setOpenPopup] = useState(false)
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
 
     useEffect(() => {
-        // console.log("Curr Detail Props: ", props.location.state.recordForEdit)
-        getCurriculumDtls(currThemeId)
+        getCurriculumDtls(themeInfo.currThemeId)
     }, [loadData, props])
 
     async function getCurriculumDtls(id) {
         try {
+            setIsLoading(true);
             const response = await CurriculumDetailService.getCurriculumDetails(id);
             setRecords(response.data);
-            setLoadData(false)
+            // setLoadData(false)
+            setIsLoading(false)
         }
         catch (e) {
             console.log('API call unsuccessful', e)
         }
     }
-    // const handleSearch = () => {
-    //
-    // }
-    const mapRecords = () => {
-        let mapResult = records.map((record, i) => {
-            // console.log("Data Record: ", record)
-            return record;
-        });
-        return mapResult
-    }
 
+    // * Table Constants
+    const {
+        TblContainer,
+        TblHead,
+        TblPagination,
+        recordsAfterPagingAndSorting
+    } = useTable(records, columnCells, filterFn, theadColor, theadText);
+
+    // ***** Event Handlers *****
+    const handleSearch = e => {
+        let target = e.target;
+        // state can't store functions, so we are storing an object with the function internally defined.
+        setFilterFn({
+            fn: items => {
+                // target.value is the search box contents
+                if (target.value === "")
+                    return items;
+                else
+                    return items.filter(
+                        (x) =>
+                            x.lectureTopics
+                                .toLowerCase()
+                                .includes(target.value.toLowerCase()) ||
+                            x.curriculumType.name
+                                .toLowerCase()
+                                .includes(target.value.toLowerCase()) ||
+                            x.templateHeader.name
+                                .toLowerCase()
+                                .includes(target.value.toLowerCase()) ||
+                            x.notes
+                                .toLowerCase()
+                                .includes(target.value.toLowerCase())
+                    )
+            }
+        })
+    };
     const openInPopup = item => {
         setRecordForEdit(item)
         setOpenPopup(true)
-    }
-
-    const addOrEdit = (record, resetForm) => {
+    };
+    const addOrEdit = (record, resetForm, close) => {
+        console.log("Editing detail with the following info: ", record)
+        debugger
         if (record.id === 0) {
             CurriculumDetailService.addCurriculumDetail(record)
             setLoadData(true); // Request reload of data
@@ -190,21 +195,50 @@ export default function CurriculumDetail(props) {
             CurriculumDetailService.updateCurriculumDetail(record)
             setLoadData(true); // Request reload of data
         }
-        resetForm()
-        setRecordForEdit(null)
-        setOpenPopup(false) // Close Popup modal
+        if (close) {            
+            resetForm()
+            setRecordForEdit(null)
+            setOpenPopup(false) // Close Popup modal
+        }
+        
         setNotify({
             isOpen: true,
             message: 'Submitted Successfully',
             type: 'success'
         })
-    }
-
+    };
+    const handleEdit = (record) => {
+        openInPopup(record)
+    };
+    const onDelete = (themeId,id) => {
+        setConfirmDialog({
+            ...confirmDialog,
+            isOpen: false,
+        });
+        CurriculumDetailService.deleteCurriculumDetail(themeId, id)
+        setLoadData(!loadData); // Request reload of data
+        setNotify({
+            isOpen: true,
+            message: "Record deleted",
+            type: "error",
+        });
+    };
+    const handleDelete = (themeId, id) => {
+        setConfirmDialog({
+            isOpen: true,
+            title:
+                "Are you sure you want to delete this Curriculum Theme and all of its Detail?",
+            subTitle: "You can't undo this action.",
+            onConfirm: () => {
+                onDelete(themeId, id);
+            },
+        })
+    };
     const returnToParent = () => {
         history.push({
             pathname: "/curriculumThemes",
         });
-    }
+    };
 
     return (
         <React.Fragment>
@@ -222,7 +256,20 @@ export default function CurriculumDetail(props) {
                     <Grid item xs={7}>
                         <Paper className={classes.paper}>
                             <Toolbar>
-                                <Typography variant="h4">{currThemeName.substr(0, 30)} </Typography>
+                                <Typography variant="h4">{themeInfo.currThemeName.substr(0, 30)} </Typography>
+
+                                <Controls.Input
+                                    label="Search Topics, Type, Project, and Notes"
+                                    fullWidth={false}
+                                    className={classes.searchInput}
+                                    InputProps={{
+                                        startAdornment: (<InputAdornment position="start">
+                                            <SearchIcon />
+                                        </InputAdornment>)
+                                    }}
+                                    onChange={handleSearch}
+                                />
+
                                 <Tooltip title="Return to Curriculum Header">
                                     <Fab
                                         className={classes.backButton}
@@ -240,7 +287,7 @@ export default function CurriculumDetail(props) {
                                         color="primary"
                                         aria-label="add a curriculum detail record"
                                         size="small"
-                                        onClick={() => {
+                                        onClick={(item) => {
                                             setOpenPopup(true);
                                             setRecordForEdit(null);
                                         }}
@@ -255,29 +302,64 @@ export default function CurriculumDetail(props) {
                 </Grid>
             </Grid>
 
-            {/* // * Data Grid Table */}
+            {/* // * Main table here */}
             <Paper className={classes.pageContent}>
                 <div style={{ height: 590, width: '100%' }}>
-                    <DataGrid
-                        classes={{
-                            toolbar: classes.toolbar,
-                        }}
-                        editMode="row"
-                        rows={mapRecords()}
-                        columns={columns}
-                        pageSize={10}
-                        rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                        // checkboxSelection 
-                        components={{
-                            Toolbar: GridToolbar,
-                        }}
-                    />
+
+                    <TblContainer>
+                        <TblHead />
+                        <TableBody>
+                            {isLoading ? (
+                                <Typography> Loading ... </Typography>
+                            ) : (
+                                recordsAfterPagingAndSorting().map(item => (
+                                    <TableRow key={item.id}>
+                                        <TableCell>{item.assignmentSequence}</TableCell>
+                                        <TableCell
+                                            className={classes.multiLineDesc}
+                                        >{item.lectureTopics}</TableCell>
+                                        <TableCell>
+                                            <Chip
+                                                label={item.curriculumType.name}
+                                                color="sucess"
+                                            />
+
+                                        </TableCell>
+                                        <TableCell>{item.dayToAssign}</TableCell>
+                                        <TableCell>{item.projectDays}</TableCell>
+                                        <TableCell>{item.templateHeader.name}</TableCell>
+                                        <TableCell
+                                            className={classes.multiLineDesc}
+                                        >{item.notes}</TableCell>
+                                        <TableCell>
+                                            <Controls.ActionButton
+                                                color="primary"
+                                                size="large"
+                                                onClick={() => handleEdit(item)}>
+                                                <EditOutlinedIcon fontSize="small" />
+                                            </Controls.ActionButton>
+                                            <Controls.ActionButton
+                                                color="secondary"
+                                                onClick={() => handleDelete(item.themeId, item.id)}
+                                            >
+                                                <DeleteIcon fontSize="small" />
+                                            </Controls.ActionButton>
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            )
+                            }
+                        </TableBody>
+                    </TblContainer>
+                    <TblPagination />
+
+
                 </div>
             </Paper >
 
             {/* // * Dialogs, Modals, & Popups */}
             <Controls.Popup openPopup={openPopup} setOpenPopup={setOpenPopup} title="Add Curriculum Detail" >
-                <CurriculumDetailForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
+                <CurriculumDetailForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} themeInfo={themeInfo} />
             </Controls.Popup>
             <Controls.Notification notify={notify} setNotify={setNotify} />
             <Controls.ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
