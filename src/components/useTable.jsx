@@ -28,7 +28,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function useTable(records, columnCells, filterFn, ...props) {
-  console.log("props:", props)
   const classes = useStyles(props);
 
   const pages = [5, 10, 25, { label: "All", value: -1 }];

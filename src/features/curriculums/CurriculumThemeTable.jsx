@@ -85,9 +85,9 @@ export default function CurriculumThemeTable() {
   const classes = useStyles();
   const history = useHistory();
   // const scrollable = useScrollable();
+  const [records, setRecords] = useState([]);
   const [loadData, setLoadData] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const [records, setRecords] = useState([]);
   const [recordForEdit, setRecordForEdit] = useState(null);
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
   const theadColor = "#d600f9"; // bright purple-pink
@@ -280,8 +280,8 @@ export default function CurriculumThemeTable() {
             </Paper>
           </Grid>
 
+          {/* //* Main table here */}
           <Grid item xs={11}>
-            {/* //* Main table here */}
             <Paper className={classes.paper}>
               <TblContainer>
                 <TblHead />
