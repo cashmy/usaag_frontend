@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid, Typography, makeStyles } from '@material-ui/core';
 import Controls from '../../components/controls/Controls';
 import { useForm, Form } from '../../components/useForm';
 // Service Layer
@@ -7,6 +7,19 @@ import CurriculumTypesService from '../../services/curriculumTypes.service';
 // Redux (RTK)
 import { useFetchAllTemplateHeadersQuery } from "../template/templateHeaderSlice";
 
+// ***** Styles *****
+const useStyles = makeStyles((theme) => ({
+    themeTitle: {
+        padding: theme.spacing(1.5),
+        textAlign: "center",
+        backgroundColor: "purple",
+        color: "white",
+        display: "flex",
+        flexDirection: "column",
+    },
+}));
+
+// * Initial Form Values
 const initialFValues = {
     id: 0,                  // Record Id
     themeId: 0,             // Curriculum Theme Id
@@ -17,25 +30,22 @@ const initialFValues = {
     headerId: "",         // User Story Template Header Id (opt)
     projectDays: 1,         // Length of days for this item
     notes: "",              // Additional Notes
-    archived: false,        // archived status (default to false)
 }
 
 // * Main component
 export default function CurriculumDetailForm(props) {
-
-    const { addOrEdit, recordForEdit } = props;
+    const classes = useStyles();
+    const { addOrEdit, recordForEdit, themeInfo } = props;
     const [nextSequence, setNextSequence] = useState(initialFValues.assignmentSequence + 10);
     const [currTypes, setCurrTypes] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
     // RTK Data reqests
     const { data = [] } = useFetchAllTemplateHeadersQuery({
         status: false,
         refetchOnMountOrArgChange: true,
         skip: false,
     });
-    const [projData, setProjData] = useState([])
 
-    // State variables for 'useForm'
+    // * State variables for 'useForm'
     const {
         values,
         setValues,
@@ -46,8 +56,12 @@ export default function CurriculumDetailForm(props) {
         resetForm,
     } = useForm(initialFValues);
 
-    // Validation function (to be passed as a callback)
+    // * Validation function (to be passed as a callback)
     const validate = (fieldValues = values) => {
+        // Default ThemeId to incoming props for Add mode.
+        if (fieldValues.themeId === 0)
+            fieldValues.themeId = props.themeInfo.currThemeId
+        
         let temp = { ...errors };
         if ('lectureTopics' in fieldValues)
             temp.lectureTopics = fieldValues.lectureTopics
@@ -55,7 +69,7 @@ export default function CurriculumDetailForm(props) {
                 : "This field is required."
         if ("currTypeId" in fieldValues)
             temp.currTypeId = fieldValues.currTypeId
-                ? 0
+                ? ""
                 : "This field is required.";
 
         setErrors({
@@ -66,26 +80,23 @@ export default function CurriculumDetailForm(props) {
         if (fieldValues === values)
             return Object.values(temp).every(x => x === "")
     }
-
-    // SaveSubmit Callback handler - event driven
-    const handleSubmit = (event) => {
+    // ***** Event Handlers *****
+    const handleSubmit = (close, event) => {
         event.preventDefault();
+        console.log("submit:", values)
         if (validate())
-            addOrEdit(values, resetForm);
+            if (close)
+                addOrEdit(values, resetForm, true);
+            else
+                addOrEdit(values, resetForm, false)
     };
-
     const handleReset = () => {
         if (recordForEdit == null)
             resetForm()
         else setValues({ ...recordForEdit })
     };
-
     // const handleClose = () => {
     // };
-    useEffect(() => {
-        setProjData(data)
-    }, [])
-
     // Default form field values to incoming data record
     useEffect(() => {
         if (recordForEdit != null)
@@ -93,7 +104,6 @@ export default function CurriculumDetailForm(props) {
                 ...recordForEdit
             })
     }, [recordForEdit])
-
     // Rtv Curriculum Types on initial load for Select/DropDown list
     // TODO: Consider switching this to RTK and cache the results
     useEffect(() => {
@@ -101,12 +111,10 @@ export default function CurriculumDetailForm(props) {
     }, []);
     const getCurrTypes = async (e) => {
         try {
-            setIsLoading(true);
             const response = await CurriculumTypesService
                 .getCurriculumTypesBySts(false)
                 .then();
             setCurrTypes(response.data)
-            setIsLoading(false)
         } catch (e) {
             console.log("API call 'Get Curr Types' unsuccessful", e);
         }
@@ -114,10 +122,11 @@ export default function CurriculumDetailForm(props) {
 
     return (
         <Form>
-            {console.log("Curr Dtl Props: ", props)}
             <Grid container alignItems="flex-start" spacing={2}>
                 <Grid item xs={12}>
-                    {/* TODO: Place Curriculum Theme Header here */}
+                    <Typography className={classes.themeTitle} variant="h5">{themeInfo.currThemeName}</Typography>
+                </Grid>
+                <Grid item xs={12}>
                     <Controls.Input
                         name="lectureTopics"
                         label="Topic"
@@ -198,7 +207,12 @@ export default function CurriculumDetailForm(props) {
                     <Controls.Button
                         type="submit"
                         text="Submit"
-                        onClick={handleSubmit}
+                        onClick={() => handleSubmit(true)}
+                    />
+                    <Controls.Button
+                        type="submit"
+                        text="Save/Cont"
+                        onClick={() => handleSubmit(false)}
                     />
                     <Controls.Button
                         color="default"
@@ -211,6 +225,7 @@ export default function CurriculumDetailForm(props) {
                         onClick={handleClose}
                     /> */}
                 </div>
+                {recordForEdit != null && <Typography>ThemeId: {recordForEdit.themeId} - Id: {recordForEdit.id}</Typography>}
             </Grid>
         </Form >
     )
