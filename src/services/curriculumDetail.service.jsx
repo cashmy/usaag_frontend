@@ -10,19 +10,19 @@ class CurriculumDetailService {
   };
 
   addCurriculumDetail = (data) => {
-    return axios.post(API_URL, data, { headers: authHeader() });
+    return axios.post(API_URL + `/${data.themeId}`, data, { headers: authHeader() });
   };
 
   updateCurriculumDetail = (data) => {
     axios
-      .put(API_URL + `/${data.themeId}`, data, { headers: authHeader() })
+      .put(API_URL + `/${data.themeId}/${data.id}`, data, { headers: authHeader() })
       .then((response) => {
-          return response.data;
+        return response.data;
       });
   };
 
-  deleteCurriculumDetail = (id) => {
-    return axios.delete(API_URL + `/${id}`, { headers: authHeader() });
+  deleteCurriculumDetail = (themeId, id) => {
+    return axios.delete(API_URL + `/${themeId}/${id}`, { headers: authHeader() });
   }
 }
 
