@@ -1,12 +1,7 @@
 import React, { Fragment } from "react";
-import {
-	Box,
-	Grid,
-	Paper,
-	Toolbar,
-	Typography,
-	makeStyles,
-} from '@material-ui/core';
+import { Box, Grid, Paper, Toolbar, Typography } from '@mui/material';
+
+import makeStyles from '@mui/styles/makeStyles';
 
 // * Styling
 const useStyles = makeStyles((theme) => ({

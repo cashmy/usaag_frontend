@@ -16,16 +16,17 @@ import {
   //   TableCell,
   Toolbar,
   Typography,
-  makeStyles,
-} from "@material-ui/core";
+} from "@mui/material";
+
+import makeStyles from '@mui/styles/makeStyles';
 
 // Icons
-import AddIcon from "@material-ui/icons/Add";
-import ArchiveIcon from "@material-ui/icons/Archive";
-import UnarchiveIcon from "@material-ui/icons/Unarchive";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import DeleteIcon from "@material-ui/icons/Delete";
-import SearchIcon from "@material-ui/icons/Search";
+import AddIcon from "@mui/icons-material/Add";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import UnarchiveIcon from "@mui/icons-material/Unarchive";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SearchIcon from "@mui/icons-material/Search";
 
 // Wrapped Components
 import Controls from "../../components/controls/Controls";
@@ -308,7 +309,7 @@ export default function TemplateTable() {
                     onClick={() => {
                       handleEdit(item);
                     }}
-                  >
+                    size="large">
                     <EditOutlinedIcon />
                   </IconButton>
                   <IconButton
@@ -324,7 +325,7 @@ export default function TemplateTable() {
                         },
                       });
                     }}
-                  >
+                    size="large">
                     <DeleteIcon />
                   </IconButton>
                   <IconButton
@@ -332,7 +333,7 @@ export default function TemplateTable() {
                     onClick={() => {
                       handleArchive(item.id);
                     }}
-                  >
+                    size="large">
                     {!archiveStatus && <ArchiveIcon />}
                     {archiveStatus && <UnarchiveIcon />}
                   </IconButton>

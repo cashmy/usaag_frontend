@@ -13,16 +13,16 @@ import {
   Toolbar,
   Tooltip,
   Typography,
-  makeStyles,
-} from "@material-ui/core";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 // Icons
-import AddIcon from "@material-ui/icons/Add";
-import ArchiveIcon from "@material-ui/icons/Archive";
-import UnarchiveIcon from "@material-ui/icons/Unarchive";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import DeleteIcon from "@material-ui/icons/Delete";
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import SearchIcon from '@material-ui/icons/Search';
+import AddIcon from "@mui/icons-material/Add";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import UnarchiveIcon from "@mui/icons-material/Unarchive";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import SearchIcon from '@mui/icons-material/Search';
 // Child components
 import Controls from "../../components/controls/Controls";
 import CurriculumThemeForm from "./CurriculumThemeForm";

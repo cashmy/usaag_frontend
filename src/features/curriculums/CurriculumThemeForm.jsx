@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid } from '@mui/material';
 import Controls from '../../components/controls/Controls';
 import { useForm, Form } from '../../components/useForm';
 

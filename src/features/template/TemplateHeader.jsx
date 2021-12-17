@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { Grid, Typography, makeStyles } from "@material-ui/core";
+import { Grid, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import Controls from "../../components/controls/Controls";
 import { useForm, Form } from "../../components/useForm";
 // Redux

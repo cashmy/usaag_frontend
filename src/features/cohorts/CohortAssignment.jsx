@@ -11,10 +11,10 @@ import {
   Toolbar,
   Tooltip,
   Typography,
-  makeStyles,
-} from "@material-ui/core";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 // Icons
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 // Child components
 import CommonCardActions from "../../components/commonCardActions";
 import Controls from "../../components/controls/Controls";

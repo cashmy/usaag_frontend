@@ -1,7 +1,8 @@
 import React, { Fragment, useState } from "react";
 import { useLocation } from "react-router-dom";
 // import clsx from 'clsx';
-import { Grid, Paper, Typography, makeStyles } from "@material-ui/core";
+import { Grid, Paper, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import TemplateData from "../../tempData/template-data";
 import { DragDropContext } from "react-beautiful-dnd";
 import TemplateColumn from "./TemplateColumn";

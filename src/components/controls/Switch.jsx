@@ -5,7 +5,7 @@ import {
     FormHelperText,
     Tooltip,
     Switch as MuiSwitch
-} from '@material-ui/core'
+} from '@mui/material'
 
 
 const Switch = (props) => {

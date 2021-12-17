@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormControl, FormControlLabel, FormHelperText, Checkbox as MuiCheckBox } from '@material-ui/core'
+import { FormControl, FormControlLabel, FormHelperText, Checkbox as MuiCheckBox } from '@mui/material'
 
 
 const Select = (props) => {

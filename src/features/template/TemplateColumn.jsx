@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Droppable } from "react-beautiful-dnd";
-import { Grid, Paper, Typography, makeStyles } from "@material-ui/core";
+import { Grid, Paper, Typography } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import TemplateTask from "./TemplateTask";
 import clsx from "clsx";
 

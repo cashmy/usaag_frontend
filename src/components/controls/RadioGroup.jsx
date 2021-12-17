@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormControl, FormControlLabel, FormLabel, FormHelperText, Radio, RadioGroup as MuiRadioGroup } from '@material-ui/core';
+import { FormControl, FormControlLabel, FormLabel, FormHelperText, Radio, RadioGroup as MuiRadioGroup } from '@mui/material';
 
 export default function RadioGroup(props) {
 

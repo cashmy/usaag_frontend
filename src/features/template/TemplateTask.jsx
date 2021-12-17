@@ -1,6 +1,7 @@
 import React, { Fragment } from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { Grid, makeStyles } from "@material-ui/core";
+import { Grid } from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 import clsx from "clsx";
 
 // * Styling
@@ -15,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
   taskColorStandard: {
     backgroundColor:
-      theme.palette.type === "dark"
+      theme.palette.mode === "dark"
         ? theme.palette.text.primary
         : theme.palette.info.main,
     color: theme.palette.getContrastText(theme.palette.info.main),

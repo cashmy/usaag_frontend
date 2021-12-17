@@ -1,6 +1,7 @@
 import React from 'react';
-import { Snackbar, makeStyles } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
+import { Snackbar } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
+import { Alert } from '@mui/material';
 
 const useStyles = makeStyles((theme) => ({
     root: {

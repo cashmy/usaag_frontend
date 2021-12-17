@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
-import { Grid, Typography, makeStyles } from '@material-ui/core';
+import { Grid, Typography } from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 import Controls from '../../components/controls/Controls';
 import { useForm, Form } from '../../components/useForm';
-import { ColorPicker } from 'material-ui-color';
-// import { Palette } from '@material-ui/icons';
+// import { ColorPicker } from 'material-ui-color';
+// import { Palette } from '@mui/icons-material';
 
 // * Styling
 const useStyles = makeStyles((theme) => ({
@@ -136,7 +137,7 @@ export default function CohortForm(props) {
                 </Grid>
                 <Grid item xs={4}>
                     <Typography className={classes.picker} variant="caption" >Background Color</Typography>
-                    <ColorPicker 
+                    {/* <ColorPicker 
                         name="cpkColor"
                         defaultValue={values.cpkColor} 
                         value={values.cpkColor}
@@ -148,7 +149,7 @@ export default function CohortForm(props) {
                         value={values.textColor} 
                         onChange={handleInputChange} 
                         palette={textPalette} 
-                    />
+                    /> */}
                 </Grid>
                 <Grid item xs={6}>
                     <div styles={{ display: "flex" }}>

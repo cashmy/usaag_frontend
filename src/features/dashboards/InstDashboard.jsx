@@ -13,14 +13,14 @@ import {
   IconButton,
   Paper,
   Typography,
-  makeStyles,
-} from "@material-ui/core";
+} from "@mui/material";
+import makeStyles from '@mui/styles/makeStyles';
 // Icons
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import AssignmentIcon from "@material-ui/icons/Assignment";
-import PeopleIcon from "@material-ui/icons/People";
-import MenuBookIcon from "@material-ui/icons/MenuBook";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import PeopleIcon from "@mui/icons-material/People";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
 
 // Images
 import TemplateImage from "../../assets/images/templates.png";
@@ -115,7 +115,7 @@ export default function InstDashboard() {
                   </Avatar>
                 }
                 action={
-                  <IconButton aria-label="settings">
+                  <IconButton aria-label="settings" size="large">
                     <MoreVertIcon />
                   </IconButton>
                 }
@@ -138,7 +138,7 @@ export default function InstDashboard() {
                   aria-label="edit templates"
                   component={RouterLink}
                   to={"templateTable"}
-                >
+                  size="large">
                   <AssignmentIcon />
                 </IconButton>
                 <IconButton
@@ -148,7 +148,7 @@ export default function InstDashboard() {
                   onClick={handleExpandTemplateClick}
                   aria-expanded={expandedTemplate}
                   aria-label="show more"
-                >
+                  size="large">
                   <ExpandMoreIcon />
                 </IconButton>
               </CardActions>
@@ -176,7 +176,7 @@ export default function InstDashboard() {
                   </Avatar>
                 }
                 action={
-                  <IconButton aria-label="settings">
+                  <IconButton aria-label="settings" size="large">
                     <MoreVertIcon />
                   </IconButton>
                 }
@@ -200,7 +200,7 @@ export default function InstDashboard() {
                   aria-label="edit cohorts"
                   component={RouterLink}
                   to={"cohortAssignment"}
-                >
+                  size="large">
                   <PeopleIcon />
                 </IconButton>
                 <IconButton
@@ -210,7 +210,7 @@ export default function InstDashboard() {
                   onClick={handleExpandCohortClick}
                   aria-expanded={expandedCohort}
                   aria-label="show more"
-                >
+                  size="large">
                   <ExpandMoreIcon />
                 </IconButton>
               </CardActions>
@@ -238,7 +238,7 @@ export default function InstDashboard() {
                   </Avatar>
                 }
                 action={
-                  <IconButton aria-label="settings">
+                  <IconButton aria-label="settings" size="large">
                     <MoreVertIcon />
                   </IconButton>
                 }
@@ -258,10 +258,11 @@ export default function InstDashboard() {
               </CardContent>
 
               <CardActions disableSpacing>
-                <IconButton 
+                <IconButton
                   aria-label="edit curriculum themes"
                   component={RouterLink}
-                  to={"curriculumThemes"}>
+                  to={"curriculumThemes"}
+                  size="large">
                   <MenuBookIcon />
                 </IconButton>
                 <IconButton
@@ -271,7 +272,7 @@ export default function InstDashboard() {
                   onClick={handleExpandCurriculumClick}
                   aria-expanded={expandedCurriculum}
                   aria-label="show more"
-                >
+                  size="large">
                   <ExpandMoreIcon />
                 </IconButton>
               </CardActions>

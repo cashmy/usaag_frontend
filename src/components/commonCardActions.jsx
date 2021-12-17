@@ -3,12 +3,12 @@ import {
     CardActions,
     IconButton,
     Tooltip
-} from "@material-ui/core";
-import ArchiveIcon from "@material-ui/icons/Archive";
-import UnarchiveIcon from "@material-ui/icons/Unarchive";
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import DeleteIcon from "@material-ui/icons/Delete";
-import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
+} from "@mui/material";
+import ArchiveIcon from "@mui/icons-material/Archive";
+import UnarchiveIcon from "@mui/icons-material/Unarchive";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteIcon from "@mui/icons-material/Delete";
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 
 export default function CommonCardActions(props) {
 
@@ -24,7 +24,7 @@ export default function CommonCardActions(props) {
                         onClick={() => {
                             handleEdit(props.item);
                         }}
-                    >
+                        size="large">
                         <EditOutlinedIcon />
                     </IconButton>
                 </Tooltip>
@@ -35,7 +35,7 @@ export default function CommonCardActions(props) {
                         onClick={() => {
                             handleDelete(item.id);
                         }}
-                    >
+                        size="large">
                         <DeleteIcon />
                     </IconButton>
                 </Tooltip>
@@ -46,7 +46,7 @@ export default function CommonCardActions(props) {
                         onClick={() => {
                             handleArchive(item);
                         }}
-                    >
+                        size="large">
                         {!archiveStatus && <ArchiveIcon />}
                         {archiveStatus && <UnarchiveIcon />}
                     </IconButton>
@@ -58,11 +58,11 @@ export default function CommonCardActions(props) {
                         onClick={() => {
                             handleAssign(item);
                         }}
-                    >
+                        size="large">
                         <AssignmentIndIcon />
                     </IconButton>
                 </Tooltip>
             </CardActions>
         </Fragment>
-    )
+    );
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
-import Chip from '@material-ui/core/Chip'
+import Chip from '@mui/material/Chip'
 import {
     InputAdornment,
     Fab,
@@ -14,14 +14,14 @@ import {
     Toolbar,
     Tooltip,
     Typography,
-    makeStyles,
-} from '@material-ui/core';
+} from '@mui/material';
+import makeStyles from '@mui/styles/makeStyles';
 // Icons
-import AddIcon from '@material-ui/icons/Add';
-import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
-import DeleteIcon from '@material-ui/icons/Delete';
-import SearchIcon from '@material-ui/icons/Search';
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import AddIcon from '@mui/icons-material/Add';
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 // Wrapped Components
 import Controls from '../../components/controls/Controls';
 import useTable from "../../components/useTable";
