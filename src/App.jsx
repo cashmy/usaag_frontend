@@ -229,7 +229,7 @@ export default function App() {
       setOpen(false);
     }
   }, []);
-
+  // * Verified ThemeProvider at root level for MUI Migration v4 -> v5
   return (
     <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
       <div className={classes.root}>
