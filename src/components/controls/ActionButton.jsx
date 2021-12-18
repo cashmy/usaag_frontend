@@ -9,12 +9,12 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(0.5)
     },
     primary: {
-        '& .MuiButton-label':{
+        '& .MuiButton-label': {
             color: theme.palette.primary.main
         }
     },
     secondary: {
-        '& .MuiButton-label':{
+        '& .MuiButton-label': {
             color: theme.palette.secondary.main
         }
     },
@@ -22,22 +22,22 @@ const useStyles = makeStyles((theme) => ({
     // The program will compile and run successfully though.
     // Material-ui standards define the use of primary, secondary, and default only.
     error: {
-        '& .MuiButton-label':{
+        '& .MuiButton-label': {
             color: theme.palette.error.main
         }
     },
     warning: {
-        '& .MuiButton-label':{
+        '& .MuiButton-label': {
             color: theme.palette.warning.main
         }
     },
     info: {
-        '& .MuiButton-label':{
+        '& .MuiButton-label': {
             color: theme.palette.info.main
         }
     },
     success: {
-        '& .MuiButton-label':{
+        '& .MuiButton-label': {
             color: theme.palette.success.main
         }
     }
@@ -45,17 +45,38 @@ const useStyles = makeStyles((theme) => ({
 
 export default function ActionButton(props) {
 
-    const{ color, children, onClick, ...other }=props;
+    const { color, children, onClick, ...other } = props;
     const classes = useStyles();
+
+    const colorPalette = (color) => {
+        switch (color) {
+            case "primary":
+                return color = { color }
+            case "secondary":
+                return color = { color }
+            case "error":
+                return color = { color }
+            case "warning":
+                return color = { color }
+            case "info":
+                return color = { color }
+            case "success":
+                return color = { color }
+            default:
+                return ""
+        }
+    }
+
 
     return (
         <Button
             className={`${classes.root} ${classes[color]}`}
+            style={{ color: color  }}
+            {...colorPalette(color)}
             onClick={onClick}
-            color={color}
             {...other}
         >
             {children}
-        </Button>
+        </Button >
     )
 }

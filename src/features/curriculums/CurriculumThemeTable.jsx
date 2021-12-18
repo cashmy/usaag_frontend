@@ -300,13 +300,13 @@ export default function CurriculumThemeTable() {
                         <TableCell>{item.dayTimeStatus === true ? "True" : "False"}</TableCell>
                         <TableCell>
                           <Controls.ActionButton
-                            color="primary"
+                            color="#64b5f6"
                             size="large"
                             onClick={() => handleEdit(item)}>
                             <EditOutlinedIcon fontSize="small" />
                           </Controls.ActionButton>
                           <Controls.ActionButton
-                            color="secondary"
+                            color="error"
                             onClick={() => handleDelete(item.id)}
                           >
                             <DeleteIcon fontSize="small" />

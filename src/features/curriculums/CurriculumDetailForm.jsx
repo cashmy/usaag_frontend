@@ -105,7 +105,7 @@ export default function CurriculumDetailForm(props) {
                 ...recordForEdit
             })
     }, [recordForEdit])
-    
+
     // Rtv Curriculum Types on initial load for Select/DropDown list
     // TODO: Consider switching this to RTK and cache the results
     useEffect(() => {
@@ -217,7 +217,7 @@ export default function CurriculumDetailForm(props) {
                         onClick={() => handleSubmit(false)}
                     />
                     <Controls.Button
-                        color="primary"
+                        color="secondary"
                         text="Reset"
                         onClick={handleReset}
                     />

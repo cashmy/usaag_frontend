@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import {
+    Button,
     Chip,
     InputAdornment,
     Fab,
@@ -347,13 +348,13 @@ export default function CurriculumDetail(props) {
                                             >{item.notes}</TableCell>
                                             <TableCell>
                                                 <Controls.ActionButton
-                                                    color="primary"
+                                                    color="#64b5f6"
                                                     size="large"
                                                     onClick={() => handleEdit(item)}>
                                                     <EditOutlinedIcon fontSize="small" />
                                                 </Controls.ActionButton>
                                                 <Controls.ActionButton
-                                                    color="secondary"
+                                                    color="error"
                                                     onClick={() => handleDelete(item.themeId, item.id)}
                                                 >
                                                     <DeleteIcon fontSize="small" />

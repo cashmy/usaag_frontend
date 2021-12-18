@@ -166,7 +166,6 @@ export default function App(props) {
   const [open, setOpen] = React.useState(false);
   const [user, setUser] = useState();
   const [initialLogin, setInitialLogin] = useState(true);
-  // const [darkMode, setDarkMode] = useState(true);
 
   // Helper functions
   const handleDrawerOpen = () => {
@@ -181,43 +180,6 @@ export default function App(props) {
     localStorage.removeItem("token");
     window.location.href = "login";
   };
-
-  // // Theme definitions
-  // const darkTheme = createTheme({
-  //   palette: {
-  //     mode: "dark",
-  //     primary: {
-  //       dark: "#ad4d18",
-  //       main: "#f86e23",
-  //       light: "#f98b4f",
-  //     },
-  //     secondary: {
-  //       dark: "#00a152",
-  //       main: "#00e676",
-  //       light: "#33eb91",
-  //     },
-  //     tertiary: {
-  //       dark: "#9500ae",
-  //       main: "#d600f9",
-  //       light: "@dd33fa",
-  //     },
-  //     info: {
-  //       dark: "#9e9e9e",
-  //       main: "#bdbdbd",
-  //       light: "#e0e0e0",
-  //     },
-  //   },
-  // });
-
-  // const lightTheme = createTheme({
-  //   palette: {
-  //     tertiary: {
-  //       dark: "#9500ae",
-  //       main: "#d600f9",
-  //       light: "@dd33fa",
-  //     },
-  //   },
-  // });
 
   // Initialization on Component Load/Render
   useEffect(() => {
@@ -303,7 +265,9 @@ export default function App(props) {
                 [classes.drawerPaperLight]: !darkMode,
               }),
             }}
-          >
+      >
+
+
             <div className={classes.toolbar}>
               {/* // TODO: place Logo here  */}
               <IconButton onClick={handleDrawerClose} size="large">
@@ -314,6 +278,7 @@ export default function App(props) {
                 <ChevronLeftIcon />
               </IconButton>
             </div>
+
             <Divider />
             <List>
               {/* Home - Dashboard */}

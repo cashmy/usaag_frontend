@@ -148,7 +148,7 @@ export default function CurriculumThemeForm(props) {
                         onClick={handleSubmit}
                     />
                     <Controls.Button
-                        color="primary"
+                        color="secondary"
                         text="Reset"
                         onClick={handleReset}
                     />
