@@ -32,7 +32,8 @@ export default function useTable(records, columnCells, filterFn, ...props) {
 
   const TblContainer = (props) => (
     <Table className={classes.table}
-          //  style={{backgroundColor: "purple"}}
+      stickyHeader={false || props.stickyHeader}
+    //  style={{backgroundColor: "purple"}}
     >{props.children}</Table>
   );
 

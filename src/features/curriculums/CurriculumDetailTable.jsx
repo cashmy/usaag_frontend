@@ -12,6 +12,7 @@ import {
     Toolbar,
     Tooltip,
     Typography,
+    TableContainer,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { Scrollbars } from 'react-custom-scrollbars'
@@ -287,30 +288,33 @@ export default function CurriculumDetail(props) {
             {/* // * Main table here */}
             <Paper className={classes.pageContent}>
                 <div style={{ height: 590, width: '100%' }}>
-                    <Scrollbars
-                    // style={{ height: '70vh' }}
-                    >
-                        <Grid container alignItems="flex-start" spacing={2}>
-                            <Grid item xs={6}>
-                                <Controls.Input
-                                    label="Search Topics, Type, Project, and Notes"
-                                    fullWidth={false}
-                                    className={classes.searchInput}
-                                    InputProps={{
-                                        startAdornment: (<InputAdornment position="start">
-                                            <SearchIcon />
-                                        </InputAdornment>)
-                                    }}
-                                    onChange={handleSearch}
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-
-                                <TblPagination />
-                            </Grid>
+                    <Grid container alignItems="flex-start" spacing={2}>
+                        <Grid item xs={6}>
+                            <Controls.Input
+                                label="Search Topics, Type, Project, and Notes"
+                                fullWidth={false}
+                                className={classes.searchInput}
+                                InputProps={{
+                                    startAdornment: (<InputAdornment position="start">
+                                        <SearchIcon />
+                                    </InputAdornment>)
+                                }}
+                                onChange={handleSearch}
+                            />
                         </Grid>
+                        <Grid item xs={6}>
 
-                        <TblContainer>
+                            <TblPagination
+                                rowsPerPage={10}
+                                rowsPerPageOptions={[5, 10, 20, { value: -1, label: 'All' }]}
+                            />
+                        </Grid>
+                    </Grid>
+                    {/* <Scrollbars
+                    // style={{ height: '70vh' }}
+                    > */}
+                    <TableContainer sx={{ maxHeight: 480 }} >
+                        <TblContainer stickyHeader={true}>
                             <TblHead />
                             <TableBody>
                                 {isLoading ? (
@@ -361,8 +365,9 @@ export default function CurriculumDetail(props) {
                                 }
                             </TableBody>
                         </TblContainer>
-                        {/* <TblPagination /> */}
-                    </Scrollbars>
+                    </TableContainer>
+                    {/* <TblPagination /> */}
+                    {/* </Scrollbars> */}
                 </div>
 
             </Paper >
@@ -373,6 +378,6 @@ export default function CurriculumDetail(props) {
             </Controls.Popup>
             <Controls.Notification notify={notify} setNotify={setNotify} />
             <Controls.ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
-        </React.Fragment>
+        </React.Fragment >
     );
 }
