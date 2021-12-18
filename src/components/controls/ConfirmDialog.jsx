@@ -38,7 +38,7 @@ export default function ConfirmDialog(props) {
     const classes = useStyles();
 
     return (
-        <Dialog open={confirmDialog.isOpen} classes={{paper: classes.dialog}}>
+        <Dialog open={confirmDialog.isOpen} classes={{ paper: classes.dialog }}>
             <DialogTitle className={classes.dialogTitle}>
                 <IconButton disableRipple className={classes.titleIcon} size="large">
                     <NotListedLocationIcon />
@@ -53,12 +53,12 @@ export default function ConfirmDialog(props) {
                 </Typography>
             </DialogContent>
             <DialogActions className={classes.dialogAction}>
-                <Controls.Button 
+                <Controls.Button
                     text="No"
-                    color="default"
-                    onClick={() => setConfirmDialog({ ...confirmDialog, isOpen:false})}
+                    color="primary"
+                    onClick={() => setConfirmDialog({ ...confirmDialog, isOpen: false })}
                 />
-                <Controls.Button 
+                <Controls.Button
                     text="Yes"
                     color="secondary"
                     onClick={confirmDialog.onConfirm}

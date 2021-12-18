@@ -159,7 +159,7 @@ export default function CohortForm(props) {
                             onClick={handleSubmit}
                         />
                         <Controls.Button
-                            color="default"
+                            color="primary"
                             text="Reset"
                             onClick={resetForm}
                         />

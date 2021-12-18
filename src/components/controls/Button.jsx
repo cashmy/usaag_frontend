@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     }
 }))
 
-const Input= (props) => {
+const Button = (props) => {
     const { text, size, color, variant, onClick, ...other} = props
     const classes = useStyles();
 
@@ -30,4 +30,4 @@ const Input= (props) => {
     )
 }
 
-export default Input
+export default Button
