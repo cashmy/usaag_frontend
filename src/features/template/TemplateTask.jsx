@@ -47,7 +47,7 @@ export default function TemplateTask(props) {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             ref={provided.innerRef}
-            isDragging={snapshot.isDragging}
+            isdragging={toString(snapshot.isDragging)}
           >
             {props.task.content}
           </Grid>

@@ -55,7 +55,7 @@ export default function Column(props) {
           {/* Template Detail Items */}
           <Droppable droppableId={props.column.id}>
             {(provided, snapshot) => (
-              <Grid
+              <Grid container
                 item
                 xs={10}
                 className={clsx(classes.tasklist, {
@@ -64,7 +64,7 @@ export default function Column(props) {
                 })}
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                isDraggingOver={snapshot.isDraggingOver}
+                isdraggingover={toString(snapshot.isDraggingOver)}
               >
                 {props.tasks.map((task, index) => (
                   <TemplateTask key={task.id} task={task} index={index} />

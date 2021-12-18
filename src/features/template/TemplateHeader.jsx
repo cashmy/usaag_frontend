@@ -118,7 +118,7 @@ export default function TemplateHeaderForm(props) {
                 error={errors.abbreviation}
               />
             </Grid>
-            <Grid direction="row" container xs={6} alignItems="center">
+            <Grid direction="row" container item xs={6} alignItems="center">
               <Grid item xs={3}>
                 <Typography className={classes.gridTextItem}>
                   Version:
@@ -206,9 +206,9 @@ export default function TemplateHeaderForm(props) {
               text="Submit"
               onClick={handleSubmit}
             />
-            <Controls.Button color="default" text="Reset" onClick={resetForm} />
+            <Controls.Button color="secondary" text="Reset" onClick={resetForm} />
             <Controls.Button
-              color="default"
+              color="grey"
               text="Exit"
               component={RouterLink}
               to={"templateTable"}
