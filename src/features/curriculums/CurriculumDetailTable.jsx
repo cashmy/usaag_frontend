@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
-import Chip from '@mui/material/Chip'
 import {
+    Chip,
     InputAdornment,
     Fab,
-    FormControlLabel,
     Grid,
-    IconButton,
     Paper,
     TableBody,
     TableRow,
@@ -55,9 +53,6 @@ const useStyles = makeStyles((theme) => ({
         marginRight: theme.spacing(7),
         marginLeft: theme.spacing(7),
         padding: theme.spacing(3)
-    },
-    searchInput: {
-        width: '25%',
     },
     multiLineDesc: {
         width: '25%',
@@ -124,12 +119,12 @@ export default function CurriculumDetail(props) {
     const theadColor = "purple"; // purple
     const theadText = "#ffffff"; // white
     const [openPopup, setOpenPopup] = useState(false)
-    const [notify, setNotify] = useState({ isOpen: false, message: '', type: '' })
+    const [notify, setNotify] = useState({ isOpen: false, message: '', type: 'info' })
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
 
     useEffect(() => {
         getCurriculumDtls(themeInfo.currThemeId)
-    }, [loadData, props])
+    }, [loadData, props, themeInfo.currThemeId])
 
     async function getCurriculumDtls(id) {
         try {
@@ -195,12 +190,12 @@ export default function CurriculumDetail(props) {
             CurriculumDetailService.updateCurriculumDetail(record)
             setLoadData(true); // Request reload of data
         }
-        if (close) {            
+        if (close) {
             resetForm()
             setRecordForEdit(null)
             setOpenPopup(false) // Close Popup modal
         }
-        
+
         setNotify({
             isOpen: true,
             message: 'Submitted Successfully',
@@ -210,7 +205,7 @@ export default function CurriculumDetail(props) {
     const handleEdit = (record) => {
         openInPopup(record)
     };
-    const onDelete = (themeId,id) => {
+    const onDelete = (themeId, id) => {
         setConfirmDialog({
             ...confirmDialog,
             isOpen: false,
@@ -310,7 +305,11 @@ export default function CurriculumDetail(props) {
                         <TblHead />
                         <TableBody>
                             {isLoading ? (
-                                <Typography> Loading ... </Typography>
+                                <TableRow key="999">
+                                    <TableCell>
+                                        <Typography> Loading ... </Typography>
+                                    </TableCell>
+                                </TableRow>
                             ) : (
                                 recordsAfterPagingAndSorting().map(item => (
                                     <TableRow key={item.id}>
@@ -321,9 +320,11 @@ export default function CurriculumDetail(props) {
                                         <TableCell>
                                             <Chip
                                                 label={item.curriculumType.name}
-                                                color="sucess"
+                                                style={{
+                                                    backgroundColor: item.curriculumType.chipColor,
+                                                    color: item.curriculumType.textColor
+                                                }}
                                             />
-
                                         </TableCell>
                                         <TableCell>{item.dayToAssign}</TableCell>
                                         <TableCell>{item.projectDays}</TableCell>

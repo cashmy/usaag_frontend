@@ -76,7 +76,7 @@ export default function CurriculumThemeForm(props) {
     const handleReset = () => {
         if (recordForEdit == null)
             resetForm()
-        else setValues({...recordForEdit})
+        else setValues({ ...recordForEdit })
     }
 
     useEffect(() => {
@@ -117,28 +117,28 @@ export default function CurriculumThemeForm(props) {
                         ]}
                     />
                 </Grid>
-            <Grid item xs={4}>
-                <Controls.Input
-                    name="numberOfWeeks"
-                    label="Nmbr of Wks"
-                    value={values.numberOfWeeks}
-                    onChange={handleInputChange}
-                    error={errors.numberOfWeeks}
-                />
-                <Controls.Input
-                    name="daysInWeek"
-                    label="Days in Week"
-                    value={values.daysInWeek}
-                    onChange={handleInputChange}
-                    error={errors.daysInWeek}
-                />
-                <Controls.Switch
-                    name="dayTimeStatus"
-                    label="Day Time Status"
-                    value={values.dayTimeStatus}
-                    onChange={handleToggleChange}
-                />
-            </Grid>
+                <Grid item xs={4}>
+                    <Controls.Input
+                        name="numberOfWeeks"
+                        label="Nmbr of Wks"
+                        value={values.numberOfWeeks}
+                        onChange={handleInputChange}
+                        error={errors.numberOfWeeks}
+                    />
+                    <Controls.Input
+                        name="daysInWeek"
+                        label="Days in Week"
+                        value={values.daysInWeek}
+                        onChange={handleInputChange}
+                        error={errors.daysInWeek}
+                    />
+                    <Controls.Switch
+                        name="dayTimeStatus"
+                        label="Day Time Status"
+                        value={values.dayTimeStatus}
+                        onChange={handleToggleChange}
+                    />
+                </Grid>
             </Grid>
             <Grid item xs={6}>
                 <div styles={{ display: "flex" }}>
@@ -148,7 +148,7 @@ export default function CurriculumThemeForm(props) {
                         onClick={handleSubmit}
                     />
                     <Controls.Button
-                        color="default"
+                        color="primary"
                         text="Reset"
                         onClick={handleReset}
                     />

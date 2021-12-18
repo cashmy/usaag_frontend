@@ -62,7 +62,7 @@ export default function CurriculumDetailForm(props) {
         // Default ThemeId to incoming props for Add mode.
         if (fieldValues.themeId === 0)
             fieldValues.themeId = props.themeInfo.currThemeId
-        
+
         let temp = { ...errors };
         if ('lectureTopics' in fieldValues)
             temp.lectureTopics = fieldValues.lectureTopics
@@ -105,21 +105,22 @@ export default function CurriculumDetailForm(props) {
                 ...recordForEdit
             })
     }, [recordForEdit])
+    
     // Rtv Curriculum Types on initial load for Select/DropDown list
     // TODO: Consider switching this to RTK and cache the results
     useEffect(() => {
+        const getCurrTypes = async (e) => {
+            try {
+                const response = await CurriculumTypesService
+                    .getCurriculumTypesBySts(false)
+                    .then();
+                setCurrTypes(response.data)
+            } catch (e) {
+                console.log("API call 'Get Curr Types' unsuccessful", e);
+            }
+        }
         getCurrTypes();
     }, []);
-    const getCurrTypes = async (e) => {
-        try {
-            const response = await CurriculumTypesService
-                .getCurriculumTypesBySts(false)
-                .then();
-            setCurrTypes(response.data)
-        } catch (e) {
-            console.log("API call 'Get Curr Types' unsuccessful", e);
-        }
-    }
 
     return (
         <Form>
@@ -216,12 +217,12 @@ export default function CurriculumDetailForm(props) {
                         onClick={() => handleSubmit(false)}
                     />
                     <Controls.Button
-                        color="default"
+                        color="primary"
                         text="Reset"
                         onClick={handleReset}
                     />
                     {/* <Controls.Button
-                        color="default"
+                        color="primary"
                         text="Exit"
                         onClick={handleClose}
                     /> */}
