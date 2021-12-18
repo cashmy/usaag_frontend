@@ -14,6 +14,7 @@ import {
     Typography,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
+import { Scrollbars } from 'react-custom-scrollbars'
 // Icons
 import AddIcon from '@mui/icons-material/Add';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -84,8 +85,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: "column",
     },
     searchInput: {
-        width: '25%',
-        marginLeft: theme.spacing(5),
+        width: '100%',
     },
 }
 ))
@@ -123,21 +123,21 @@ export default function CurriculumDetail(props) {
     const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
 
     useEffect(() => {
+        async function getCurriculumDtls(id) {
+            try {
+                setIsLoading(true);
+                const response = await CurriculumDetailService.getCurriculumDetails(id);
+                setRecords(response.data);
+                // setLoadData(false)
+                setIsLoading(false)
+            }
+            catch (e) {
+                console.log('API call unsuccessful', e)
+            }
+        }
         getCurriculumDtls(themeInfo.currThemeId)
     }, [loadData, props, themeInfo.currThemeId])
 
-    async function getCurriculumDtls(id) {
-        try {
-            setIsLoading(true);
-            const response = await CurriculumDetailService.getCurriculumDetails(id);
-            setRecords(response.data);
-            // setLoadData(false)
-            setIsLoading(false)
-        }
-        catch (e) {
-            console.log('API call unsuccessful', e)
-        }
-    }
 
     // * Table Constants
     const {
@@ -252,19 +252,6 @@ export default function CurriculumDetail(props) {
                         <Paper className={classes.paper}>
                             <Toolbar>
                                 <Typography variant="h4">{themeInfo.currThemeName.substr(0, 30)} </Typography>
-
-                                <Controls.Input
-                                    label="Search Topics, Type, Project, and Notes"
-                                    fullWidth={false}
-                                    className={classes.searchInput}
-                                    InputProps={{
-                                        startAdornment: (<InputAdornment position="start">
-                                            <SearchIcon />
-                                        </InputAdornment>)
-                                    }}
-                                    onChange={handleSearch}
-                                />
-
                                 <Tooltip title="Return to Curriculum Header">
                                     <Fab
                                         className={classes.backButton}
@@ -300,62 +287,84 @@ export default function CurriculumDetail(props) {
             {/* // * Main table here */}
             <Paper className={classes.pageContent}>
                 <div style={{ height: 590, width: '100%' }}>
+                    <Scrollbars
+                    // style={{ height: '70vh' }}
+                    >
+                        <Grid container alignItems="flex-start" spacing={2}>
+                            <Grid item xs={6}>
+                                <Controls.Input
+                                    label="Search Topics, Type, Project, and Notes"
+                                    fullWidth={false}
+                                    className={classes.searchInput}
+                                    InputProps={{
+                                        startAdornment: (<InputAdornment position="start">
+                                            <SearchIcon />
+                                        </InputAdornment>)
+                                    }}
+                                    onChange={handleSearch}
+                                />
+                            </Grid>
+                            <Grid item xs={6}>
 
-                    <TblContainer>
-                        <TblHead />
-                        <TableBody>
-                            {isLoading ? (
-                                <TableRow key="999">
-                                    <TableCell>
-                                        <Typography> Loading ... </Typography>
-                                    </TableCell>
-                                </TableRow>
-                            ) : (
-                                recordsAfterPagingAndSorting().map(item => (
-                                    <TableRow key={item.id}>
-                                        <TableCell>{item.assignmentSequence}</TableCell>
-                                        <TableCell
-                                            className={classes.multiLineDesc}
-                                        >{item.lectureTopics}</TableCell>
+                                <TblPagination />
+                            </Grid>
+                        </Grid>
+
+                        <TblContainer>
+                            <TblHead />
+                            <TableBody>
+                                {isLoading ? (
+                                    <TableRow key="999">
                                         <TableCell>
-                                            <Chip
-                                                label={item.curriculumType.name}
-                                                style={{
-                                                    backgroundColor: item.curriculumType.chipColor,
-                                                    color: item.curriculumType.textColor
-                                                }}
-                                            />
-                                        </TableCell>
-                                        <TableCell>{item.dayToAssign}</TableCell>
-                                        <TableCell>{item.projectDays}</TableCell>
-                                        <TableCell>{item.templateHeader.name}</TableCell>
-                                        <TableCell
-                                            className={classes.multiLineDesc}
-                                        >{item.notes}</TableCell>
-                                        <TableCell>
-                                            <Controls.ActionButton
-                                                color="primary"
-                                                size="large"
-                                                onClick={() => handleEdit(item)}>
-                                                <EditOutlinedIcon fontSize="small" />
-                                            </Controls.ActionButton>
-                                            <Controls.ActionButton
-                                                color="secondary"
-                                                onClick={() => handleDelete(item.themeId, item.id)}
-                                            >
-                                                <DeleteIcon fontSize="small" />
-                                            </Controls.ActionButton>
+                                            <Typography> Loading ... </Typography>
                                         </TableCell>
                                     </TableRow>
-                                ))
-                            )
-                            }
-                        </TableBody>
-                    </TblContainer>
-                    <TblPagination />
-
-
+                                ) : (
+                                    recordsAfterPagingAndSorting().map(item => (
+                                        <TableRow key={item.id}>
+                                            <TableCell>{item.assignmentSequence}</TableCell>
+                                            <TableCell
+                                                className={classes.multiLineDesc}
+                                            >{item.lectureTopics}</TableCell>
+                                            <TableCell>
+                                                <Chip
+                                                    label={item.curriculumType.name}
+                                                    style={{
+                                                        backgroundColor: item.curriculumType.chipColor,
+                                                        color: item.curriculumType.textColor
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell>{item.dayToAssign}</TableCell>
+                                            <TableCell>{item.projectDays}</TableCell>
+                                            <TableCell>{item.templateHeader.name}</TableCell>
+                                            <TableCell
+                                                className={classes.multiLineDesc}
+                                            >{item.notes}</TableCell>
+                                            <TableCell>
+                                                <Controls.ActionButton
+                                                    color="primary"
+                                                    size="large"
+                                                    onClick={() => handleEdit(item)}>
+                                                    <EditOutlinedIcon fontSize="small" />
+                                                </Controls.ActionButton>
+                                                <Controls.ActionButton
+                                                    color="secondary"
+                                                    onClick={() => handleDelete(item.themeId, item.id)}
+                                                >
+                                                    <DeleteIcon fontSize="small" />
+                                                </Controls.ActionButton>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                )
+                                }
+                            </TableBody>
+                        </TblContainer>
+                        {/* <TblPagination /> */}
+                    </Scrollbars>
                 </div>
+
             </Paper >
 
             {/* // * Dialogs, Modals, & Popups */}
