@@ -20,7 +20,7 @@ const Button = (props) => {
         <MuiButton 
             variant={variant || "contained"}
             size={size || "small"}
-            color={color || "primary"}
+            color={color}
             onClick={onClick}
             {...other}
             classes={{ root:classes.root, label:classes.label }}

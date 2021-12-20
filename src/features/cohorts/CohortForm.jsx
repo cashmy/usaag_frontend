@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { Grid, Typography } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
+import ClrPicker from '../../components/controls/ColorPicker';
 import Controls from '../../components/controls/Controls';
 import { useForm, Form } from '../../components/useForm';
-// import { ColorPicker } from 'material-ui-color';
+import { SketchPicker, PhotoshopPicker } from 'react-color';
 // import { Palette } from '@mui/icons-material';
 
 // * Styling
@@ -136,20 +137,24 @@ export default function CohortForm(props) {
                     </Grid>
                 </Grid>
                 <Grid item xs={4}>
-                    <Typography className={classes.picker} variant="caption" >Background Color</Typography>
-                    {/* <ColorPicker 
+                    {/* <Typography className={classes.picker} variant="caption" >Background Color</Typography> */}
+                    <ClrPicker
                         name="cpkColor"
-                        defaultValue={values.cpkColor} 
+                        label="Background Color"
                         value={values.cpkColor}
-                        onChange={handleInputChange} 
-                        palette={stdPalette} />
-                    <Typography className={classes.picker} variant="caption" >Text Color</Typography>
-                    <ColorPicker 
-                        name="textColor" 
-                        value={values.textColor} 
-                        onChange={handleInputChange} 
-                        palette={textPalette} 
+                        onChange={handleInputChange}
+                    />
+                    {/* <PhotoshopPicker
+                        color={values.cpkColor}
+                        onChangeComplete={values.cpkColor}
                     /> */}
+                    {/* <Typography className={classes.picker} variant="caption" >Text Color</Typography> */}
+                    <ClrPicker
+                        name="cpkColor"
+                        label="Text Color"
+                        value={values.textColor}
+                        onChange={handleInputChange}
+                    />
                 </Grid>
                 <Grid item xs={6}>
                     <div styles={{ display: "flex" }}>
@@ -159,7 +164,7 @@ export default function CohortForm(props) {
                             onClick={handleSubmit}
                         />
                         <Controls.Button
-                            color="primary"
+                            color="secondary"
                             text="Reset"
                             onClick={resetForm}
                         />

@@ -83,7 +83,7 @@ export default function CohortAssignment() {
   const [notify, setNotify] = useState({
     isOpen: false,
     message: "",
-    type: "",
+    type: "success",
   });
 
   useEffect(() => {
@@ -276,12 +276,12 @@ export default function CohortAssignment() {
               >
                 <CardContent>
                   {/* <Typography>Student Cards go here</Typography> */}
-                  <Card raised={true} className={classes.studentCard}>
+                  <Card key="1" raised={true} className={classes.studentCard}>
                     <CardContent>
                       <Typography>Assigned Student card 1</Typography>
                     </CardContent>
                   </Card>
-                  <Card raised={true} className={classes.studentCard}>
+                  <Card key="2" raised={true} className={classes.studentCard}>
                     <CardContent>
                       <Typography>Assigned Student card 2</Typography>
                     </CardContent>
@@ -307,7 +307,7 @@ export default function CohortAssignment() {
                     <Typography> No new students available </Typography>
                   ) : (
                     studentRecords.map((item, index) => (
-                      <Card raised={true} className={classes.studentCard}>
+                      <Card key={index} raised={true} className={classes.studentCard}>
                         <CardContent>
                           <Typography key={index} > {item.firstName} {item.lastName} </Typography>
                         </CardContent>
