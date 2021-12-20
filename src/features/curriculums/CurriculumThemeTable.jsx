@@ -64,8 +64,7 @@ const useStyles = makeStyles((theme) => ({
     right: "10%",
   },
   searchInput: {
-    width: '25%',
-    marginLeft: theme.spacing(5),
+    width: '100%',
   },
 }));
 
@@ -236,18 +235,6 @@ export default function CurriculumThemeTable() {
               <Toolbar>
                 <Typography variant="h4">Currriculum Themes</Typography>
 
-                <Controls.Input
-                  label="Search Name, Tech Stack, Level"
-                  fullWidth={false}
-                  className={classes.searchInput}
-                  InputProps={{
-                    startAdornment: (<InputAdornment position="start">
-                      <SearchIcon />
-                    </InputAdornment>)
-                  }}
-                  onChange={handleSearch}
-                />
-
                 <Tooltip title="Toggle archive status">
                   <FormControlLabel
                     className={classes.archiveSwitch}
@@ -283,6 +270,30 @@ export default function CurriculumThemeTable() {
           {/* //* Main table here */}
           <Grid item xs={11}>
             <Paper className={classes.paper}>
+              <div style={{ height: 590, width: '100%' }}>
+                <Grid container alignItems="flex-start" spacing={2}>
+                  <Grid item xs={6}>
+                    <Controls.Input
+                      label="Search Name, Tech Stack, Level"
+                      fullWidth={false}
+                      className={classes.searchInput}
+                      InputProps={{
+                        startAdornment: (<InputAdornment position="start">
+                          <SearchIcon />
+                        </InputAdornment>)
+                      }}
+                      onChange={handleSearch}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+
+                    <TblPagination
+                      rowsPerPage={10}
+                      rowsPerPageOptions={[5, 10, 20, { value: -1, label: 'All' }]}
+                    />
+                  </Grid>
+                </Grid>
+
               <TblContainer>
                 <TblHead />
                 <TableBody>
@@ -333,7 +344,7 @@ export default function CurriculumThemeTable() {
                   }
                 </TableBody>
               </TblContainer>
-              <TblPagination />
+              </div>
             </Paper>
           </Grid>
         </Grid>

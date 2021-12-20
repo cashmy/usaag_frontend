@@ -311,9 +311,7 @@ export default function CurriculumDetail(props) {
                             />
                         </Grid>
                     </Grid>
-                    {/* <Scrollbars
-                    // style={{ height: '70vh' }}
-                    > */}
+                    
                     <TableContainer sx={{ maxHeight: 480 }} >
                         <TblContainer stickyHeader={true}>
                             <TblHead />
