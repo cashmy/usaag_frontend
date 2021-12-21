@@ -83,7 +83,7 @@ export default function CurriculumDetailForm(props) {
     }
     // ***** Event Handlers *****
     const handleSubmit = (close, event) => {
-        event.preventDefault();
+        // event.preventDefault();
         console.log("submit:", values)
         if (validate())
             if (close)
@@ -100,7 +100,7 @@ export default function CurriculumDetailForm(props) {
     // };
     // Default form field values to incoming data record
     useEffect(() => {
-        if (recordForEdit != null)
+        if (recordForEdit != null && recordForEdit != undefined)
             setValues({
                 ...recordForEdit
             })

@@ -24,7 +24,7 @@ const initialFValues = {
     abbreviation: '',
     slackChannel: '',
     cpkColor: '#bdbdbd',
-    textColor: 'white',
+    textColor: 'black',
     archived: false,
 }
 
@@ -34,29 +34,29 @@ export default function CohortForm(props) {
     const classes = useStyles();
     const { addOrEdit, recordForEdit } = props
 
-    const stdPalette = {
-        red: 'red',
-        blue: 'blue',
-        green: 'green',
-        yellow: 'yellow',
-        cyan: 'cyan',
-        lime: 'lime',
-        gray: 'gray',
-        orange: 'orange',
-        purple: 'purple',
-        black: 'black',
-        white: 'white',
-        pink: 'pink',
-        darkblue: 'darkblue',
-    };
+    // const stdPalette = {
+    //     red: 'red',
+    //     blue: 'blue',
+    //     green: 'green',
+    //     yellow: 'yellow',
+    //     cyan: 'cyan',
+    //     lime: 'lime',
+    //     gray: 'gray',
+    //     orange: 'orange',
+    //     purple: 'purple',
+    //     black: 'black',
+    //     white: 'white',
+    //     pink: 'pink',
+    //     darkblue: 'darkblue',
+    // };
 
-    const textPalette = {
-        white: 'white',
-        grey: 'grey',
-        near_black: '#302f2f',
-        black: 'black',
+    // const textPalette = {
+    //     white: 'white',
+    //     grey: 'grey',
+    //     near_black: '#302f2f',
+    //     black: 'black',
 
-    };
+    // };
 
     // Validation function (to be passed as a callback)
     const validate = (fieldValues = values) => {
@@ -89,12 +89,29 @@ export default function CohortForm(props) {
         resetForm,
     } = useForm(initialFValues);
 
+    const handleColorChange = (color) => {
+        console.log("Color value: ", color)
+        const { name, value } = color.target;
+        setValues({
+            ...values,
+            [name]: value,
+        });
+    }
+
     // SaveSubmit Callback handler - event driven
     const handleSubmit = (event) => {
         console.log("Cohort Submitted")
         event.preventDefault();
         if (validate())
-            addOrEdit(values, resetForm);
+            addOrEdit(values, resetForm, true);
+        else
+            addOrEdit(values, resetForm, false)
+    };
+
+    const handleReset = () => {
+        if (recordForEdit == null)
+            resetForm()
+        else setValues({ ...recordForEdit })
     };
 
     useEffect(() => {
@@ -105,7 +122,7 @@ export default function CohortForm(props) {
     }, [recordForEdit])
 
     return (
-        <Form>
+        <Form style={{ minHeight: '350px' }}>
             <Grid container alignItems="flex-start" spacing={2}>
                 <Grid item xs={8}>
                     <Controls.Input
@@ -144,13 +161,8 @@ export default function CohortForm(props) {
                         value={values.cpkColor}
                         onChange={handleInputChange}
                     />
-                    {/* <PhotoshopPicker
-                        color={values.cpkColor}
-                        onChangeComplete={values.cpkColor}
-                    /> */}
-                    {/* <Typography className={classes.picker} variant="caption" >Text Color</Typography> */}
                     <ClrPicker
-                        name="cpkColor"
+                        name="textColor"
                         label="Text Color"
                         value={values.textColor}
                         onChange={handleInputChange}
@@ -166,7 +178,7 @@ export default function CohortForm(props) {
                         <Controls.Button
                             color="secondary"
                             text="Reset"
-                            onClick={resetForm}
+                            onClick={handleReset}
                         />
                     </div>
                 </Grid>

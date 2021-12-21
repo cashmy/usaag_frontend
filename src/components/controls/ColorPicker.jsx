@@ -1,61 +1,57 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useRef, useCallback } from 'react';
 import {
     IconButton,
     InputAdornment,
     TextField,
 } from "@mui/material";
 import {
-    Visibility,
-    VisibilityOff
+    Calculate,
+    KeyboardArrowDown,
+    KeyboardArrowUp
 } from "@mui/icons-material"
 import makeStyles from '@mui/styles/makeStyles';
-import { ChromePicker } from 'react-color'
+import useClickOutside from "../useClickOutside";
+import TextContrast from '../getTextContrast';
+import { HexColorPicker } from 'react-colorful';
+import "./styles.css";
 
 const useStyles = makeStyles((theme) => ({
-    popover: {
-        position: 'absolute',
-        zIndex: '2',
-    },
-    cover: {
-        position: 'fixed',
-        top: '0px',
-        right: '0px',
-        bottom: '0px',
-        left: '0px',
-    },
+    // popover: {
+    //     position: 'absolute',
+    //     top: 'calc(100% + 2px)',
+    //     left: '0px',
+    //     borderRadius: '9px',
+    //     boxShadow: "0 6px 12px rgba(0, 0, 0, 0.15)"
+    // },
+    // swatch: {
+    //     width: '28px',
+    //     height: '28px',
+    //     borderRadius: '8px',
+    //     border: '3px solid #fff',
+    //     boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1), inset 0 0 0 1px rgba(0, 0, 0, 0.1)',
+    //     cursor: 'pointer'
+    // },
 }))
 
 const ClrPicker = (props) => {
     const classes = useStyles();
     const { name, label, value, error = null, onChange, ...other } = props;
-    const [displayColorPicker, setDisplayColorPicker] = useState(false)
-    const [colorInput, setColorInput] = useState(value)
+    const popover = useRef();
+    const [isOpen, toggle] = useState(false);
+    // const [value, setValue] = useState(props.value)
 
-    const handleClick = () => {
-        setDisplayColorPicker(!displayColorPicker)
-    }
+    const handleClose = useCallback(() => toggle(false), []);
+    useClickOutside(popover, handleClose);
 
-    const handleClose = () => {
-        setDisplayColorPicker(false)
-    }
-
-    const handleChangeComplete = (color, event) => {
-        setColorInput(event.hex)
-        console.log("Change complete: ", event.hex)
-        onChange()
-        // TODO: Update value with newly selected color.
-    }
-
-    const popover = {
-        position: 'absolute',
-        zIndex: '2',
-    }
-    const cover = {
-        position: 'fixed',
-        top: '0px',
-        right: '0px',
-        bottom: '0px',
-        left: '0px',
+    const handleChangeProp = (color, event) => {
+        console.log("HandleChangeProp:", color)
+        let tempProp = {
+            name: name,
+            value: color
+        }
+        event = { ...event, target: tempProp }
+        props.onChange(event)
+        // setValue(color)
     }
 
     return (
@@ -65,32 +61,31 @@ const ClrPicker = (props) => {
                 size="small"
                 label={label}
                 name={name}
-                value={colorInput}
+                value={value}
                 onChange={onChange}
-                fullWidth
                 {...(error && { error: true, helperText: error })}
                 {...other}
-
-                // endAdornment={
-                //     <InputAdornment position="end">
-                //         <IconButton
-                //             aria-label="toggle password visibility"
-                //         // onClick={handleClickShowPassword}
-                //         // onMouseDown={handleMouseDownPassword}
-                //         >
-                //             <Visibility />
-                //         </IconButton>
-                //     </InputAdornment>
-                // }
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={() => toggle(true)}
+                                style={{ backgroundColor: value, color: TextContrast.getTextContrast(value) }}
+                            >
+                                {isOpen ? <KeyboardArrowDown /> : <KeyboardArrowUp />}
+                            </IconButton>
+                        </InputAdornment>
+                    )
+                }}
             />
-            {/* <button onClick={handleClick}>Pick Color</button> */}
-            {/* {displayColorPicker ? <div style={popover}> */}
-            {/* <div style={cover} onClick={handleClose} />
-            <ChromePicker
-                color={colorInput}
-                onChangeComplete={handleChangeComplete}
-            /> */}
-            {/* </div> : null} */}
+            <div className="picker">
+                {isOpen && (
+                    <div className="popover" ref={popover}>
+                        <HexColorPicker color={value} onChange={handleChangeProp} />
+                    </div>
+                )}
+            </div>
         </Fragment>
     )
 }

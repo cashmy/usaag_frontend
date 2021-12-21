@@ -1,7 +1,8 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useRef, useState, useCallback } from "react";
 import { Box, Grid, Paper, Toolbar, Typography } from '@mui/material';
-
+import ClrPicker from '../../components/controls/ColorPicker';
 import makeStyles from '@mui/styles/makeStyles';
+
 
 // * Styling
 const useStyles = makeStyles((theme) => ({
@@ -29,11 +30,20 @@ const useStyles = makeStyles((theme) => ({
 		width: "200px",
 		height: "200px",
 		overflow: "auto",
-	}
+	},
+
 }));
 
 export default function ComponentTester() {
 	const classes = useStyles();
+
+	const [field1, setField1] = useState("#bdbdbd")
+
+
+	const handleInputChange = (event) => {
+		setField1(event.target.value)
+		console.log(event)
+	}
 
 	return (
 		<Fragment>
@@ -51,21 +61,13 @@ export default function ComponentTester() {
 					{/* //* Box Component */}
 					<Grid item xs={11}>
 
-						<Box className={classes.myBox}
-							sx={{ backgroundColor: 'primary' }}
-						>
-							<Typography variant="h5" >Test</Typography>
-							<Typography variant="h5" >Test</Typography>
-							<Typography variant="h5" >Test</Typography>
-							<Typography variant="h5" >Test</Typography>
-							<Typography variant="h5" >Test</Typography>
-							<Typography variant="h5" >Test</Typography>
-							<Typography variant="h5" >Test</Typography>
-						</Box>
-
-						<Box sx={{ backgroundColor: 'primary' }}>
-							<Typography variant="h5" >Test</Typography>
-						</Box>
+						{/* <Typography className={classes.picker} variant="caption" >Background Color</Typography> */}
+						<ClrPicker
+							name="cpkColor"
+							label="Background Color"
+							value={field1}
+							onChange={handleInputChange}
+						/>
 
 					</Grid>
 
