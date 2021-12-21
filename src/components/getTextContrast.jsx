@@ -52,15 +52,13 @@ class TextContrast {
         if (typeof colorList[colorName.toLowerCase()] != 'undefined')
             return colorList[colorName.toLowerCase()];
 
-        return false;
+        return colorName;
     }
 
     // *** Main Function ***
     // Determine Contrast of hex color
     getTextContrast = (colorNameOrHex, threshold = 128) => {
         let colorHex = this.clrNameToHex(colorNameOrHex)
-
-        console.log("Color Value: ", colorHex)
 
         if (colorHex === undefined) {
             return '#000'
