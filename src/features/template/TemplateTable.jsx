@@ -36,7 +36,7 @@ import {
   //   useAddTemplateHeaderMutation,
   useDeleteTemplateHeaderMutation,
   useFetchAllTemplateHeadersQuery,
-  //   useUpdateTemplateHeaderMutation,
+  useChangeTemplateStatusMutation,
 } from "./templateHeaderSlice";
 
 // * Styling
@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.getContrastText("#00a152"),
     display: "flex",
     flexDirection: "column",
-},
+  },
   iconSecondaryColor: {
     backgroundColor: "#00e676",
     color: theme.palette.getContrastText("#00e676"),
@@ -115,13 +115,14 @@ export default function TemplateTable() {
     },
   });
   // RTK Data reqests
-  const { data = [] } = useFetchAllTemplateHeadersQuery({
+  const { data = [], isLoading } = useFetchAllTemplateHeadersQuery({
     status: archiveStatus,
     reload: loadData,
     refetchOnMountOrArgChange: true,
     skip: false,
   });
   const [deleteTemplateHeader] = useDeleteTemplateHeaderMutation();
+  const [archiveTemplateHeader] = useChangeTemplateStatusMutation();
 
   // Modal Window state variables
   // const [openPopup, setOpenPopup] = useState(false);
@@ -188,10 +189,19 @@ export default function TemplateTable() {
   };
 
   // Changes the archive status of a given record
-  const handleArchive = (id) => {
-    // priorAuth.PAArchived = !archiveStatus;
-    // PriorAuthService.updatePA(priorAuth);
-    alert(`Changing archive status for ${id}!`);
+  const handleArchive = (id, status) => {
+    let body =
+    {
+      id: id,
+      archived: !status
+    }
+    archiveTemplateHeader(body);
+    // alert(`Changing archive status for ${id}!`);
+    setNotify({
+      isOpen: true,
+      message: status ? "Record activated" : "Record archived",
+      type: "info",
+    });
   };
 
   // Helper function to format the version int a short readable format
@@ -247,9 +257,9 @@ export default function TemplateTable() {
                   color="primary"
                   aria-label="add a template"
                   size="small"
-                  // onClick={() => {
-                  //   setRecordForEdit(null);
-                  // }}
+                // onClick={() => {
+                //   setRecordForEdit(null);
+                // }}
                 >
                   <AddIcon />
                 </Fab>
@@ -263,84 +273,88 @@ export default function TemplateTable() {
           {/* // TODO Map function goes here  */}
           {/* {recordsAfterPagingAndSorting().map((item) => (
           ))} */}
-          {data.map((item, index) => (
-            <Grid item xl={2} key={index} >
-              <Card className={classes.cardDetails}>
-                <CardContent>
-                  <Typography
-                    className={classes.title}
-                    color="textPrimary"
-                    gutterBottom
-                  >
-                    {item.name}
-                  </Typography>
-                  <Typography variant="h5" component="h2">
-                    {bull} {item.abbreviation} {bull}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    component="p"
-                    color="textSecondary"
-                  >
-                    Tech Stack: -- {item.technologyStack}
-                    <br />
-                    Tot/Weighted Pts: -- {item.totalPoints}/
-                    {item.totalWeightedPoints}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    component="p"
-                    align="right"
-                    // className={clsx({ [classes.archivedColor]: archiveStatus })}
-                    color={archiveStatus ? "error" : "textPrimary"}
-                  >
-                    <br />
-                    Version:{" "}
-                    {formatVersion(
-                      item.versionMain,
-                      item.versionMinor,
-                      item.versionSub
-                    )}
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <IconButton
-                    aria-label="edit template"
-                    onClick={() => {
-                      handleEdit(item);
-                    }}
-                    size="large">
-                    <EditOutlinedIcon />
-                  </IconButton>
-                  <IconButton
-                    aria-label="delete template"
-                    onClick={() => {
-                      setConfirmDialog({
-                        isOpen: true,
-                        title:
-                          "Are you sure you want to delete this Template and all of its Detail?",
-                        subTitle: "You can't undo this action.",
-                        onConfirm: () => {
-                          onDelete(item.id);
-                        },
-                      });
-                    }}
-                    size="large">
-                    <DeleteIcon />
-                  </IconButton>
-                  <IconButton
-                    aria-label="archive template"
-                    onClick={() => {
-                      handleArchive(item.id);
-                    }}
-                    size="large">
-                    {!archiveStatus && <ArchiveIcon />}
-                    {archiveStatus && <UnarchiveIcon />}
-                  </IconButton>
-                </CardActions>
-              </Card>
-            </Grid>
-          ))}
+          {isLoading ? (
+            <Typography> Loading ... </Typography>
+          ) : (
+            data.map((item, index) => (
+              <Grid item xl={2} key={index} >
+                <Card className={classes.cardDetails}>
+                  <CardContent>
+                    <Typography
+                      className={classes.title}
+                      color="textPrimary"
+                      gutterBottom
+                    >
+                      {item.name}
+                    </Typography>
+                    <Typography variant="h5" component="h2">
+                      {bull} {item.abbreviation} {bull}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      component="p"
+                      color="textSecondary"
+                    >
+                      Tech Stack: -- {item.technologyStack}
+                      <br />
+                      Tot/Weighted Pts: -- {item.totalPoints}/
+                      {item.totalWeightedPoints}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      component="p"
+                      align="right"
+                      // className={clsx({ [classes.archivedColor]: archiveStatus })}
+                      color={archiveStatus ? "error" : "textPrimary"}
+                    >
+                      <br />
+                      Version:{" "}
+                      {formatVersion(
+                        item.versionMain,
+                        item.versionMinor,
+                        item.versionSub
+                      )}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <IconButton
+                      aria-label="edit template"
+                      onClick={() => {
+                        handleEdit(item);
+                      }}
+                      size="large">
+                      <EditOutlinedIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete template"
+                      onClick={() => {
+                        setConfirmDialog({
+                          isOpen: true,
+                          title:
+                            "Are you sure you want to delete this Template and all of its Detail?",
+                          subTitle: "You can't undo this action.",
+                          onConfirm: () => {
+                            onDelete(item.id);
+                          },
+                        });
+                      }}
+                      size="large">
+                      <DeleteIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="archive template"
+                      onClick={() => {
+                        handleArchive(item.id, item.archived);
+                      }}
+                      size="large">
+                      {!archiveStatus && <ArchiveIcon />}
+                      {archiveStatus && <UnarchiveIcon />}
+                    </IconButton>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))
+          )}
         </Grid>
       </Grid>
 

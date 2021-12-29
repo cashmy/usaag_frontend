@@ -43,14 +43,21 @@ export const apiTemplateHeaderSlice = createApi({
         invalidatesTags: ["TempHeaders"],
       }),
 
+      changeTemplateStatus: builder.mutation({
+        query: (body) => ({
+          url: `/${body.id}`,
+          method: "PATCH",
+          body,
+        }),
+        invalidatesTags: ["TempHeaders"],
+      }),
+
       // Delete a Template Header
       deleteTemplateHeader: builder.mutation({
-        query(id) {
-          return {
-            url: `/${id}`,
-            method: "DELETE",
-          };
-        },
+        query: (id) => ({
+          url: `/${id}`,
+          method: "DELETE",
+        }),
         invalidatesTags: ["TempHeaders"],
       }),
     };
@@ -62,4 +69,5 @@ export const {
   useAddTemplateHeaderMutation,
   useUpdateTemplateHeaderMutation,
   useDeleteTemplateHeaderMutation,
+  useChangeTemplateStatusMutation,
 } = apiTemplateHeaderSlice;
