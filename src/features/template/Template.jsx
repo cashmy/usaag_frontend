@@ -7,6 +7,12 @@ import TemplateData from "../../tempData/template-data";
 import { DragDropContext } from "react-beautiful-dnd";
 import TemplateColumn from "./TemplateColumn";
 import TemplateHeaderForm from "./TemplateHeader";
+import Controls from '../../components/controls/Controls'
+// Report Items
+import ReactDOM from 'react-dom';
+import { PDFViewer } from '@react-pdf/renderer';
+// import ReactPDF from '@react-pdf/renderer';
+import UserStoryTemplate from "./Reports/UserStoryTemplate";
 
 // * Styling
 const useStyles = makeStyles((theme) => ({
@@ -36,6 +42,9 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
+  reportButton: {
+    marginLeft: theme.spacing(3)
+  }
 }));
 
 export default function Template() {
@@ -43,6 +52,18 @@ export default function Template() {
   const recordForEdit = location.state?.recordForEdit;
   const classes = useStyles();
   const [templateData, setTemplateData] = useState(TemplateData);
+
+
+  const handleReport = (id) => {
+    ReactDOM.render(
+
+      <PDFViewer width="100%" height="1200" showtoolbar="true">
+        <UserStoryTemplate id={id} />
+      </PDFViewer>,
+      document.getElementById("root")
+    );
+
+  }
 
   // * Handle "Dragging"
   // Note: This is an "optimistic Update" so it is not waiting on the server.
@@ -128,6 +149,15 @@ export default function Template() {
           <Grid item xs={10}>
             <Paper className={classes.paper}>
               <Typography variant="h4">User Story Template</Typography>
+              <Controls.Button
+                className={classes.reportButton}
+                text="Report"
+                color="primary"
+                aria-label="report"
+                size="small"
+                onClick={() => handleReport(recordForEdit.id)}
+              >
+              </Controls.Button>
             </Paper>
           </Grid>
         </Grid>
@@ -149,11 +179,11 @@ export default function Template() {
               {/* //* Template Detail Column */}
               {templateData.columns.columnOrder.map((columnID) => {
                 const column = templateData.columns[columnID];
-                console.log("Column: ", column);
+                // console.log("Column: ", column);
                 const tasks = column.taskIds.map(
                   (taskId) => templateData.tasks[taskId]
                 );
-                console.log("Tasks: ", tasks);
+                // console.log("Tasks: ", tasks);
                 return (
                   <TemplateColumn
                     key={column.id}
