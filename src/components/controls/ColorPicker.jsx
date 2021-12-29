@@ -5,7 +5,6 @@ import {
     TextField,
 } from "@mui/material";
 import {
-    Calculate,
     KeyboardArrowDown,
     KeyboardArrowUp
 } from "@mui/icons-material"
