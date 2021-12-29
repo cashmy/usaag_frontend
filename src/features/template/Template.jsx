@@ -9,9 +9,8 @@ import TemplateColumn from "./TemplateColumn";
 import TemplateHeaderForm from "./TemplateHeader";
 import Controls from '../../components/controls/Controls'
 // Report Items
-import ReactDOM from 'react-dom';
+import NewWindow from 'react-new-window'
 import { PDFViewer } from '@react-pdf/renderer';
-// import ReactPDF from '@react-pdf/renderer';
 import UserStoryTemplate from "./Reports/UserStoryTemplate";
 
 // * Styling
@@ -52,17 +51,13 @@ export default function Template() {
   const recordForEdit = location.state?.recordForEdit;
   const classes = useStyles();
   const [templateData, setTemplateData] = useState(TemplateData);
+  const [popup, setPopup] = useState(false);
+  const [currentRecordId, setCurrentRecordId] = useState()
 
 
   const handleReport = (id) => {
-    ReactDOM.render(
-
-      <PDFViewer width="100%" height="1200" showtoolbar="true">
-        <UserStoryTemplate id={id} />
-      </PDFViewer>,
-      document.getElementById("root")
-    );
-
+    setCurrentRecordId(id)
+    setPopup(!popup)
   }
 
   // * Handle "Dragging"
@@ -196,6 +191,21 @@ export default function Template() {
           </DragDropContext>
         </Grid>
       </Grid>
+
+      {popup && (
+        <NewWindow
+          name="PDF Viewer"
+          title="PDF Viewer"
+          onUnload={handleReport}
+          center="screen"
+        >
+          <PDFViewer width="100%" height="1200" showtoolbar="true">
+            <UserStoryTemplate id={currentRecordId} />
+          </PDFViewer>,
+        </NewWindow>
+
+      )}
+
     </Fragment>
   );
 }

@@ -125,7 +125,6 @@ export default function TemplateTable() {
   const [archiveTemplateHeader] = useChangeTemplateStatusMutation();
 
   // Modal Window state variables
-  // const [openPopup, setOpenPopup] = useState(false);
   const [notify, setNotify] = useState({
     isOpen: false,
     message: "",
@@ -137,6 +136,7 @@ export default function TemplateTable() {
     subTitle: "",
   });
 
+  // * Handle helper functions
   const handleSearch = (e) => {
     let target = e.target;
     // state can't store functions, so we are storing an object with the function internally defined.
@@ -182,12 +182,10 @@ export default function TemplateTable() {
       type: "error",
     });
   };
-
   // Toggles between Active and Archived status display
   const handleToggle = () => {
     setArchiveStatus(!archiveStatus);
   };
-
   // Changes the archive status of a given record
   const handleArchive = (id, status) => {
     let body =
@@ -203,12 +201,12 @@ export default function TemplateTable() {
       type: "info",
     });
   };
-
   // Helper function to format the version int a short readable format
   const formatVersion = (main, minor, sub) => {
     return main.toString() + "." + minor.toString() + "." + sub.toString();
   };
 
+  // * Main component render
   return (
     <React.Fragment>
       <Grid container className={classes.root} spacing={1}>
