@@ -1,5 +1,5 @@
 {
-  "name": "mui-drawer-rtk",
+  "name": "usaag-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -12,13 +12,18 @@
     "@mui/material": "^5.2.4",
     "@mui/styles": "^5.2.3",
     "@mui/x-data-grid": "^5.2.1",
+    "@react-pdf/renderer": "^2.0.16",
     "@reduxjs/toolkit": "^1.7.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "assert": "^2.0.0",
     "axios": "^0.22.0",
+    "browserify-zlib": "^0.2.0",
+    "buffer": "^6.0.3",
     "date-fns": "^2.23.0",
     "jwt-decode": "^3.1.2",
+    "process": "^0.11.10",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
@@ -26,13 +31,16 @@
     "react-colorful": "^5.5.1",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^17.0.2",
-    "react-pdf": "^5.5.0",
     "react-redux": "^7.2.6",
     "react-router-dom": "^5.3.0",
-    "react-scripts": "^5.0.0"
+    "react-scripts": "^5.0.0",
+    "stream-browserify": "^3.0.0",
+    "util": "^0.12.4"
   },
   "scripts": {
     "start": "react-scripts start",
+    "start:wp": "webpack serve --config webpack.config.js --open --mode development",
+    "dev": "webpack --mode development",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -53,6 +61,16 @@
     ]
   },
   "devDependencies": {
-    "cypress": "^9.1.0"
+    "@babel/core": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "@babel/preset-react": "^7.16.5",
+    "babel-loader": "^8.2.3",
+    "css-loader": "^6.5.1",
+    "cypress": "^9.1.0",
+    "html-webpack-plugin": "^5.5.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.7.1"
   }
 }
