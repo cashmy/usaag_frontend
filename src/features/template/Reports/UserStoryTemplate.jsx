@@ -21,14 +21,19 @@ const styles = StyleSheet.create({
         padding: 10,
         flexGrow: 1
     },
-    title: {
-        margin: 8,
+    titleBox: {
+        marginLeft: 4,
+        marginTop: 8,
+        marginBottom: 12,
     },
-    subTitle: {
-        marginLeft: 12,
+    titleText: {
         fontSize: 18,
         textAlign: 'Left',
-        marginBottom: 12,
+    },
+    versionText: {
+        width: 275,
+        fontSize: 8,
+        textAlign: 'right',
     },
     label: {
         marginRight: 12,
@@ -72,19 +77,31 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#4caf50',
     },
+    headerSpace: {
+        marginTop: 4,
+        marginBottom: 4,
+        paddingTop: 4,
+    },
     colHdgText: {
         marginLeft: 4,
-        marginRight: 18,
+        marginRight: 23,
         fontSize: 10,
         textAlign: 'left',
     },
-    columnHeadings: {
-        margin: 4,
+    featureHeadings: {
+        marginTop: 8,
+        width: '100%',
         fontSize: 10,
-        fontWeight: 'bold',
-        padding: 4,
+        paddingTop: 4,
+        paddingBottom: 4,
+        paddingLeft: 60,
         backgroundColor: '#e65100',
         color: '#000000',
+    },
+    columnHeadings: {
+        marginTop: 4,
+        marginBottom: 4,
+        fontSize: 10,
         flexDirection: 'row',
     },
     row: {
@@ -120,16 +137,22 @@ export default function UserStoryTemplate(props) {
     const [headerData, setHeaderData] = useState({});     // Template Header Info
     const [data, setData] = useState();                 // Template Detail User Stories
     const [bonusData, setBonusData] = useState();       // Template Detail Bonus Stories
-
+    const [version, setVersion] = useState();
     const colHdgs = [
         { field: 'pointValue', headerName: 'Points', width: 30 },
         { field: 'description', headerName: 'Details', width: 450 },
     ]
 
+    // Helper function to format the version int a short readable format
+    const formatVersion = (main, minor, sub) => {
+        return main.toString() + "." + minor.toString() + "." + sub.toString();
+    }
+
     async function getRecords() {
         try {
             const hdrResponse = await TemplateHeaderService.getTemplateHeader(id);
             setHeaderData(hdrResponse.data);
+            setVersion(formatVersion(hdrResponse.data.versionMain, hdrResponse.data.versionMinor, hdrResponse.data.versionSub))
             const response = await TemplateDetailService.getTemplateDetailsByBonus(id, false);
             setData(response.data);
             const response2 = await TemplateDetailService.getTemplateDetailsByBonus(id, true);
@@ -163,18 +186,23 @@ export default function UserStoryTemplate(props) {
                         style={styles.logo}
                         src={dccLogo}
                     />
+                    <Text style={[styles.headerSpace], { width: 125 }} />
                     <Text style={[
                         styles.headerText,
-                        { width: 325 },
+                        { width: 50 },
                         { height: 'auto' },
                         { fontFamily: 'Roboto', fontStyle: 'italic' }]}
                     >Template</Text>
+                    <Text style={[styles.headerSpace], { width: 175 }} />
                     <Text style={[styles.headerPage, { width: 20 }, { height: 'auto' }]} render={({ pageNumber, totalPages }) => (`${pageNumber} / ${totalPages}`)} />
                 </View>
 
                 {/* //* Template Header Info */}
-                <View style={styles.title}>
-                    <Text style={styles.subtitle} fixed>{headerData.abbreviation} - {headerData.name}</Text>
+                <View style={styles.titleBox}>
+                    <Text style={styles.titleText} fixed>{headerData.abbreviation} - {headerData.name}</Text>
+                    <Text style={styles.versionText}>
+                        Version:{" "}{version}
+                    </Text>
                 </View>
                 <View style={styles.row}>
                     <Text style={[
@@ -203,8 +231,23 @@ export default function UserStoryTemplate(props) {
                     >Notes</Text>
                     <Text style={[styles.fieldData, { width: 450 }, { height: 'auto' }]} >{headerData.specialNotes}</Text>
                 </View>
+                <View style={styles.row}>
+                    <Text style={[
+                        styles.label,
+                        { width: 60 },
+                        { height: 'auto' },
+                        { fontFamily: 'Roboto', fontWeight: 'bold' }]}
+                    >Points</Text>
+                    <Text style={[styles.fieldData, { width: 450 }, { height: 'auto' }]} >
+                        Total: {headerData.totalPoints} /
+                        Wghtd: {headerData.totalWeightedPoints}
+                    </Text>
+                </View>
 
                 {/* //* Feature Headings */}
+                <Text style={[styles.featureHeadings, { fontFamily: 'Roboto', fontWeight: 'bold' }]}>
+                    Features
+                </Text>
                 <View style={styles.columnHeadings}>
                     {colHdgItems}
                 </View>
@@ -235,6 +278,9 @@ export default function UserStoryTemplate(props) {
                 </View>
 
                 {/* //* Bonus Headings */}
+                <Text style={[styles.featureHeadings, { fontFamily: 'Roboto', fontWeight: 'bold' }]}>
+                    Bonuses
+                </Text>
                 <View style={styles.columnHeadings}>
                     {colHdgItems}
                 </View>
