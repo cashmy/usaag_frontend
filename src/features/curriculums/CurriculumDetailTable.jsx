@@ -311,7 +311,7 @@ export default function CurriculumDetail(props) {
                             />
                         </Grid>
                     </Grid>
-                    
+
                     <TableContainer sx={{ maxHeight: 480 }} >
                         <TblContainer stickyHeader={true}>
                             <TblHead />
@@ -346,13 +346,13 @@ export default function CurriculumDetail(props) {
                                             >{item.notes}</TableCell>
                                             <TableCell>
                                                 <Controls.ActionButton
-                                                    color="#64b5f6"
+                                                    color="darkcyan"
                                                     size="large"
                                                     onClick={() => handleEdit(item)}>
                                                     <EditOutlinedIcon fontSize="small" />
                                                 </Controls.ActionButton>
                                                 <Controls.ActionButton
-                                                    color="error"
+                                                    color="red"
                                                     onClick={() => handleDelete(item.themeId, item.id)}
                                                 >
                                                     <DeleteIcon fontSize="small" />

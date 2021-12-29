@@ -27,6 +27,7 @@ import UnarchiveIcon from "@mui/icons-material/Unarchive";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
+import PrintIcon from '@mui/icons-material/Print';
 
 // Wrapped Components
 import Controls from "../../components/controls/Controls";
@@ -38,6 +39,11 @@ import {
   useFetchAllTemplateHeadersQuery,
   useChangeTemplateStatusMutation,
 } from "./templateHeaderSlice";
+
+// Report Items
+import NewWindow from 'react-new-window'
+import { PDFViewer } from '@react-pdf/renderer';
+import UserStoryTemplate from "./Reports/UserStoryTemplate";
 
 // * Styling
 const useStyles = makeStyles((theme) => ({
@@ -108,6 +114,8 @@ export default function TemplateTable() {
   const bull = <span className={classes.bullet}>•</span>;
   const [loadData, setLoadData] = useState(false);
   const [archiveStatus, setArchiveStatus] = useState(false);
+  const [popup, setPopup] = useState(false);
+  const [currentRecordId, setCurrentRecordId] = useState()
   // Initialize with a default filter of all records, bypasses initial load error
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
@@ -205,6 +213,11 @@ export default function TemplateTable() {
   const formatVersion = (main, minor, sub) => {
     return main.toString() + "." + minor.toString() + "." + sub.toString();
   };
+  const handlePrint = (id) => {
+    setCurrentRecordId(id)
+    setPopup(!popup)
+  }
+
 
   // * Main component render
   return (
@@ -320,6 +333,7 @@ export default function TemplateTable() {
                       onClick={() => {
                         handleEdit(item);
                       }}
+                      style={{ color: "darkcyan" }}
                       size="large">
                       <EditOutlinedIcon />
                     </IconButton>
@@ -336,6 +350,7 @@ export default function TemplateTable() {
                           },
                         });
                       }}
+                      style={{ color: "red" }}
                       size="large">
                       <DeleteIcon />
                     </IconButton>
@@ -344,9 +359,20 @@ export default function TemplateTable() {
                       onClick={() => {
                         handleArchive(item.id, item.archived);
                       }}
+                      style={{ color: "darkorchid" }}
                       size="large">
                       {!archiveStatus && <ArchiveIcon />}
                       {archiveStatus && <UnarchiveIcon />}
+                    </IconButton>
+                    <IconButton
+                      aria-label="print template"
+                      onClick={() => {
+                        handlePrint(item.id);
+                      }}
+                      color="primary"
+                      size="large"
+                    >
+                      <PrintIcon />
                     </IconButton>
                   </CardActions>
                 </Card>
@@ -362,6 +388,19 @@ export default function TemplateTable() {
         confirmDialog={confirmDialog}
         setConfirmDialog={setConfirmDialog}
       />
+      {/* PDF Viewer */}
+      {popup && (
+        <NewWindow
+          name="PDF Viewer"
+          title="PDF Viewer"
+          onUnload={handlePrint}
+          center="screen"
+        >
+          <PDFViewer width="100%" height="1200" showtoolbar="true">
+            <UserStoryTemplate id={currentRecordId} />
+          </PDFViewer>,
+        </NewWindow>
+      )}
     </React.Fragment>
   );
 }

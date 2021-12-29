@@ -23,6 +23,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import SearchIcon from '@mui/icons-material/Search';
+import PrintIcon from '@mui/icons-material/Print';
 // Child components
 import Controls from "../../components/controls/Controls";
 import CurriculumThemeForm from "./CurriculumThemeForm";
@@ -30,9 +31,12 @@ import CurriculumThemeForm from "./CurriculumThemeForm";
 import useTable from "../../components/useTable";
 // Service Layer
 import CurriculumThemesService from "../../services/curriculumThemes.service";
-// import { OverlayScrollbarsComponent } from 'overlayscrollbars-react';
 
-// import { Scrollable, useScrollable } from 'nice-scrollbars';
+// Report Items
+import NewWindow from 'react-new-window'
+import { PDFViewer } from '@react-pdf/renderer';
+// import UserStoryTemplate from "./Reports/UserStoryTemplate";
+
 
 // * Styling
 const useStyles = makeStyles((theme) => ({
@@ -91,6 +95,8 @@ export default function CurriculumThemeTable() {
   const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
   const theadColor = "#d600f9"; // bright purple-pink
   const theadText = "#ffffff"; // white
+  const [popup, setPopup] = useState(false); // used for PDFViewer
+  const [currentRecordId, setCurrentRecordId] = useState()
   const [openPopup, setOpenPopup] = useState(false);
   const [archiveStatus, setArchiveStatus] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState({
@@ -180,7 +186,7 @@ export default function CurriculumThemeTable() {
   const handleEdit = (record) => {
     openInPopup(record)
   };
-  
+
   const onDelete = (id) => {
     setConfirmDialog({
       ...confirmDialog,
@@ -222,8 +228,11 @@ export default function CurriculumThemeTable() {
       },
     });
   }
+  const handlePrint = (id) => {
+    setCurrentRecordId(id)
+    setPopup(!popup)
+  }
 
-  
 
   return (
     <Fragment>
@@ -294,56 +303,63 @@ export default function CurriculumThemeTable() {
                   </Grid>
                 </Grid>
 
-              <TblContainer>
-                <TblHead />
-                <TableBody>
-                  {isLoading ? (
-                    <Typography> Loading ... </Typography>
-                  ) : (
-                    recordsAfterPagingAndSorting().map(item => (
-                      <TableRow key={item.id}>
-                        <TableCell>{item.name}</TableCell>
-                        <TableCell>{item.numberOfWeeks}</TableCell>
-                        <TableCell
-                          className={classes.multiLineDesc}
-                        >{item.technologyStack}</TableCell>
-                        <TableCell>{item.level}</TableCell>
-                        <TableCell>{item.dayTimeStatus === true ? "True" : "False"}</TableCell>
-                        <TableCell>
-                          <Controls.ActionButton
-                            color="#64b5f6"
-                            size="large"
-                            onClick={() => handleEdit(item)}>
-                            <EditOutlinedIcon fontSize="small" />
-                          </Controls.ActionButton>
-                          <Controls.ActionButton
-                            color="error"
-                            onClick={() => handleDelete(item.id)}
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </Controls.ActionButton>
-                          <Controls.ActionButton
-                            color="warning"
-                            onClick={() => {
-                              handleArchive(item);
-                            }}
-                          >
-                            {!archiveStatus && <ArchiveIcon />}
-                            {archiveStatus && <UnarchiveIcon />}
-                          </Controls.ActionButton>
-                          <Controls.ActionButton
-                            color="info"
-                            onClick={() => handleDetails(item)}
-                          >
-                            <AssignmentIcon fontSize="small" />
-                          </Controls.ActionButton>
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )
-                  }
-                </TableBody>
-              </TblContainer>
+                <TblContainer>
+                  <TblHead />
+                  <TableBody>
+                    {isLoading ? (
+                      <Typography> Loading ... </Typography>
+                    ) : (
+                      recordsAfterPagingAndSorting().map(item => (
+                        <TableRow key={item.id}>
+                          <TableCell>{item.name}</TableCell>
+                          <TableCell>{item.numberOfWeeks}</TableCell>
+                          <TableCell
+                            className={classes.multiLineDesc}
+                          >{item.technologyStack}</TableCell>
+                          <TableCell>{item.level}</TableCell>
+                          <TableCell>{item.dayTimeStatus === true ? "True" : "False"}</TableCell>
+                          <TableCell>
+                            <Controls.ActionButton
+                              color="darkcyan"
+                              size="large"
+                              onClick={() => handleEdit(item)}>
+                              <EditOutlinedIcon fontSize="small" />
+                            </Controls.ActionButton>
+                            <Controls.ActionButton
+                              color="red"
+                              onClick={() => handleDelete(item.id)}
+                            >
+                              <DeleteIcon fontSize="small" />
+                            </Controls.ActionButton>
+                            <Controls.ActionButton
+                              color="darkorchid"
+                              onClick={() => {
+                                handleArchive(item);
+                              }}
+                            >
+                              {!archiveStatus && <ArchiveIcon />}
+                              {archiveStatus && <UnarchiveIcon />}
+                            </Controls.ActionButton>
+                            <Controls.ActionButton
+                              disabled="true"
+                              color="primary"
+                              onClick={() => handlePrint(item)}
+                            >
+                              <PrintIcon fontSize="small" />
+                            </Controls.ActionButton>
+                            <Controls.ActionButton
+                              color="info"
+                              onClick={() => handleDetails(item)}
+                            >
+                              <AssignmentIcon fontSize="small" />
+                            </Controls.ActionButton>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )
+                    }
+                  </TableBody>
+                </TblContainer>
               </div>
             </Paper>
           </Grid>
@@ -363,6 +379,19 @@ export default function CurriculumThemeTable() {
         confirmDialog={confirmDialog}
         setConfirmDialog={setConfirmDialog}
       />
+      {/* PDF Viewer */}
+      {popup && (
+        <NewWindow
+          name="PDF Viewer"
+          title="PDF Viewer"
+          onUnload={handlePrint}
+          center="screen"
+        >
+          <PDFViewer width="100%" height="1200" showtoolbar="true">
+            {/* <UserStoryTemplate id={currentRecordId} /> */}
+          </PDFViewer>,
+        </NewWindow>
+      )}
     </Fragment>
   );
 }
