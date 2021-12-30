@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 // import clsx from 'clsx';
 import { Grid, Paper, Typography } from "@mui/material";
@@ -12,6 +12,8 @@ import Controls from '../../components/controls/Controls'
 import NewWindow from 'react-new-window'
 import { PDFViewer } from '@react-pdf/renderer';
 import UserStoryTemplate from "./Reports/UserStoryTemplate";
+// Redux
+import { useFetchAllTemplateDetailsQuery } from "./templateDetailSlice";
 
 // * Styling
 const useStyles = makeStyles((theme) => ({
@@ -50,10 +52,60 @@ export default function Template() {
   const location = useLocation();
   const recordForEdit = location.state?.recordForEdit;
   const classes = useStyles();
-  const [templateData, setTemplateData] = useState(TemplateData);
+  const { data = [], isLoading, error } = useFetchAllTemplateDetailsQuery(recordForEdit.id);
   const [popup, setPopup] = useState(false);
   const [currentRecordId, setCurrentRecordId] = useState()
 
+  // * Setup Template Data object for DnD
+  const [templateData, setTemplateData] = useState({
+    tasks: {
+      "0": { id: "0", content: "Take out the garbage" },
+      "1": { id: "1", content: "Watch my favorite show" },
+      "2": { id: "2", content: "Charge my phone" },
+    },
+    columns: {
+      "column-1": {
+        id: "column-1",
+        title: "User Stories",
+        taskIds: ["0", "1"],
+      },
+      "column-2": {
+        id: "column-2",
+        title: "Bonus stories",
+        taskIds: ["2"],
+      },
+      columnOrder: ["column-1", "column-2"],
+    }
+  });
+
+  useEffect(() => {
+    // console.log("Test Data: ", testData)
+    // console.log("Record for Edit: ", recordForEdit)
+    let mapResult = {}
+    let taskIds = []
+    let taskIds2 = []
+
+    if (data.length > 0) {
+      data.map((item) => {
+        let strId = item.id.toString()
+        mapResult[strId] = { id: strId, content: item.title + " - (" + item.pointValue + "pts )" }
+        if (item.bonusStatus)
+          taskIds2.push(strId)
+        else
+          taskIds.push(strId)
+      })
+
+      console.log("\n*** Map Result: ", mapResult)
+      let newState = templateData
+      newState.tasks = mapResult
+      newState.columns["column-1"].taskIds = taskIds
+      newState.columns["column-2"].taskIds = taskIds2
+
+      setTemplateData(newState);
+      console.log("After setTmpDta: ", templateData.columns["column-1"].taskIds)
+    }
+
+  }, [recordForEdit.id, data])
 
   const handleReport = (id) => {
     setCurrentRecordId(id)
@@ -81,7 +133,7 @@ export default function Template() {
     const startColumn = templateData.columns[source.droppableId];
     const finishColumn = templateData.columns[destination.droppableId];
 
-    console.log("===> Destination Index: ", destination.index);
+    // console.log("===> Destination Index: ", destination.index);
 
     // * Moving within a list
     if (startColumn === finishColumn) {
@@ -102,7 +154,7 @@ export default function Template() {
           [newColumn.id]: newColumn,
         },
       };
-      console.log("*** NEW STATE ***: ", newState);
+      // console.log("*** NEW STATE: Int ***: ", newState);
       setTemplateData(newState);
       // TODO: Add call to DATA-PATCH here
       return;
@@ -131,7 +183,7 @@ export default function Template() {
         [newFinish.id]: newFinish,
       },
     };
-
+    // console.log("*** NEW STATE: U<->B *** : ", newState);
     setTemplateData(newState);
     // TODO: Add call to DATA-PATCH here
   };
@@ -170,15 +222,14 @@ export default function Template() {
           <DragDropContext onDragEnd={onDragEnd} className={classes.root}>
             <Grid item xs={5} container className={classes.columnContainer}>
               {/* Setup Droppable context columns */}
-
               {/* //* Template Detail Column */}
+              {console.log("Processing Template Data: ", templateData.columns["column-1"].taskIds)}
               {templateData.columns.columnOrder.map((columnID) => {
                 const column = templateData.columns[columnID];
-                // console.log("Column: ", column);
                 const tasks = column.taskIds.map(
                   (taskId) => templateData.tasks[taskId]
                 );
-                // console.log("Tasks: ", tasks);
+                console.log("Proccessed Tasks are: ", tasks)
                 return (
                   <TemplateColumn
                     key={column.id}

@@ -1,10 +1,11 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import { Grid, Paper, Typography } from "@mui/material";
 import makeStyles from '@mui/styles/makeStyles';
 import TemplateTask from "./TemplateTask";
 import clsx from "clsx";
 
+// * Styling
 const useStyles = makeStyles((theme) => ({
   container: {
     border: "1px solid lightgrey",
@@ -29,18 +30,15 @@ const useStyles = makeStyles((theme) => ({
   taskList: {
     padding: theme.spacing(1),
   },
-  //   taskListStandard: {
-  //     backgroundColor: theme.palette.background.paper,
-  //     // color: theme.palette.getContrastText(theme.palette.text.secondary),
-  //   },
-  //   taskListDragging: {
-  //     backgroundColor: "#bdbdbd",
-  //     // color: theme.palette.getContrastText(theme.palette.background.paper),
-  //   },
 }));
 
 export default function Column(props) {
   const classes = useStyles();
+
+  useEffect(() => {
+    // console.log("Column: ", props.column.title)
+    console.log(">> Column Tasks: ", props.tasks)
+  }, [props])
 
   return (
     <Fragment>
