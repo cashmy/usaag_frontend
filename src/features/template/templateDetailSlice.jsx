@@ -5,18 +5,27 @@ export const apiTemplateDetailSlice = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "https://localhost:44319/api/TemplateDetail",
     prepareHeaders(headers) {
-      const token = localStorage.getItem("token");
-      headers.localStorage("authorization", `Bearer ${token}`);
+      // const token = localStorage.getItem("token");
+      // headers.localStorage("authorization", `Bearer ${token}`);
       return headers;
     },
   }),
+  tagTypes: ["TempDetails"],
 
   endpoints: (builder) => {
     return {
       // Get All Detals for a Template
       fetchAllTemplateDetails: builder.query({
         query(id) {
+          console.log("RTK Query Id: ", id)
           return `/${id}`;
+        },
+        providesTags: (result, err, arg) => ["TempDetails"],
+      }),
+
+      fetchTemplateDetailsByBonus: builder.query({
+        query(body) {
+          return `/${body.id}/${body.status}`
         },
         providesTags: (result, err, arg) => ["TempDetails"],
       }),
@@ -57,6 +66,7 @@ export const apiTemplateDetailSlice = createApi({
 
 export const {
   useFetchAllTemplateDetailsQuery,
+  useFetchTemplateDetailsByBonusQuery,
   useAddTemplateDetailMutation,
   useUpdateTemplateDetailMutation,
   useDeleteTemplateDetailMutation,
