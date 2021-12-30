@@ -15,8 +15,7 @@ export default function Notification(props) {
     const classes = useStyles()
 
     const handleClose = (event, reason) => {
-        if ( reason === 'clickaway')
-        {
+        if (reason === 'clickaway') {
             return
         }
         setNotify({
@@ -31,11 +30,11 @@ export default function Notification(props) {
             className={classes.root}
             open={notify.isOpen}
             autoHideDuration={6000}
-            anchorOrigin={{vertical: 'top', horizontal: 'right' }}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             onClose={handleClose}
         >
-            <Alert 
-                severity={notify.type}
+            <Alert
+                severity={notify.type || "info"}
                 onClose={handleClose}
             >
                 {notify.message}
