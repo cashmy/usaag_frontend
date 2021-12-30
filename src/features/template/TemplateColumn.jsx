@@ -37,7 +37,7 @@ export default function Column(props) {
 
   useEffect(() => {
     // console.log("Column: ", props.column.title)
-    console.log(">> Column Tasks: ", props.tasks)
+    // console.log(">> Column Tasks: ", props.tasks)
   }, [props])
 
   return (

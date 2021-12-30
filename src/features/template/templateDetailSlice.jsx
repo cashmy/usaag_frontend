@@ -17,7 +17,6 @@ export const apiTemplateDetailSlice = createApi({
       // Get All Detals for a Template
       fetchAllTemplateDetails: builder.query({
         query(id) {
-          console.log("RTK Query Id: ", id)
           return `/${id}`;
         },
         providesTags: (result, err, arg) => ["TempDetails"],
