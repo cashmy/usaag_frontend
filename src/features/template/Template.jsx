@@ -8,6 +8,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import TemplateColumn from "./TemplateColumn";
 import TemplateHeaderForm from "./TemplateHeader";
 import Controls from '../../components/controls/Controls'
+import { Scrollbars } from 'react-custom-scrollbars'
 // Report Items
 import NewWindow from 'react-new-window'
 import { PDFViewer } from '@react-pdf/renderer';
@@ -220,24 +221,28 @@ export default function Template() {
 
           {/* Setup container for Drag Context */}
           <DragDropContext onDragEnd={onDragEnd} className={classes.root}>
-            <Grid item xs={5} container className={classes.columnContainer}>
-              {/* Setup Droppable context columns */}
-              {/* //* Template Detail Column */}
-              {console.log("Processing Template Data: ", templateData.columns["column-1"].taskIds)}
-              {templateData.columns.columnOrder.map((columnID) => {
-                const column = templateData.columns[columnID];
-                const tasks = column.taskIds.map(
-                  (taskId) => templateData.tasks[taskId]
-                );
-                console.log("Proccessed Tasks are: ", tasks)
-                return (
-                  <TemplateColumn
-                    key={column.id}
-                    column={column}
-                    tasks={tasks}
-                  />
-                );
-              })}
+            <Grid item xs={5} container className={classes.columnContainer} >
+              <Scrollbars
+                style={{ height: '75vh' }}
+              >
+                {/* Setup Droppable context columns */}
+                {/* //* Template Detail Column */}
+                {console.log("Processing Template Data: ", templateData.columns["column-1"].taskIds)}
+                {templateData.columns.columnOrder.map((columnID) => {
+                  const column = templateData.columns[columnID];
+                  const tasks = column.taskIds.map(
+                    (taskId) => templateData.tasks[taskId]
+                  );
+                  console.log("Proccessed Tasks are: ", tasks)
+                  return (
+                    <TemplateColumn
+                      key={column.id}
+                      column={column}
+                      tasks={tasks}
+                    />
+                  );
+                })}
+              </Scrollbars>
             </Grid>
           </DragDropContext>
         </Grid>
