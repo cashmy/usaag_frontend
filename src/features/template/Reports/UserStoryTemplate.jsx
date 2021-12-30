@@ -267,9 +267,8 @@ export default function UserStoryTemplate(props) {
                                         { width: colHdgs[1].width },
                                         { height: 'auto' },
                                         item.greyHighlight ? { backgroundColor: '#9e9e9e' } : ""
-
                                     ]}
-                                    > {item.description} </Text>
+                                    > {item.title + ": " + item.description} </Text>
                                 </View>
                             )
                         })
@@ -295,7 +294,13 @@ export default function UserStoryTemplate(props) {
                             return (
                                 <View key={index} style={styles.row} wrap={false}>
                                     <Text style={[styles.text, { width: colHdgs[0].width }, { height: 'auto' }]} > {item.pointValue} </Text>
-                                    <Text style={[styles.text, { width: colHdgs[1].width }, { height: 'auto' }]} > {item.description} </Text>
+                                    <Text style={[
+                                        styles.text,
+                                        { width: colHdgs[1].width },
+                                        { height: 'auto' },
+                                        item.greyHighlight ? { backgroundColor: '#9e9e9e' } : ""
+                                    ]}
+                                    > {item.title + ": "} {item.description} </Text>
                                 </View>
                             )
                         })
