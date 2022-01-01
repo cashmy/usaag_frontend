@@ -11,7 +11,7 @@ export const apiTemplateDetailSlice = createApi({
     },
   }),
   tagTypes: ["TempDetails"],
-  refetchOnFocus: true,
+  refetchOnMountOrArgChange: true,
 
   endpoints: (builder) => {
     return {
@@ -20,26 +20,32 @@ export const apiTemplateDetailSlice = createApi({
         query(body) {
           return `/${body.id}`;
         },
-        providesTags: (result, err, arg) => ["TempDetails"],
+        providesTags: (result, error, arg) => {
+          console.log('Fetch TempDetails: ', result, error, arg)
+          return ["TempDetails"]
+        }
       }),
 
-      fetchTemplateDetailsByBonus: builder.query({
-        query(body) {
-          return `/${body.id}/${body.status}`
-        },
-        providesTags: (result, err, arg) => ["TempDetails"],
-      }),
+      // fetchTemplateDetailsByBonus: builder.query({
+      //   query(body) {
+      //     return `/${body.id}/${body.status}`
+      //   },
+      //   providesTags: (result, err, arg) => ["TempDetails"],
+      // }),
 
       // Add a Template Detail
       addTemplateDetail: builder.mutation({
         query: (body) => (
-          console.log(body),
+          // console.log(body),
           {
             url: "",
             method: "POST",
             body,
           }),
-        invalidatesTags: ["TempDetails"],
+        invalidatesTags: (result, error, arg) => {
+          console.log('Add TempDetails: ', result, error, arg)
+          return ['TempDetails']
+        },
       }),
 
       // Update A Template Detail
@@ -49,7 +55,10 @@ export const apiTemplateDetailSlice = createApi({
           method: "PUT",
           body,
         }),
-        invalidatesTags: ["TempDetails"],
+        invalidatesTags: (result, error, arg) => {
+          console.log('Update TempDetails: ', result, error, arg)
+          return ['TempDetails']
+        },
       }),
 
       // Delete a Template Header
@@ -60,15 +69,19 @@ export const apiTemplateDetailSlice = createApi({
             method: "DELETE",
           };
         },
-        invalidatesTags: ["TempDetails"],
-      }),
+        invalidatesTags: (result, error, arg) => {
+          console.log('Delete TempDetails: ', result, error, arg)
+          return ['TempDetails']
+        },
+      }
+      ),
     };
   },
 });
 
 export const {
   useFetchAllTemplateDetailsQuery,
-  useFetchTemplateDetailsByBonusQuery,
+  // useFetchTemplateDetailsByBonusQuery,
   useAddTemplateDetailMutation,
   useUpdateTemplateDetailMutation,
   useDeleteTemplateDetailMutation,

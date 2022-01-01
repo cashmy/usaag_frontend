@@ -8,15 +8,10 @@ import clsx from "clsx";
 // * Styling
 const useStyles = makeStyles((theme) => ({
   container: {
-    border: "1px solid lightgrey",
-    borderRadius: "2px",
-    // width: theme.spacing(40),
-    // height: theme.spacing(20), // 320px
     display: "flex",
     justifyContent: "center",
   },
   paper: {
-    // margin: theme.spacing(1),
     textAlign: "center",
     color: theme.palette.text.secondary,
     display: "flex",
@@ -30,10 +25,16 @@ const useStyles = makeStyles((theme) => ({
   taskList: {
     padding: theme.spacing(1),
   },
+
 }));
 
 export default function Column(props) {
   const classes = useStyles();
+  const { headerId } = props
+  const handleEdit = (task) => {
+    alert(`it works: ${task.id}`)
+
+  }
 
   useEffect(() => {
     // console.log("Column: ", props.column.title)
@@ -64,9 +65,16 @@ export default function Column(props) {
                 {...provided.droppableProps}
                 isdraggingover={toString(snapshot.isDraggingOver)}
               >
-                {props.tasks.map((task, index) => (
-                  <TemplateTask key={task.id} task={task} index={index} />
-                ))}
+                {props.tasks.map((task, index) =>
+                  <TemplateTask
+                    key={task.id}
+                    task={task}
+                    index={index}
+                    handleEdit={() => handleEdit(task)}
+                    headerId={headerId}
+                  // handleDelete={() => handleDelete(task.id)}
+                  />
+                )}
                 {provided.placeholder}
               </Grid>
             )}

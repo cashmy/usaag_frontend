@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
   },
   userStoriesContainer: {
+    paddingLeft: theme.spacing(10),
     textAlign: "center",
     display: "flex",
     flexDirection: "row",
@@ -73,7 +74,8 @@ export default function Template() {
   const recordForAdd = {
     id: 0
   }
-  const { data = [], isLoading, error } = useFetchAllTemplateDetailsQuery(recordForEdit !== undefined ? recordForEdit : recordForAdd);
+  const { data = [], isLoading, error } = useFetchAllTemplateDetailsQuery(recordForEdit !== undefined ? recordForEdit : recordForAdd,
+    { refetchOnMountOrArgChange: true });
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState({
@@ -93,8 +95,8 @@ export default function Template() {
   const [addTemplateDetail] = useAddTemplateDetailMutation();
 
   useEffect(() => {
+    console.log("Data: ", data)
     if (recordForEdit == null) return
-    console.log("Temp UseEffect recordForEdit: ", recordForEdit)
     setHeaderId(recordForEdit.id)
     let mapResult = {}
     let taskIds = []
@@ -121,10 +123,9 @@ export default function Template() {
     }
     dispatch(changeColumnTaskList(payload2))
 
-  }, [recordForEdit])
+  }, [recordForEdit], data)
 
   const addOrEdit = (templateDetail, resetForm) => {
-    console.log("Add/Edit headerId: ", headerId)
     if (templateDetail.id === 0) {
       addTemplateDetail(templateDetail)
 
@@ -139,20 +140,21 @@ export default function Template() {
       message: "Submitted Successfully",
       type: "success",
     });
+    console.log("Relook at data: ", data)
   };
 
-  // const openInPopup = (item) => {
-  //   setRecordForEdit(item);
-  //   setOpenPopup(true);
-  // };
+  const openInPopup = (item) => {
+    // setRecordForEdit(item);
+    setOpenPopup(true);
+  };
 
   const toggleTaskForm = () => {
     setShowTaskForm(!showTaskForm)
   }
 
-  // const handleDtlEdit = (record) => {
-  //   openInPopup(record)
-  // };
+  const handleDtlEdit = (record) => {
+    openInPopup(record)
+  };
 
   const handleReport = (id) => {
     setCurrentRecordId(id)
@@ -320,6 +322,8 @@ export default function Template() {
                         key={column.id}
                         column={column}
                         tasks={tasks}
+                        headerId={headerId}
+                        handleDtlEdit={handleDtlEdit}
                       />
                     );
                   })}
