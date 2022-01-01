@@ -11,7 +11,6 @@ export const apiTemplateDetailSlice = createApi({
     },
   }),
   tagTypes: ["TempDetails"],
-  refetchOnMountOrArgChange: true,
 
   endpoints: (builder) => {
     return {
@@ -21,7 +20,7 @@ export const apiTemplateDetailSlice = createApi({
           return `/${body.id}`;
         },
         providesTags: (result, error, arg) => {
-          console.log('Fetch TempDetails: ', result, error, arg)
+          // console.log('Fetch TempDetails: ', result, error, arg)
           return ["TempDetails"]
         }
       }),
@@ -43,7 +42,7 @@ export const apiTemplateDetailSlice = createApi({
             body,
           }),
         invalidatesTags: (result, error, arg) => {
-          console.log('Add TempDetails: ', result, error, arg)
+          // console.log('Add TempDetails: ', result, error, arg)
           return ['TempDetails']
         },
       }),
@@ -56,7 +55,7 @@ export const apiTemplateDetailSlice = createApi({
           body,
         }),
         invalidatesTags: (result, error, arg) => {
-          console.log('Update TempDetails: ', result, error, arg)
+          // console.log('Update TempDetails: ', result, error, arg)
           return ['TempDetails']
         },
       }),
@@ -70,7 +69,7 @@ export const apiTemplateDetailSlice = createApi({
           };
         },
         invalidatesTags: (result, error, arg) => {
-          console.log('Delete TempDetails: ', result, error, arg)
+          // console.log('Delete TempDetails: ', result, error, arg)
           return ['TempDetails']
         },
       }

@@ -21,6 +21,7 @@ import UserStoryTemplate from "./Reports/UserStoryTemplate";
 import { useSelector, useDispatch } from "react-redux";
 import { useFetchAllTemplateDetailsQuery, useAddTemplateDetailMutation } from "./templateDetailSlice";
 import { changeColumnTaskList, changeTasks, changeTemplate, selectTemplateData } from "./templateDataSlice";
+import { useDateValidation } from "@mui/lab/internal/pickers/hooks/useValidation";
 
 // * Styling
 const useStyles = makeStyles((theme) => ({
@@ -74,8 +75,7 @@ export default function Template() {
   const recordForAdd = {
     id: 0
   }
-  const { data = [], isLoading, error } = useFetchAllTemplateDetailsQuery(recordForEdit !== undefined ? recordForEdit : recordForAdd,
-    { refetchOnMountOrArgChange: true });
+  const { data = [], isLoading, error } = useFetchAllTemplateDetailsQuery(recordForEdit !== undefined ? recordForEdit : recordForAdd);
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState({
@@ -91,13 +91,19 @@ export default function Template() {
   const [popup, setPopup] = useState(false);
   const [currentRecordId, setCurrentRecordId] = useState()
   const [headerId, setHeaderId] = useState(0)
-  const templateData = useSelector(selectTemplateData)
   const [addTemplateDetail] = useAddTemplateDetailMutation();
 
-  useEffect(() => {
-    console.log("Data: ", data)
-    if (recordForEdit == null) return
-    setHeaderId(recordForEdit.id)
+  // * The variable below is an object used for Drag and Drop
+  // This structure is required to exist prior to the initial render of the child components.
+  // An RTK variable was required to persist the data and to leverage RTK's auto re-render 
+  //   capability, otherwise the initial view of the component would always show initial values only.
+  //   Any attempt to populate after data was read, would not trigger the re-render of the children.
+  //   So RTK handle this requirement.
+  const templateData = useSelector(selectTemplateData)
+
+
+  // Helper function that will update state variable based upon database updates.
+  const updateTemplateData = () => {
     let mapResult = {}
     let taskIds = []
     let taskIds2 = []
@@ -122,8 +128,24 @@ export default function Template() {
       taskIds: taskIds2
     }
     dispatch(changeColumnTaskList(payload2))
+    // console.log("Template Data is: ", templateData.tasks)
+  }
 
-  }, [recordForEdit], data)
+  // On initial entry of component, update RTK State variable
+  useEffect(() => {
+    if (recordForEdit == null) return
+    setHeaderId(recordForEdit.id)
+    updateTemplateData()
+  }, [recordForEdit])
+
+  // To sync with data cache, detect change in fetched query and update RTK State variable
+  // ! isLoading is required because the combination of "data" and dispatch functions 
+  // !   againgst the RTK global state will result in an infinite loop with useEffect.
+  // ! All other combinations of component state variables, async calls, RTK and non-RTK were exhausted. 
+  useEffect(() => {
+    if (isLoading) return
+    updateTemplateData()
+  }, [isLoading, data])
 
   const addOrEdit = (templateDetail, resetForm) => {
     if (templateDetail.id === 0) {
@@ -150,6 +172,7 @@ export default function Template() {
 
   const toggleTaskForm = () => {
     setShowTaskForm(!showTaskForm)
+    console.log("Toggle - Relook at data: ", data)
   }
 
   const handleDtlEdit = (record) => {
@@ -203,7 +226,7 @@ export default function Template() {
           [newColumn.id]: newColumn,
         },
       };
-      // console.log("*** NEW STATE: Int ***: ", newState);
+      console.log("*** NEW STATE: Int ***: ", newState);
       // setTemplateData(newState);
       dispatch(changeTemplate(newState))
       // TODO: Add call to DATA-PATCH here
@@ -304,8 +327,6 @@ export default function Template() {
               </Grid>
 
               <Grid item xs={12} container className={classes.columnContainer}>
-                {/* {!showTaskFrom && <Scrollbars style={{ height: '60vh' }}>}
-                  {showTaskFrom && <Scrollbars style={{ height: '60vh' }}>} */}
                 <Scrollbars
                   style={showTaskForm ? { height: '40vh' } : { height: '60vh' }}
                 >

@@ -31,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
 export default function Column(props) {
   const classes = useStyles();
   const { headerId } = props
+
   const handleEdit = (task) => {
     alert(`it works: ${task.id}`)
-
   }
 
   useEffect(() => {

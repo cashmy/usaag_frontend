@@ -72,7 +72,7 @@ export default function TemplateDetailForm(props) {
     }
 
     useEffect(() => {
-        console.log("TD UseEffect: ", headerId)
+        // console.log("TD UseEffect: ", headerId)
         if (recordForEdit != null)
             setValues({
                 ...recordForEdit,
