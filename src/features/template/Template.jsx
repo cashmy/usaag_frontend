@@ -1,12 +1,16 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-// import clsx from 'clsx';
-import { Grid, Paper, Typography } from "@mui/material";
+// Material UI
+import { Grid, IconButton, Paper, Typography } from "@mui/material";
 import makeStyles from '@mui/styles/makeStyles';
-// import TemplateData from "../../tempData/template-data";
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+// Forms
+import TemplateHeaderForm from "./TemplateHeader";
+import TemplateDetailForm from "./templateDetailForm";
+// Drag and Drop plus Scrollbars
 import { DragDropContext } from "react-beautiful-dnd";
 import TemplateColumn from "./TemplateColumn";
-import TemplateHeaderForm from "./TemplateHeader";
 import Controls from '../../components/controls/Controls'
 import { Scrollbars } from 'react-custom-scrollbars'
 // Report Items
@@ -15,7 +19,7 @@ import { PDFViewer } from '@react-pdf/renderer';
 import UserStoryTemplate from "./Reports/UserStoryTemplate";
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import { useFetchAllTemplateDetailsQuery } from "./templateDetailSlice";
+import { useFetchAllTemplateDetailsQuery, useAddTemplateDetailMutation } from "./templateDetailSlice";
 import { changeColumnTaskList, changeTasks, changeTemplate, selectTemplateData } from "./templateDataSlice";
 
 // * Styling
@@ -33,11 +37,21 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     display: "flex",
   },
+  columnHeader: {
+    justifyContent: "flex-start",
+    display: "flex",
+    flexDirection: "row",
+  },
   columnContainer: {
-    paddingBottom: theme.spacing(4),
+    paddingBottom: theme.spacing(2),
     justifyContent: "flex-start",
     display: "flex",
     flexDirection: "column",
+  },
+  userStoriesContainer: {
+    textAlign: "center",
+    display: "flex",
+    flexDirection: "row",
   },
   paper: {
     padding: theme.spacing(1.5),
@@ -56,12 +70,32 @@ export default function Template() {
   const location = useLocation();
   const recordForEdit = location.state?.recordForEdit;
   const classes = useStyles();
-  const { data = [], isLoading, error } = useFetchAllTemplateDetailsQuery(recordForEdit.id);
+  const recordForAdd = {
+    id: 0
+  }
+  const { data = [], isLoading, error } = useFetchAllTemplateDetailsQuery(recordForEdit !== undefined ? recordForEdit : recordForAdd);
+  const [showTaskForm, setShowTaskForm] = useState(false);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    title: "",
+    subTitle: "",
+  });
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
   const [popup, setPopup] = useState(false);
   const [currentRecordId, setCurrentRecordId] = useState()
+  const [headerId, setHeaderId] = useState(0)
   const templateData = useSelector(selectTemplateData)
+  const [addTemplateDetail] = useAddTemplateDetailMutation();
 
   useEffect(() => {
+    if (recordForEdit == null) return
+    console.log("Temp UseEffect recordForEdit: ", recordForEdit)
+    setHeaderId(recordForEdit.id)
     let mapResult = {}
     let taskIds = []
     let taskIds2 = []
@@ -87,7 +121,38 @@ export default function Template() {
     }
     dispatch(changeColumnTaskList(payload2))
 
-  }, [recordForEdit.id])
+  }, [recordForEdit])
+
+  const addOrEdit = (templateDetail, resetForm) => {
+    console.log("Add/Edit headerId: ", headerId)
+    if (templateDetail.id === 0) {
+      addTemplateDetail(templateDetail)
+
+    } else {
+      // updateTemplateDetail(tempDetail)
+      setOpenPopup(false); // Close Popup modal
+    }
+    resetForm();
+    // setRecordForEdit(null);
+    setNotify({
+      isOpen: true,
+      message: "Submitted Successfully",
+      type: "success",
+    });
+  };
+
+  // const openInPopup = (item) => {
+  //   setRecordForEdit(item);
+  //   setOpenPopup(true);
+  // };
+
+  const toggleTaskForm = () => {
+    setShowTaskForm(!showTaskForm)
+  }
+
+  // const handleDtlEdit = (record) => {
+  //   openInPopup(record)
+  // };
 
   const handleReport = (id) => {
     setCurrentRecordId(id)
@@ -175,20 +240,21 @@ export default function Template() {
   return (
     <Fragment>
       <Grid container className={classes.root} spacing={1}>
-        {/* Header Bar */}
+        {/* //* Header Bar */}
         <Grid container className={classes.headingContainer}>
           <Grid item xs={10}>
             <Paper className={classes.paper}>
               <Typography variant="h4">User Story Template</Typography>
-              <Controls.Button
-                className={classes.reportButton}
-                text="Report"
-                color="primary"
-                aria-label="report"
-                size="small"
-                onClick={() => handleReport(recordForEdit.id)}
-              >
-              </Controls.Button>
+              {recordForEdit != null &&
+                < Controls.Button
+                  className={classes.reportButton}
+                  text="Report"
+                  color="primary"
+                  aria-label="report"
+                  size="small"
+                  onClick={() => handleReport(recordForEdit.id)}
+                >
+                </Controls.Button>}
             </Paper>
           </Grid>
         </Grid>
@@ -202,35 +268,81 @@ export default function Template() {
             </Paper>
           </Grid>
 
+          {/* //* User Stories */}
           {/* Setup container for Drag Context */}
           <DragDropContext onDragEnd={onDragEnd} className={classes.root}>
-            <Grid item xs={5} container className={classes.columnContainer} >
-              <Scrollbars
-                style={{ height: '75vh' }}
-              >
-                {/* Setup Droppable context columns */}
-                {/* //* Template Detail Column */}
-                {/* {console.log("Processing Template Data: ", templateData.columns["column-1"].taskIds)} */}
-                {templateData.columns.columnOrder.map((columnID) => {
-                  const column = templateData.columns[columnID];
-                  const tasks = column.taskIds.map(
-                    (taskId) => templateData.tasks[taskId]
-                  );
-                  // console.log("Proccessed Tasks are: ", tasks)
-                  return (
-                    <TemplateColumn
-                      key={column.id}
-                      column={column}
-                      tasks={tasks}
-                    />
-                  );
-                })}
-              </Scrollbars>
+            <Grid item xs={5} container className={classes.columnHeader} >
+
+              {/* //* Template Detail Add */}
+              <Grid item xs={12} container className={classes.columnContainer}>
+                <Paper className={classes.paper}>
+                  <Grid container className={classes.userStoriesContainer}>
+                    <Grid item xs={10}>
+                      <Typography>User Stories</Typography>
+                    </Grid>
+                    <Grid item xs={2}>
+                      {recordForEdit != null &&
+                        <IconButton
+                          aria-label="show/hide template task add form"
+                          onClick={toggleTaskForm}
+                          size="small"
+                        >
+                          {!showTaskForm && <AddIcon />}
+                          {showTaskForm && <RemoveIcon />}
+                        </IconButton>
+                      }
+                    </Grid>
+                  </Grid>
+
+
+                  {(recordForEdit != null && showTaskForm) &&
+                    <TemplateDetailForm recordForEdit={null} addOrEdit={addOrEdit} toggleTaskForm={toggleTaskForm} headerId={headerId} />
+                  }
+                </Paper>
+              </Grid>
+
+              <Grid item xs={12} container className={classes.columnContainer}>
+                {/* {!showTaskFrom && <Scrollbars style={{ height: '60vh' }}>}
+                  {showTaskFrom && <Scrollbars style={{ height: '60vh' }}>} */}
+                <Scrollbars
+                  style={showTaskForm ? { height: '40vh' } : { height: '60vh' }}
+                >
+
+                  {/* Setup Droppable context columns */}
+                  {/* //* Template Detail Column */}
+                  {recordForEdit != null && templateData.columns.columnOrder.map((columnID) => {
+                    const column = templateData.columns[columnID];
+                    const tasks = column.taskIds.map(
+                      (taskId) => templateData.tasks[taskId]
+                    );
+                    return (
+                      <TemplateColumn
+                        key={column.id}
+                        column={column}
+                        tasks={tasks}
+                      />
+                    );
+                  })}
+                </Scrollbars>
+              </Grid>
             </Grid>
           </DragDropContext>
         </Grid>
       </Grid>
 
+      {/* //* POP-ups and Notifications */}
+      <Controls.Popup
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+        title="Edit User Story"
+      >
+        <TemplateDetailForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
+      </Controls.Popup>
+      <Controls.Notification notify={notify} setNotify={setNotify} />
+      <Controls.ConfirmDialog
+        confirmDialog={confirmDialog}
+        setConfirmDialog={setConfirmDialog}
+      />
       {popup && (
         <NewWindow
           name="PDF Viewer"

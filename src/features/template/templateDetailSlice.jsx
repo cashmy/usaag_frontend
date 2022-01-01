@@ -11,13 +11,14 @@ export const apiTemplateDetailSlice = createApi({
     },
   }),
   tagTypes: ["TempDetails"],
+  refetchOnFocus: true,
 
   endpoints: (builder) => {
     return {
       // Get All Detals for a Template
       fetchAllTemplateDetails: builder.query({
-        query(id) {
-          return `/${id}`;
+        query(body) {
+          return `/${body.id}`;
         },
         providesTags: (result, err, arg) => ["TempDetails"],
       }),
@@ -31,11 +32,13 @@ export const apiTemplateDetailSlice = createApi({
 
       // Add a Template Detail
       addTemplateDetail: builder.mutation({
-        query: (body) => ({
-          url: "",
-          method: "POST",
-          body,
-        }),
+        query: (body) => (
+          console.log(body),
+          {
+            url: "",
+            method: "POST",
+            body,
+          }),
         invalidatesTags: ["TempDetails"],
       }),
 
