@@ -86,16 +86,12 @@ export default function TemplateHeaderForm(props) {
   };
 
   // If "Edit" mode then update form with current field values
-  useEffect(
-    () => {
-      if (recordForEdit != null)
-        setValues({
-          ...recordForEdit,
-        });
-    },
-    [recordForEdit],
-    setValues
-  );
+  useEffect(() => {
+    if (recordForEdit != null)
+      setValues({
+        ...recordForEdit,
+      });
+  }, [recordForEdit]);
 
   return (
     <Form>
@@ -203,7 +199,7 @@ export default function TemplateHeaderForm(props) {
           <div styles={{ display: "flex" }}>
             <Controls.Button
               type="submit"
-              text="Submit"
+              text={(values.id == 0) ? "Add" : "Submit"}
               onClick={handleSubmit}
             />
             <Controls.Button color="secondary" text="Reset" onClick={resetForm} />

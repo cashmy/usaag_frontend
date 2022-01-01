@@ -95,15 +95,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
-  iconSecondaryColor: {
-    backgroundColor: "#00e676",
-    color: theme.palette.getContrastText("#00e676"),
-  },
   cardDetails: {
     // width: "250px",
-  },
-  archivedColor: {
-    backgroundColor: theme.palette.error,
   },
 }));
 
@@ -236,6 +229,7 @@ export default function TemplateTable() {
             <Paper className={classes.paper}>
               <Toolbar>
                 <Controls.Input
+                  style={{ width: 350 }}
                   size="small"
                   label="Search Name, Abbr, and Tech Stack"
                   fullWidth={false}
@@ -268,9 +262,7 @@ export default function TemplateTable() {
                   color="primary"
                   aria-label="add a template"
                   size="small"
-                // onClick={() => {
-                //   setRecordForEdit(null);
-                // }}
+                // onClick={handleAdd}
                 >
                   <AddIcon />
                 </Fab>
@@ -315,7 +307,6 @@ export default function TemplateTable() {
                       variant="caption"
                       component="p"
                       align="right"
-                      // className={clsx({ [classes.archivedColor]: archiveStatus })}
                       color={archiveStatus ? "error" : "textPrimary"}
                     >
                       <br />
@@ -334,7 +325,7 @@ export default function TemplateTable() {
                         handleEdit(item);
                       }}
                       style={{ color: "darkcyan" }}
-                      size="large">
+                    >
                       <EditOutlinedIcon />
                     </IconButton>
                     <IconButton
@@ -351,7 +342,7 @@ export default function TemplateTable() {
                         });
                       }}
                       style={{ color: "red" }}
-                      size="large">
+                    >
                       <DeleteIcon />
                     </IconButton>
                     <IconButton
@@ -360,7 +351,7 @@ export default function TemplateTable() {
                         handleArchive(item.id, item.archived);
                       }}
                       style={{ color: "darkorchid" }}
-                      size="large">
+                    >
                       {!archiveStatus && <ArchiveIcon />}
                       {archiveStatus && <UnarchiveIcon />}
                     </IconButton>
@@ -370,7 +361,6 @@ export default function TemplateTable() {
                         handlePrint(item.id);
                       }}
                       color="primary"
-                      size="large"
                     >
                       <PrintIcon />
                     </IconButton>

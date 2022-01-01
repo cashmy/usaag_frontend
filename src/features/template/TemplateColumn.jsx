@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
   },
   title: {
-    padding: theme.spacing(1),
+    padding: theme.spacing(.5),
     textAlign: "center",
   },
   taskList: {
@@ -45,7 +45,7 @@ export default function Column(props) {
       <Paper className={classes.paper}>
         <Grid container className={classes.container}>
           <Grid item xs={12}>
-            <Typography className={classes.title} variant="h5">
+            <Typography className={classes.title} variant="h6">
               {props.column.title}
             </Typography>
           </Grid>

@@ -12,12 +12,12 @@ const initialState = {
     columns: {
       "column-1": {
         id: "column-1",
-        title: "User Stories",
+        title: "Features",
         taskIds: ["0", "1"],
       },
       "column-2": {
         id: "column-2",
-        title: "Bonus stories",
+        title: "Bonus Features",
         taskIds: ["2"],
       },
       columnOrder: ["column-1", "column-2"],
