@@ -2,6 +2,7 @@ import React, { Fragment, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { Grid, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+// import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import makeStyles from '@mui/styles/makeStyles';
@@ -71,6 +72,11 @@ export default function TemplateTask(props) {
     handleEdit();
     handleMenuClose();
   }
+
+  // const handleDuplicateItem = () => {
+  //   handleEdit();
+  //   handleMenuClose();
+  // }
 
   const onDelete = (id) => {
     setConfirmDialog({
@@ -161,6 +167,14 @@ export default function TemplateTask(props) {
             Edit
           </ListItemText>
         </MenuItem>
+        {/* <MenuItem onClick={handleDuplicateItem}>
+          <ListItemIcon>
+            <ContentCopyIcon />
+          </ListItemIcon>
+          <ListItemText>
+            Duplicate
+          </ListItemText>
+        </MenuItem> */}
         <MenuItem onClick={handleDelete}>
           <ListItemIcon>
             <DeleteIcon />
