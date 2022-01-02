@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { Grid, Typography } from "@mui/material";
 import makeStyles from '@mui/styles/makeStyles';
@@ -42,6 +42,11 @@ const initialFValues = {
 export default function TemplateHeaderForm(props) {
   const classes = useStyles();
   const { recordForEdit } = props;
+  const [notify, setNotify] = useState({
+    isOpen: false,
+    message: "",
+    type: "",
+  });
   const { values, setValues, errors, setErrors, handleInputChange, resetForm } =
     useForm(initialFValues);
 
@@ -82,6 +87,11 @@ export default function TemplateHeaderForm(props) {
     if (validate()) {
       if (values.id === 0) addTemplateHeader(values);
       else updateTemplateHeader(values);
+      setNotify({
+        isOpen: true,
+        message: "Submitted Successfully",
+        type: "success",
+      });
     }
   };
 
@@ -212,6 +222,7 @@ export default function TemplateHeaderForm(props) {
           </div>
         </Grid>
       </Grid>
+      <Controls.Notification notify={notify} setNotify={setNotify} />
     </Form>
   );
 }
