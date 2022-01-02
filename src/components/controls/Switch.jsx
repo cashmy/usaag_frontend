@@ -20,7 +20,7 @@ const Switch = (props) => {
                     control={
                         <MuiSwitch
                             aria-label={`Toggle ${label} status`}
-                            checked={value}
+                            checked={value == null ? !!value : value}
                             onChange={onChange}
                             name={name}
                         />
