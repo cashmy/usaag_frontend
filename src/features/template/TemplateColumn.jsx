@@ -30,10 +30,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Column(props) {
   const classes = useStyles();
-  const { headerId } = props
+  const { headerId, handleDtlEdit } = props
 
   const handleEdit = (task) => {
-    alert(`it works: ${task.id}`)
+    handleDtlEdit(task)
+    // alert(`it works: ${task.id}`)
   }
 
   useEffect(() => {

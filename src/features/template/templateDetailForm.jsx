@@ -133,9 +133,14 @@ export default function TemplateDetailForm(props) {
                 <div styles={{ display: "flex" }}>
                     <Controls.Button
                         type="submit"
-                        text="Add"
+                        text={values.id !== 0 ? "Submit" : "Add"}
                         onClick={handleSubmit}
                     />
+                    {values.id !== 0 && <Controls.Button
+                        color="secondary"
+                        text="Reset"
+                        onClick={handleReset}
+                    />}
                     <Controls.Button
                         color="info"
                         text="Cancel"

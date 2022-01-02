@@ -5,9 +5,9 @@ const initialState = {
   value: 0,
   tdta: {
     tasks: {
-      "0": { id: "0", content: "Take out the garbage" },
-      "1": { id: "1", content: "Watch my favorite show" },
-      "2": { id: "2", content: "Charge my phone" },
+      "0": { id: "0", content: "Take out the garbage", title: "", description: "", pointValue: 0, bonusStatus: false, greyHighLight: false, headerId: 0 },
+      "1": { id: "1", content: "Watch my favorite show", title: "", description: "", pointValue: 0, bonusStatus: false, greyHighLight: false, headerId: 0 },
+      "2": { id: "2", content: "Charge my phone", title: "", description: "", pointValue: 0, bonusStatus: false, greyHighLight: false, headerId: 0 },
     },
     columns: {
       "column-1": {

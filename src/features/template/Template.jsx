@@ -19,9 +19,9 @@ import { PDFViewer } from '@react-pdf/renderer';
 import UserStoryTemplate from "./Reports/UserStoryTemplate";
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import { useFetchAllTemplateDetailsQuery, useAddTemplateDetailMutation } from "./templateDetailSlice";
+import { useFetchAllTemplateDetailsQuery, useAddTemplateDetailMutation, useUpdateTemplateDetailMutation } from "./templateDetailSlice";
 import { changeColumnTaskList, changeTasks, changeTemplate, selectTemplateData } from "./templateDataSlice";
-import { useDateValidation } from "@mui/lab/internal/pickers/hooks/useValidation";
+// import { useDateValidation } from "@mui/lab/internal/pickers/hooks/useValidation";
 
 // * Styling
 const useStyles = makeStyles((theme) => ({
@@ -89,16 +89,26 @@ export default function Template() {
     type: "",
   });
   const [popup, setPopup] = useState(false);
-  const [currentRecordId, setCurrentRecordId] = useState()
+  const [currentRecordId, setCurrentRecordId] = useState() // Header Id
   const [headerId, setHeaderId] = useState(0)
   const [addTemplateDetail] = useAddTemplateDetailMutation();
+  const [updateTemplateDetail] = useUpdateTemplateDetailMutation();
+  const [dtlRecordForEdit, setDtlRecordForEdit] = useState({
+    headerId: 0,
+    id: 0,
+    title: '',
+    description: '',
+    pointValue: 0,
+    bonusStatus: false,
+    greyHighLight: false,
+  })
 
   // * The variable below is an object used for Drag and Drop
   // This structure is required to exist prior to the initial render of the child components.
   // An RTK variable was required to persist the data and to leverage RTK's auto re-render 
   //   capability, otherwise the initial view of the component would always show initial values only.
   //   Any attempt to populate after data was read, would not trigger the re-render of the children.
-  //   So RTK handle this requirement.
+  //   So RTK handles this requirement.
   const templateData = useSelector(selectTemplateData)
 
 
@@ -110,7 +120,16 @@ export default function Template() {
 
     data.map((item) => {
       let strId = item.id.toString()
-      mapResult[strId] = { id: strId, content: item.title + " - (" + item.pointValue + "pts )" }
+      mapResult[strId] = {
+        id: strId,
+        content: item.title + " - (" + item.pointValue + "pts ),",
+        title: item.title,
+        description: item.description,
+        pointValue: item.pointValue,
+        bonusStatus: item.bonusStatus,
+        greyHighLight: item.greyHighLight,
+        headerId: recordForEdit.id
+      }
       if (item.bonusStatus)
         taskIds2.push(strId)
       else
@@ -118,17 +137,18 @@ export default function Template() {
     })
 
     dispatch(changeTasks(mapResult))
+
     let payload = {
       columnId: "column-1",
       taskIds: taskIds
     }
     dispatch(changeColumnTaskList(payload))
+
     let payload2 = {
       columnId: "column-2",
       taskIds: taskIds2
     }
     dispatch(changeColumnTaskList(payload2))
-    // console.log("Template Data is: ", templateData.tasks)
   }
 
   // On initial entry of component, update RTK State variable
@@ -150,30 +170,31 @@ export default function Template() {
   const addOrEdit = (templateDetail, resetForm) => {
     if (templateDetail.id === 0) {
       addTemplateDetail(templateDetail)
-
     } else {
-      // updateTemplateDetail(tempDetail)
+      updateTemplateDetail(templateDetail)
       setOpenPopup(false); // Close Popup modal
     }
     resetForm();
-    // setRecordForEdit(null);
     setNotify({
       isOpen: true,
       message: "Submitted Successfully",
       type: "success",
     });
-    console.log("Relook at data: ", data)
-  };
 
-  const openInPopup = (item) => {
-    // setRecordForEdit(item);
-    setOpenPopup(true);
   };
 
   const toggleTaskForm = () => {
     setShowTaskForm(!showTaskForm)
-    console.log("Toggle - Relook at data: ", data)
+
   }
+
+  const toggleTaskFormEdit = () => {
+    setOpenPopup(false)
+  }
+  const openInPopup = (item) => {
+    setDtlRecordForEdit(item);
+    setOpenPopup(true);
+  };
 
   const handleDtlEdit = (record) => {
     openInPopup(record)
@@ -226,7 +247,7 @@ export default function Template() {
           [newColumn.id]: newColumn,
         },
       };
-      console.log("*** NEW STATE: Int ***: ", newState);
+      // console.log("*** NEW STATE: Int ***: ", newState);
       // setTemplateData(newState);
       dispatch(changeTemplate(newState))
       // TODO: Add call to DATA-PATCH here
@@ -361,7 +382,12 @@ export default function Template() {
         setOpenPopup={setOpenPopup}
         title="Edit User Story"
       >
-        <TemplateDetailForm recordForEdit={recordForEdit} addOrEdit={addOrEdit} />
+        <TemplateDetailForm
+          recordForEdit={dtlRecordForEdit}
+          toggleTaskForm={toggleTaskFormEdit}
+          addOrEdit={addOrEdit}
+          headerId={headerId}
+        />
       </Controls.Popup>
       <Controls.Notification notify={notify} setNotify={setNotify} />
       <Controls.ConfirmDialog
