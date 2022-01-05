@@ -8,17 +8,17 @@ const templateData = {
     "task-6": { id: "task-6", content: "Make the Bed" },
   },
   columns: {
-    "column-1": {
-      id: "column-1",
+    "column1": {
+      id: "column1",
       title: "User Stories",
       taskIds: ["task-1", "task-2", "task-3", "task-4"],
     },
-    "column-2": {
-      id: "column-2",
+    "column2": {
+      id: "column2",
       title: "Bonus stories",
       taskIds: ["task-5", "task-6"],
     },
-    columnOrder: ["column-1", "column-2"],
+    columnOrder: ["column1", "column2"],
   },
 };
 

@@ -23,7 +23,7 @@ import {
   useFetchAllTemplateDetailsQuery,
   useAddTemplateDetailMutation,
   useUpdateTemplateDetailMutation,
-  useResequenceTemplateDetailMutations
+  useResequenceTemplateDetailMutation
 } from "./templateDetailSlice";
 import { changeColumnTaskList, changeTasks, changeTemplate, selectTemplateData } from "./templateDataSlice";
 // import { useDateValidation } from "@mui/lab/internal/pickers/hooks/useValidation";
@@ -145,13 +145,13 @@ export default function Template() {
     dispatch(changeTasks(mapResult))
 
     let payload = {
-      columnId: "column-1",
+      columnId: "column1",
       taskIds: taskIds
     }
     dispatch(changeColumnTaskList(payload))
 
     let payload2 = {
-      columnId: "column-2",
+      columnId: "column2",
       taskIds: taskIds2
     }
     dispatch(changeColumnTaskList(payload2))
@@ -191,7 +191,6 @@ export default function Template() {
 
   const toggleTaskForm = () => {
     setShowTaskForm(!showTaskForm)
-
   }
 
   const toggleTaskFormEdit = () => {
@@ -211,16 +210,37 @@ export default function Template() {
     setPopup(!popup)
   }
 
-  const resequenceDtls = (temp) => {
-    // Temporarily skip this process until records have been built
-    if (temp == "skip") return
-
+  const resequenceDtls = (tmpDta) => {
     let bodyObject = {
       headerId: headerId,
-      records: {}
+      records: []
     }
     // TODO: Build an array of db Objects from templateDetails obj
 
+    tmpDta.columns.column1.taskIds.map((task) => {
+      let record = {
+        headerId: headerId,
+        id: tmpDta.tasks[task].id,
+        title: tmpDta.tasks[task].title,
+        description: tmpDta.tasks[task].description,
+        pointValue: tmpDta.tasks[task].pointValue,
+        bonusStatus: false,
+        greyHighlight: tmpDta.tasks[task].greyHighlight
+      }
+      bodyObject.records.push(record)
+    })
+    tmpDta.columns.column2.taskIds.map((task) => {
+      let record = {
+        headerId: headerId,
+        id: tmpDta.tasks[task].id,
+        title: tmpDta.tasks[task].title,
+        description: tmpDta.tasks[task].description,
+        pointValue: tmpDta.tasks[task].pointValue,
+        bonusStatus: true,
+        greyHighlight: tmpDta.tasks[task].greyHighlight
+      }
+      bodyObject.records.push(record)
+    })
     resequenceTemplateDetail(bodyObject)
   }
 
@@ -245,8 +265,6 @@ export default function Template() {
     const startColumn = templateData.columns[source.droppableId];
     const finishColumn = templateData.columns[destination.droppableId];
 
-    // console.log("===> Destination Index: ", destination.index);
-
     // * Moving within a list
     if (startColumn === finishColumn) {
       const newTasksIds = Array.from(startColumn.taskIds);
@@ -266,9 +284,8 @@ export default function Template() {
           [newColumn.id]: newColumn,
         },
       };
-      // console.log("*** NEW STATE: Int ***: ", newState);
       dispatch(changeTemplate(newState))
-      resequenceDtls("skip");
+      resequenceDtls(newState);
       return;
     }
 
@@ -297,9 +314,8 @@ export default function Template() {
         [newFinish.id]: newFinish,
       },
     };
-    // console.log("*** NEW STATE: U<->B *** : ", newState);
     dispatch(changeTemplate(newState))
-    resequenceDtls("skip");
+    resequenceDtls(newState);
   };
 
   return (

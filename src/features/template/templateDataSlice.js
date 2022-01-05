@@ -10,17 +10,17 @@ const initialState = {
       "2": { id: "2", content: "Charge my phone", title: "", description: "", pointValue: 0, bonusStatus: false, greyHighLight: false, headerId: 0 },
     },
     columns: {
-      "column-1": {
-        id: "column-1",
+      "column1": {
+        id: "column1",
         title: "Features",
         taskIds: ["0", "1"],
       },
-      "column-2": {
-        id: "column-2",
+      "column2": {
+        id: "column2",
         title: "Bonus Features",
         taskIds: ["2"],
       },
-      columnOrder: ["column-1", "column-2"],
+      columnOrder: ["column1", "column2"],
     }
   }
 };

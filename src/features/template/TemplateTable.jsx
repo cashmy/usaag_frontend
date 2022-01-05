@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useHistory, Link as RouterLink } from "react-router-dom";
 import {
   Card,
@@ -11,9 +11,6 @@ import {
   Fab,
   FormControlLabel,
   Switch,
-  //   TableBody,
-  //   TableRow,
-  //   TableCell,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -28,13 +25,13 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import PrintIcon from '@mui/icons-material/Print';
+// import DataUsageIcon from '@mui/icons-material/DataUsage'; // * For "where used"
 
 // Wrapped Components
 import Controls from "../../components/controls/Controls";
 
 // Redux
 import {
-  //   useAddTemplateHeaderMutation,
   useDeleteTemplateHeaderMutation,
   useFetchAllTemplateHeadersQuery,
   useChangeTemplateStatusMutation,
