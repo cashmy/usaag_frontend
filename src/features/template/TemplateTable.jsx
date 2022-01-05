@@ -273,7 +273,7 @@ export default function TemplateTable() {
 
         {/* //* Card Grid */}
         <Grid container className={classes.cardContainer} spacing={2}>
-          {/* // TODO Map function goes here  */}
+          {/* // TODO: Map function goes here  */}
           {/* {recordsAfterPagingAndSorting().map((item) => (
           ))} */}
           {isLoading ? (

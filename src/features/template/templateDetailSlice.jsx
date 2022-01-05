@@ -25,13 +25,6 @@ export const apiTemplateDetailSlice = createApi({
         }
       }),
 
-      // fetchTemplateDetailsByBonus: builder.query({
-      //   query(body) {
-      //     return `/${body.id}/${body.status}`
-      //   },
-      //   providesTags: (result, err, arg) => ["TempDetails"],
-      // }),
-
       // Add a Template Detail
       addTemplateDetail: builder.mutation({
         query: (body) => (
@@ -60,7 +53,7 @@ export const apiTemplateDetailSlice = createApi({
         },
       }),
 
-      // Delete a Template Header
+      // Delete a Template Detail
       deleteTemplateDetail: builder.mutation({
         query(params) {
           return {
@@ -74,14 +67,29 @@ export const apiTemplateDetailSlice = createApi({
         },
       }
       ),
+
+      // Resequence Template Details
+      resequenceTemplateDetail: builder.mutation({
+        query(body) {
+          return {
+            url: `/${body.headerId}`,
+            method: "POST",
+            body: body.records
+          };
+        },
+        invalidatesTags: (result, error, arg) => {
+          // console.log('Delete TempDetails: ', result, error, arg)
+          return ['TempDetails']
+        },
+      })
     };
   },
 });
 
 export const {
   useFetchAllTemplateDetailsQuery,
-  // useFetchTemplateDetailsByBonusQuery,
   useAddTemplateDetailMutation,
   useUpdateTemplateDetailMutation,
   useDeleteTemplateDetailMutation,
+  useResequenceTemplateDetailMutation,
 } = apiTemplateDetailSlice;

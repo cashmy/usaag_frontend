@@ -19,7 +19,12 @@ import { PDFViewer } from '@react-pdf/renderer';
 import UserStoryTemplate from "./Reports/UserStoryTemplate";
 // Redux
 import { useSelector, useDispatch } from "react-redux";
-import { useFetchAllTemplateDetailsQuery, useAddTemplateDetailMutation, useUpdateTemplateDetailMutation } from "./templateDetailSlice";
+import {
+  useFetchAllTemplateDetailsQuery,
+  useAddTemplateDetailMutation,
+  useUpdateTemplateDetailMutation,
+  useResequenceTemplateDetailMutations
+} from "./templateDetailSlice";
 import { changeColumnTaskList, changeTasks, changeTemplate, selectTemplateData } from "./templateDataSlice";
 // import { useDateValidation } from "@mui/lab/internal/pickers/hooks/useValidation";
 
@@ -93,6 +98,7 @@ export default function Template() {
   const [headerId, setHeaderId] = useState(0)
   const [addTemplateDetail] = useAddTemplateDetailMutation();
   const [updateTemplateDetail] = useUpdateTemplateDetailMutation();
+  const [resequenceTemplateDetail] = useResequenceTemplateDetailMutation();
   const [dtlRecordForEdit, setDtlRecordForEdit] = useState({
     headerId: 0,
     id: 0,
@@ -205,6 +211,19 @@ export default function Template() {
     setPopup(!popup)
   }
 
+  const resequenceDtls = (temp) => {
+    // Temporarily skip this process until records have been built
+    if (temp == "skip") return
+
+    let bodyObject = {
+      headerId: headerId,
+      records: {}
+    }
+    // TODO: Build an array of db Objects from templateDetails obj
+
+    resequenceTemplateDetail(bodyObject)
+  }
+
   // * Handle "Dragging"
   // Note: This is an "optimistic Update" so it is not waiting on the server.
   // A "PATCH" will be called via an endpoint at the end of this state managed update.
@@ -248,9 +267,8 @@ export default function Template() {
         },
       };
       // console.log("*** NEW STATE: Int ***: ", newState);
-      // setTemplateData(newState);
       dispatch(changeTemplate(newState))
-      // TODO: Add call to DATA-PATCH here
+      resequenceDtls("skip");
       return;
     }
 
@@ -269,6 +287,8 @@ export default function Template() {
       taskIds: finishTaskIds,
     };
 
+    // TODO: "Flip" the BonusStatus on column change
+
     const newState = {
       ...templateData,
       columns: {
@@ -279,8 +299,7 @@ export default function Template() {
     };
     // console.log("*** NEW STATE: U<->B *** : ", newState);
     dispatch(changeTemplate(newState))
-    // setTemplateData(newState);
-    // TODO: Add call to DATA-PATCH here
+    resequenceDtls("skip");
   };
 
   return (
