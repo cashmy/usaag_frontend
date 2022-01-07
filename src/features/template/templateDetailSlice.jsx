@@ -79,7 +79,7 @@ export const apiTemplateDetailSlice = createApi({
         },
         invalidatesTags: (result, error, arg) => {
           // console.log('Delete TempDetails: ', result, error, arg)
-          return ['TempDetails']
+          return ['TempDetails', 'TempHeaders']
         },
       })
     };
