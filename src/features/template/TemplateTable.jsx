@@ -6,10 +6,14 @@ import {
   CardContent,
   IconButton,
   InputAdornment,
-  Grid,
-  Paper,
   Fab,
   FormControlLabel,
+  Grid,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Paper,
   Switch,
   Toolbar,
   Typography,
@@ -25,7 +29,10 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SearchIcon from "@mui/icons-material/Search";
 import PrintIcon from '@mui/icons-material/Print';
-// import DataUsageIcon from '@mui/icons-material/DataUsage'; // * For "where used"
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DataUsageIcon from '@mui/icons-material/DataUsage'; // * For "where used"
+import CopyAllIcon from '@mui/icons-material/CopyAll';
 
 // Wrapped Components
 import Controls from "../../components/controls/Controls";
@@ -101,11 +108,14 @@ const useStyles = makeStyles((theme) => ({
 export default function TemplateTable() {
   const classes = useStyles();
   const history = useHistory();
+  const [anchorEl, setAnchorEl] = useState(null);
   const bull = <span className={classes.bullet}>•</span>;
+  const open = Boolean(anchorEl);
   const [loadData, setLoadData] = useState(false);
   const [archiveStatus, setArchiveStatus] = useState(false);
   const [popup, setPopup] = useState(false);
-  const [currentRecordId, setCurrentRecordId] = useState()
+  const [currentRecordId, setCurrentRecordId] = useState();
+  const [currentItem, setCurrentItem] = useState();
   // Initialize with a default filter of all records, bypasses initial load error
   const [filterFn, setFilterFn] = useState({
     fn: (items) => {
@@ -167,6 +177,7 @@ export default function TemplateTable() {
     });
   };
 
+  // Process delete request and close modal
   const onDelete = (id) => {
     setConfirmDialog({
       ...confirmDialog,
@@ -180,6 +191,20 @@ export default function TemplateTable() {
       type: "error",
     });
   };
+  // Open modal and request confirmation
+  const handleDelete = (item) => {
+    setConfirmDialog({
+      isOpen: true,
+      title:
+        "Are you sure you want to delete this Template and all of its Detail?",
+      subTitle: "You can't undo this action.",
+      onConfirm: () => {
+        onDelete(item.id);
+      },
+    });
+    handleMenuClose();
+  }
+
   // Toggles between Active and Archived status display
   const handleToggle = () => {
     setArchiveStatus(!archiveStatus);
@@ -198,6 +223,7 @@ export default function TemplateTable() {
       message: status ? "Record activated" : "Record archived",
       type: "info",
     });
+    handleMenuClose();
   };
   // Helper function to format the version int a short readable format
   const formatVersion = (main, minor, sub) => {
@@ -207,7 +233,14 @@ export default function TemplateTable() {
     setCurrentRecordId(id)
     setPopup(!popup)
   }
-
+  const handleMenuClick = (event, item) => {
+    setAnchorEl(event.currentTarget);
+    setCurrentItem(item);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setCurrentItem(null);
+  };
 
   // * Main component render
   return (
@@ -316,6 +349,7 @@ export default function TemplateTable() {
                     </Typography>
                   </CardContent>
                   <CardActions>
+                    {/* Edit */}
                     <IconButton
                       aria-label="edit template"
                       onClick={() => {
@@ -325,7 +359,7 @@ export default function TemplateTable() {
                     >
                       <EditOutlinedIcon />
                     </IconButton>
-                    <IconButton
+                    {/* <IconButton
                       aria-label="delete template"
                       onClick={() => {
                         setConfirmDialog({
@@ -341,17 +375,8 @@ export default function TemplateTable() {
                       style={{ color: "red" }}
                     >
                       <DeleteIcon />
-                    </IconButton>
-                    <IconButton
-                      aria-label="archive template"
-                      onClick={() => {
-                        handleArchive(item.id, item.archived);
-                      }}
-                      style={{ color: "darkorchid" }}
-                    >
-                      {!archiveStatus && <ArchiveIcon />}
-                      {archiveStatus && <UnarchiveIcon />}
-                    </IconButton>
+                    </IconButton> */}
+                    {/* Print */}
                     <IconButton
                       aria-label="print template"
                       onClick={() => {
@@ -361,6 +386,17 @@ export default function TemplateTable() {
                     >
                       <PrintIcon />
                     </IconButton>
+                    {/* MoreVertical */}
+                    <IconButton
+                      aria-controls={open ? 'basic-menu' : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={open ? 'true' : undefined}
+                      onClick={(e) => handleMenuClick(e, item)}
+                      size="small"
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+
                   </CardActions>
                 </Card>
               </Grid>
@@ -388,6 +424,79 @@ export default function TemplateTable() {
           </PDFViewer>,
         </NewWindow>
       )}
+      {/* Vertical Menu  */}
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleMenuClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        {/* Archive Item */}
+        <MenuItem
+          onClick={() => handleArchive(currentItem.id, currentItem.archived)}
+        >
+          <ListItemIcon
+            aria-label="archive template"
+            style={{ color: "darkorchid" }}>
+            {!archiveStatus && <ArchiveIcon />}
+            {archiveStatus && <UnarchiveIcon />}
+          </ListItemIcon>
+          <ListItemText>
+            Archive
+          </ListItemText>
+        </MenuItem>
+        {/* Delete Item */}
+        <MenuItem onClick={() => handleDelete(currentItem.id)}>
+          <ListItemIcon
+            aria-label="delete template"
+            style={{ color: "red" }}
+          >
+            <DeleteIcon />
+          </ListItemIcon>
+          <ListItemText>
+            Delete
+          </ListItemText>
+        </MenuItem>
+        {/* Copy */}
+        <MenuItem>
+          <ListItemIcon
+            aria-label="copy template"
+            style={{ color: "grey" }}
+          >
+            <ContentCopyIcon />
+          </ListItemIcon>
+          <ListItemText>
+            Copy
+          </ListItemText>
+        </MenuItem>
+        {/* Copy and Archive */}
+        <MenuItem>
+          <ListItemIcon
+            aria-label="copy and archive old"
+            style={{ color: "grey" }}
+          >
+            <CopyAllIcon />
+          </ListItemIcon>
+          <ListItemText>
+            Copy & Archive
+          </ListItemText>
+        </MenuItem>
+        {/* Usage */}
+        <MenuItem>
+          <ListItemIcon
+            aria-label="template usage"
+            style={{ color: "grey" }}
+          >
+            <DataUsageIcon />
+          </ListItemIcon>
+          <ListItemText>
+            Where used
+          </ListItemText>
+        </MenuItem>
+      </Menu>
     </React.Fragment>
   );
 }
