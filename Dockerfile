@@ -1,5 +1,5 @@
 # pull official base image
-FROM node:14.18.1-buster
+FROM node:alpine
 
 # set working directory
 WORKDIR /app
