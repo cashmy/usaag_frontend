@@ -106,7 +106,7 @@ export default function Template() {
     description: '',
     pointValue: 0,
     bonusStatus: false,
-    greyHighLight: false,
+    greyHighlight: false,
   })
 
   // * The variable below is an object used for Drag and Drop
@@ -133,7 +133,7 @@ export default function Template() {
         description: item.description,
         pointValue: item.pointValue,
         bonusStatus: item.bonusStatus,
-        greyHighLight: item.greyHighLight,
+        greyHighlight: item.greyHighlight,
         headerId: recordForEdit.id
       }
       if (item.bonusStatus)

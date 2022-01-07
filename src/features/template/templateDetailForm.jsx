@@ -24,7 +24,7 @@ export default function TemplateDetailForm(props) {
         description: '',
         pointValue: 5,
         bonusStatus: false,
-        greyHighLight: false,
+        greyHighlight: false,
     }
 
     // Validation function (to be passed as a callback)
@@ -103,9 +103,9 @@ export default function TemplateDetailForm(props) {
                 </Grid>
                 <Grid item xs={2} >
                     <Controls.Switch
-                        name="greyHighLight"
+                        name="greyHighlight"
                         label="Grey"
-                        value={values.greyHighLight}
+                        value={values.greyHighlight}
                         onChange={handleToggleChange}
                     />
                 </Grid>
