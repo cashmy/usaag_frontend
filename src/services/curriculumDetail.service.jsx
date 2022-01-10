@@ -9,6 +9,10 @@ class CurriculumDetailService {
     return axios.get(API_URL + `/${id}`, { headers: authHeader() });
   };
 
+  getCurriculumDetailsbyTemplate = (headerId) => {
+    return axios.get(API_URL + `/tempHeader/${headerId}`, { headers: authHeader() });
+  };
+
   addCurriculumDetail = (data) => {
     return axios.post(API_URL + `/${data.themeId}`, data, { headers: authHeader() });
   };

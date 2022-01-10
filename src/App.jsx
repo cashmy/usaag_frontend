@@ -53,6 +53,7 @@ import TemplateTable from "./features/template/TemplateTable";
 import CurriculumThemeTable from "./features/curriculums/CurriculumThemeTable";
 import CurriculumDetail from "./features/curriculums/CurriculumDetailTable";
 import ComponentTester from "./features/componentTester/componentTester";
+import CurrDtlByTmpHdrTable from "./features/curriculums/CurrDtlByTmpHdrTable";
 // import { PauseCircleFilledTwoTone } from "@mui/icons-material";
 
 const drawerWidth = 240;
@@ -197,176 +198,178 @@ export default function App(props) {
   return (
     // <StyledEngineProvider injectFirst>
     //   <ThemeProvider theme={darkMode ? darkTheme : lightTheme}>
-        <div className={classes.root}>
-          <CssBaseline />
+    <div className={classes.root}>
+      <CssBaseline />
 
-          {/* AppBar */}
-          <AppBar
-            position="fixed"
-            className={clsx(classes.appBar, {
-              [classes.appBarShift]: open,
-              [classes.drawerPaperDark]: darkMode,
-              [classes.drawerPaperLight]: !darkMode,
+      {/* //* AppBar */}
+      <AppBar
+        position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open,
+          [classes.drawerPaperDark]: darkMode,
+          [classes.drawerPaperLight]: !darkMode,
+        })}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            className={clsx(classes.menuButton, {
+              [classes.hide]: open,
             })}
-          >
-            <Toolbar>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                className={clsx(classes.menuButton, {
-                  [classes.hide]: open,
-                })}
-                size="large">
-                <MenuIcon />
-              </IconButton>
-              {/* // TODO: Place Logo/Avatar here */}
-              <Typography variant="h6" noWrap>
-                dCC User Stories At A Glance (USAAG)
-              </Typography>
-              <FormControlLabel
-                className={classes.darkModeSwitch}
-                control={
-                  <MuiSwitch
-                    checked={darkMode}
-                    onChange={() => setDarkMode(!darkMode)}
-                  // color="palette.text.primary"
-                  />
-                }
-                label="Dark Mode"
+            size="large">
+            <MenuIcon />
+          </IconButton>
+          {/* // TODO: Place Logo/Avatar here */}
+          <Typography variant="h6" noWrap>
+            dCC User Stories At A Glance (USAAG)
+          </Typography>
+          <FormControlLabel
+            className={classes.darkModeSwitch}
+            control={
+              <MuiSwitch
+                checked={darkMode}
+                onChange={() => setDarkMode(!darkMode)}
+              // color="palette.text.primary"
               />
-              {initialLogin === true && (
-                <IconButton
-                  className={classes.logOut}
-                  color="inherit"
-                  onClick={handleMenuClose}
-                  size="large">
-                  <PowerSettingsNewIcon />
-                </IconButton>
-              )}
-            </Toolbar>
-          </AppBar>
+            }
+            label="Dark Mode"
+          />
+          {initialLogin === true && (
+            <IconButton
+              className={classes.logOut}
+              color="inherit"
+              onClick={handleMenuClose}
+              size="large">
+              <PowerSettingsNewIcon />
+            </IconButton>
+          )}
+        </Toolbar>
+      </AppBar>
 
-          {/* Drawer */}
-          <Drawer
-            variant="permanent"
-            className={clsx(classes.drawer, {
-              [classes.drawerPaperOpen]: open,
-              [classes.drawerPaperClose]: !open,
-              [classes.drawerPaperDark]: darkMode,
-              [classes.drawerPaperLight]: !darkMode,
-            })}
-            classes={{
-              paper: clsx({
-                [classes.drawerPaperOpen]: open,
-                [classes.drawerPaperClose]: !open,
-                [classes.drawerPaperDark]: darkMode,
-                [classes.drawerPaperLight]: !darkMode,
-              }),
-            }}
+      {/* //* Drawer */}
+      <Drawer
+        variant="permanent"
+        className={clsx(classes.drawer, {
+          [classes.drawerPaperOpen]: open,
+          [classes.drawerPaperClose]: !open,
+          [classes.drawerPaperDark]: darkMode,
+          [classes.drawerPaperLight]: !darkMode,
+        })}
+        classes={{
+          paper: clsx({
+            [classes.drawerPaperOpen]: open,
+            [classes.drawerPaperClose]: !open,
+            [classes.drawerPaperDark]: darkMode,
+            [classes.drawerPaperLight]: !darkMode,
+          }),
+        }}
       >
 
 
-            <div className={classes.toolbar}>
-              {/* // TODO: place Logo here  */}
-              <IconButton onClick={handleDrawerClose} size="large">
-                {/* {theme.direction === "rtl" ? (
+        <div className={classes.toolbar}>
+          {/* // TODO: place Logo here  */}
+          <IconButton onClick={handleDrawerClose} size="large">
+            {/* {theme.direction === "rtl" ? (
                   <ChevronRightIcon />
                 ) : (
                   )} */}
-                <ChevronLeftIcon />
-              </IconButton>
-            </div>
-
-            <Divider />
-            <List>
-              {/* Home - Dashboard */}
-              <ListItem button component={RouterLink} to={"instDashBoard"}>
-                <ListItemIcon className={classes.listItemIcon}>
-                  <HomeIcon />
-                </ListItemIcon>
-                <ListItemText primary="Home" />
-              </ListItem>
-              {/* Cohorts */}
-              <ListItem button component={RouterLink} to={"cohortAssignment"}>
-                <ListItemIcon className={classes.listItemIcon}>
-                  <PeopleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Cohorts" />
-              </ListItem>
-              {/* Curriculum */}
-              <ListItem button component={RouterLink} to={"curriculumThemes"}>
-                <ListItemIcon className={classes.listItemIcon}>
-                  <MenuBookIcon />
-                </ListItemIcon>
-                <ListItemText primary="Curriculum" />
-              </ListItem>
-              {/* Projects s */}
-              <ListItem button key="Projects">
-                <ListItemIcon className={classes.listItemIcon}>
-                  <AccountTreeIcon />
-                </ListItemIcon>
-                <ListItemText primary="Projects" />
-              </ListItem>{" "}
-              {/* Templates */}
-              <ListItem button component={RouterLink} to={"templateTable"}>
-                <ListItemIcon className={classes.listItemIcon}>
-                  <AssignmentIcon />
-                </ListItemIcon>
-                <ListItemText primary="Templates" />
-              </ListItem>
-            </List>
-            <Divider />
-            <List>
-              {/* Reports */}
-
-              <ListItem button key="Reports">
-                <ListItemIcon className={classes.listItemIcon}>
-                  <PrintIcon />
-                </ListItemIcon>
-                <ListItemText primary="Reports" />
-              </ListItem>
-            </List>
-          </Drawer>
-
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            <Paper
-              className={clsx(classes.paperContainer, {
-                [classes.paperContainerDark]: darkMode,
-                [classes.paperContainerLight]: !darkMode,
-              })}
-            >
-              <Switch>
-                <Route
-                  path="/profile"
-                  render={(props) => {
-                    if (!user) {
-                      return <Redirect to="/login" />;
-                    } else {
-                      return;
-                    }
-                  }}
-                />
-                <Route
-                  exact={true}
-                  path="/registration"
-                  component={RegistrationSide}
-                />
-                <Route path="/instDashBoard" component={InstDashBoard} />
-                <Route path="/cohortAssignment" component={CohortAssignment} />
-                <Route path="/template" component={Template} />
-                <Route path="/templateTable" component={TemplateTable} />
-                <Route path="/curriculumThemes" component={CurriculumThemeTable} />
-                <Route path="/curriculumDetail" component={CurriculumDetail} />
-                <Route path="/componentTester" component={ComponentTester} />
-                {/* Temporary call to component until Auth is added */}
-                <SignInSide />
-              </Switch>
-            </Paper>
-          </main>
+            <ChevronLeftIcon />
+          </IconButton>
         </div>
+
+        <Divider />
+        <List>
+          {/* Home - Dashboard */}
+          <ListItem button component={RouterLink} to={"instDashBoard"}>
+            <ListItemIcon className={classes.listItemIcon}>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText primary="Home" />
+          </ListItem>
+          {/* Cohorts */}
+          <ListItem button component={RouterLink} to={"cohortAssignment"}>
+            <ListItemIcon className={classes.listItemIcon}>
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText primary="Cohorts" />
+          </ListItem>
+          {/* Curriculum */}
+          <ListItem button component={RouterLink} to={"curriculumThemes"}>
+            <ListItemIcon className={classes.listItemIcon}>
+              <MenuBookIcon />
+            </ListItemIcon>
+            <ListItemText primary="Curriculum" />
+          </ListItem>
+          {/* Projects s */}
+          <ListItem button key="Projects">
+            <ListItemIcon className={classes.listItemIcon}>
+              <AccountTreeIcon />
+            </ListItemIcon>
+            <ListItemText primary="Projects" />
+          </ListItem>{" "}
+          {/* Templates */}
+          <ListItem button component={RouterLink} to={"templateTable"}>
+            <ListItemIcon className={classes.listItemIcon}>
+              <AssignmentIcon />
+            </ListItemIcon>
+            <ListItemText primary="Templates" />
+          </ListItem>
+        </List>
+        <Divider />
+        <List>
+          {/* Reports */}
+
+          <ListItem button key="Reports">
+            <ListItemIcon className={classes.listItemIcon}>
+              <PrintIcon />
+            </ListItemIcon>
+            <ListItemText primary="Reports" />
+          </ListItem>
+        </List>
+      </Drawer>
+
+      {/* // *Routing */}
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        <Paper
+          className={clsx(classes.paperContainer, {
+            [classes.paperContainerDark]: darkMode,
+            [classes.paperContainerLight]: !darkMode,
+          })}
+        >
+          <Switch>
+            <Route
+              path="/profile"
+              render={(props) => {
+                if (!user) {
+                  return <Redirect to="/login" />;
+                } else {
+                  return;
+                }
+              }}
+            />
+            <Route
+              exact={true}
+              path="/registration"
+              component={RegistrationSide}
+            />
+            <Route path="/instDashBoard" component={InstDashBoard} />
+            <Route path="/cohortAssignment" component={CohortAssignment} />
+            <Route path="/template" component={Template} />
+            <Route path="/templateTable" component={TemplateTable} />
+            <Route path="/curriculumThemes" component={CurriculumThemeTable} />
+            <Route path="/curriculumDetail" component={CurriculumDetail} />
+            <Route path="/currDtlByTmp" component={CurrDtlByTmpHdrTable} />
+            <Route path="/componentTester" component={ComponentTester} />
+            {/* Temporary call to component until Auth is added */}
+            <SignInSide />
+          </Switch>
+        </Paper>
+      </main>
+    </div>
     //   </ThemeProvider>
     // </StyledEngineProvider>
   );

@@ -241,6 +241,19 @@ export default function TemplateTable() {
     setAnchorEl(null);
     setCurrentItem(null);
   };
+  const handleTemplateUse = (record, action) => {
+    // Viable actions are:
+    //    "display"
+    //    "copy"
+    //    "copyarch"
+    history.push({
+      pathname: "/currDtlByTmp",
+      state: {
+        templateInfo: record,
+        action: action,
+      },
+    });
+  }
 
   // * Main component render
   return (
@@ -461,10 +474,10 @@ export default function TemplateTable() {
           </ListItemText>
         </MenuItem>
         {/* Copy */}
-        <MenuItem>
+        <MenuItem onClick={() => handleTemplateUse(currentItem, "copy")}>
           <ListItemIcon
             aria-label="copy template"
-            style={{ color: "grey" }}
+            style={{ color: "#2196f3" }}
           >
             <ContentCopyIcon />
           </ListItemIcon>
@@ -473,10 +486,10 @@ export default function TemplateTable() {
           </ListItemText>
         </MenuItem>
         {/* Copy and Archive */}
-        <MenuItem>
+        <MenuItem onClick={() => handleTemplateUse(currentItem, "copyarch")}>
           <ListItemIcon
             aria-label="copy and archive old"
-            style={{ color: "grey" }}
+            style={{ color: "purple" }}
           >
             <CopyAllIcon />
           </ListItemIcon>
@@ -485,10 +498,10 @@ export default function TemplateTable() {
           </ListItemText>
         </MenuItem>
         {/* Usage */}
-        <MenuItem>
+        <MenuItem onClick={() => handleTemplateUse(currentItem, "display")}>
           <ListItemIcon
             aria-label="template usage"
-            style={{ color: "grey" }}
+            style={{ color: "#00a152" }}
           >
             <DataUsageIcon />
           </ListItemIcon>

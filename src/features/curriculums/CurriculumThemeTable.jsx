@@ -111,21 +111,21 @@ export default function CurriculumThemeTable() {
   });
 
   useEffect(() => {
+    const getCurriculumThemes = async (e) => {
+      try {
+        setIsLoading(true);
+        const response = await CurriculumThemesService
+          .getCurriculumThemesBySts(archiveStatus)
+          .then();
+        setRecords(response.data)
+        setIsLoading(false)
+      } catch (e) {
+        console.log("API call unsuccessful", e);
+      }
+    }
     getCurriculumThemes();
   }, [archiveStatus, loadData]);
 
-  const getCurriculumThemes = async (e) => {
-    try {
-      setIsLoading(true);
-      const response = await CurriculumThemesService
-        .getCurriculumThemesBySts(archiveStatus)
-        .then();
-      setRecords(response.data)
-      setIsLoading(false)
-    } catch (e) {
-      console.log("API call unsuccessful", e);
-    }
-  }
 
   const {
     TblContainer,
