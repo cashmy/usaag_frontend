@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {
+  Alert,
   InputAdornment,
   Fab,
   FormControlLabel,
@@ -389,6 +390,7 @@ export default function CurriculumThemeTable() {
         >
           <PDFViewer width="100%" height="1200" showtoolbar="true">
             {/* <UserStoryTemplate id={currentRecordId} /> */}
+            <Alert> {currentRecordId} </Alert>
           </PDFViewer>,
         </NewWindow>
       )}

@@ -80,7 +80,7 @@ export default function Template() {
   const recordForAdd = {
     id: 0
   }
-  const { data = [], isLoading, error } = useFetchAllTemplateDetailsQuery(recordForEdit !== undefined ? recordForEdit : recordForAdd);
+  const { data = [], isLoading } = useFetchAllTemplateDetailsQuery(recordForEdit !== undefined ? recordForEdit : recordForAdd);
   const [showTaskForm, setShowTaskForm] = useState(false);
   const [openPopup, setOpenPopup] = useState(false);
   const [confirmDialog, setConfirmDialog] = useState({

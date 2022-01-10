@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useHistory } from "react-router-dom";
 import {
-    Button,
     Checkbox,
     Chip,
     InputAdornment,
@@ -16,7 +15,6 @@ import {
     Typography,
     TableContainer,
 } from '@mui/material';
-import clsx from "clsx";
 import makeStyles from '@mui/styles/makeStyles';
 // Icons
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -27,7 +25,6 @@ import Controls from '../../components/controls/Controls';
 import useTable from "../../components/useTable";
 // Service Layer
 import CurriculumDetailService from '../../services/curriculumDetail.service';
-import { amber } from '@mui/material/colors';
 
 // ***** Styles *****
 const useStyles = makeStyles((theme) => ({
@@ -90,26 +87,18 @@ export default function CurrDtlByTmpHdrTable(props) {
     const [filterFn, setFilterFn] = useState({ fn: items => { return items; } });
 
     const tTitleColor =
-        props.location.state.action == 'copy' ? "#2196f3" :
-            props.location.state.action == 'copyarch' ? "purple" :
+        props.location.state.action === 'copy' ? "#2196f3" :
+            props.location.state.action === 'copyarch' ? "purple" :
                 "#00a152";
     const tTitleText = "#ffffff";
     const theadColor = "purple"
     const theadText = "#ffffff"; // white
     const tableHeading =
-        props.location.state.action == 'copy' ? "Template Copy: " :
-            props.location.state.action == 'copyarch' ? "Template Copy/Archive: " :
+        props.location.state.action === 'copy' ? "Template Copy: " :
+            props.location.state.action === 'copyarch' ? "Template Copy/Archive: " :
                 "Template Usage: "
     // * Table Columns
     const [columnCells, setColumnCells] = useState([])
-    const columnSelect = [{ id: 'select', label: 'Select', disableSorting: true }]
-    const columnCellsSubset = [
-        { id: 'curriculumThemes.name', label: 'Course' },
-        { id: 'assignmentSequence', label: 'Seq' },
-        { id: 'curriculumType.name', label: 'Type' },
-        { id: 'dayToAssign', label: 'Day' },
-        { id: 'projectDays', label: 'Nbr Days' },
-    ]
 
     useEffect(() => {
         async function getCurriculumDtls(id) {
@@ -126,8 +115,16 @@ export default function CurrDtlByTmpHdrTable(props) {
         getCurriculumDtls(templateInfo.currTempHdrId)
 
         // Build Column Hdgs for table (based upon action requested: display or copy, copy/archive)
+        const columnSelect = [{ id: 'select', label: 'Select', disableSorting: true }]
+        const columnCellsSubset = [
+            { id: 'curriculumThemes.name', label: 'Course' },
+            { id: 'assignmentSequence', label: 'Seq' },
+            { id: 'curriculumType.name', label: 'Type' },
+            { id: 'dayToAssign', label: 'Day' },
+            { id: 'projectDays', label: 'Nbr Days' },
+        ]
         var colHdgs = []
-        if (props.location.state.action != 'display') {
+        if (props.location.state.action !== 'display') {
             colHdgs = [...columnSelect];
         }
         colHdgs = [...colHdgs, ...columnCellsSubset];
@@ -221,7 +218,7 @@ export default function CurrDtlByTmpHdrTable(props) {
                             />
                         </Grid>
                         <Grid item xs={3}>
-                            {(props.location.state.action != "display") &&
+                            {(props.location.state.action !== "display") &&
                                 <Typography variant="body1" color='primary' >Select items to update with new version</Typography>
                             }
                         </Grid>
@@ -254,7 +251,7 @@ export default function CurrDtlByTmpHdrTable(props) {
                                         </TableRow>
                                     ) : (recordsAfterPagingAndSorting().map(item => (
                                         <TableRow key={item.id}>
-                                            {(props.location.state.action != "display") &&
+                                            {(props.location.state.action !== "display") &&
                                                 <TableCell>
                                                     <Checkbox />
                                                 </TableCell>}
