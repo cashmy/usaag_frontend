@@ -127,7 +127,6 @@ export default function CurriculumThemeTable() {
     getCurriculumThemes();
   }, [archiveStatus, loadData]);
 
-
   const {
     TblContainer,
     TblHead,
@@ -159,7 +158,6 @@ export default function CurriculumThemeTable() {
       }
     })
   }
-
   const addOrEdit = (curriculumTheme, resetForm) => {
     if (curriculumTheme.id === 0) {
       CurriculumThemesService.addCurriculumTheme(curriculumTheme);
@@ -187,13 +185,12 @@ export default function CurriculumThemeTable() {
   const handleEdit = (record) => {
     openInPopup(record)
   };
-
   const onDelete = (id) => {
     setConfirmDialog({
       ...confirmDialog,
       isOpen: false,
     });
-    CurriculumThemesService.deleteCurruiculum(id)
+    CurriculumThemesService.deleteCurriculumTheme(id)
     setLoadData(!loadData); // Request reload of data
     setNotify({
       isOpen: true,
@@ -225,7 +222,7 @@ export default function CurriculumThemeTable() {
     history.push({
       pathname: "/curriculumDetail",
       state: {
-        recordForEdit: record,
+        currThemeHdr: record,
       },
     });
   }
@@ -308,7 +305,11 @@ export default function CurriculumThemeTable() {
                   <TblHead />
                   <TableBody>
                     {isLoading ? (
-                      <Typography> Loading ... </Typography>
+                      <TableRow key="999">
+                        <TableCell>
+                          <Typography> Loading ... </Typography>
+                        </TableCell>
+                      </TableRow>
                     ) : (
                       recordsAfterPagingAndSorting().map(item => (
                         <TableRow key={item.id}>
@@ -342,7 +343,7 @@ export default function CurriculumThemeTable() {
                               {archiveStatus && <UnarchiveIcon />}
                             </Controls.ActionButton>
                             <Controls.ActionButton
-                              disabled="true"
+                              disabled={true}
                               color="primary"
                               onClick={() => handlePrint(item)}
                             >

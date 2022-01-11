@@ -199,7 +199,7 @@ export default function TemplateTable() {
         "Are you sure you want to delete this Template and all of its Detail?",
       subTitle: "You can't undo this action.",
       onConfirm: () => {
-        onDelete(item.id);
+        onDelete(item);
       },
     });
     handleMenuClose();
@@ -457,9 +457,8 @@ export default function TemplateTable() {
             {!archiveStatus && <ArchiveIcon />}
             {archiveStatus && <UnarchiveIcon />}
           </ListItemIcon>
-          <ListItemText>
-            Archive
-          </ListItemText>
+          {!archiveStatus && <ListItemText>Archive</ListItemText>}
+          {archiveStatus && <ListItemText>Re-activate</ListItemText>}
         </MenuItem>
         {/* Delete Item */}
         <MenuItem onClick={() => handleDelete(currentItem.id)}>
@@ -493,9 +492,8 @@ export default function TemplateTable() {
           >
             <CopyAllIcon />
           </ListItemIcon>
-          <ListItemText>
-            Copy & Archive
-          </ListItemText>
+          {!archiveStatus && <ListItemText>Copy & Archive</ListItemText>}
+          {archiveStatus && <ListItemText>Copy & Activate</ListItemText>}
         </MenuItem>
         {/* Usage */}
         <MenuItem onClick={() => handleTemplateUse(currentItem, "display")}>

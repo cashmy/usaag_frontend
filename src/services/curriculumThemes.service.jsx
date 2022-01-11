@@ -8,8 +8,8 @@ class CurriculumThemesService {
     return axios.get(API_URL, { headers: authHeader() });
   };
 
-  getCurriculumThemesBySts = (status) =>{
-    return axios.get(API_URL + `/archive/${status}`, {headers: authHeader() });
+  getCurriculumThemesBySts = (status) => {
+    return axios.get(API_URL + `/archive/${status}`, { headers: authHeader() });
   };
 
   getCurriculumTheme = (id) => {
@@ -24,22 +24,22 @@ class CurriculumThemesService {
     axios
       .put(API_URL + `/${data.id}`, data, { headers: authHeader() })
       .then((response) => {
-          return response.data;
+        return response.data;
       });
   };
 
   patchCurriculumThemeSts = (id, sts) => {
-    let data ={
+    let data = {
       'archived': sts
     }
     axios
       .patch(API_URL + `/${id}`, data, { headers: authHeader() })
       .then((response) => {
-          return response.data;
+        return response.data;
       });
   }
 
-  deleteCurriculumThem = (id) => {
+  deleteCurriculumTheme = (id) => {
     return axios.delete(API_URL + `/${id}`, { headers: authHeader() });
   }
 }
