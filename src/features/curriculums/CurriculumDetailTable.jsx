@@ -104,10 +104,8 @@ const columnCells = [
 
 // ***** Main Function *****
 export default function CurriculumDetail(props) {
-    const themeInfo = {
-        'currThemeId': props.location.state.recordForEdit.id,
-        'currThemeName': props.location.state.recordForEdit.name
-    }
+    console.log("Props-Location-State: ", props.location.state)
+    const [themeInfo, setThemeInfo] = useState({})
     const classes = useStyles();
     const history = useHistory();
     // const [mode, setMode] = useState("");
@@ -135,9 +133,12 @@ export default function CurriculumDetail(props) {
                 console.log('API call unsuccessful', e)
             }
         }
-        getCurriculumDtls(themeInfo.currThemeId)
-    }, [loadData, props, themeInfo.currThemeId])
-
+        setThemeInfo({
+            'currThemeId': props.location.state.currThemeHdr.id,
+            'currThemeName': props.location.state.currThemeHdr.name.substr(0, 30)
+        })
+        getCurriculumDtls(props.location.state.currThemeHdr.id)
+    }, [loadData, props])
 
     // * Table Constants
     const {
@@ -251,7 +252,7 @@ export default function CurriculumDetail(props) {
                     <Grid item xs={7}>
                         <Paper className={classes.paper}>
                             <Toolbar>
-                                <Typography variant="h4">{themeInfo.currThemeName.substr(0, 30)} </Typography>
+                                <Typography variant="h4">{themeInfo.currThemeName} </Typography>
                                 <Tooltip title="Return to Curriculum Header">
                                     <Fab
                                         className={classes.backButton}

@@ -60,6 +60,7 @@ export default function CurriculumDetailForm(props) {
     // * Validation function (to be passed as a callback)
     const validate = (fieldValues = values) => {
         // Default ThemeId to incoming props for Add mode.
+        console.log("props theme info: ", props.themeInfo)
         if (fieldValues.themeId === 0)
             fieldValues.themeId = props.themeInfo.currThemeId
 
