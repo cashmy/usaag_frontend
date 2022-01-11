@@ -101,7 +101,7 @@ export default function CurriculumDetailForm(props) {
     // };
     // Default form field values to incoming data record
     useEffect(() => {
-        if (recordForEdit != null && recordForEdit != undefined)
+        if (recordForEdit !== null && recordForEdit !== undefined)
             setValues({
                 ...recordForEdit
             })
