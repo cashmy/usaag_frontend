@@ -126,8 +126,11 @@ Font.register({
     ]
 })
 
-return (
-    <Document>
+// * Create Document Component
+export default function CurrThemeReport(props) {
+    return (
+        <Document>
 
-    </Document>
-)
+        </Document>
+    )
+}
