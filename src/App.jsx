@@ -52,7 +52,7 @@ import Template from "./features/template/Template";
 import TemplateTable from "./features/template/TemplateTable";
 import CurriculumThemeTable from "./features/curriculums/CurriculumThemeTable";
 import CurriculumDetail from "./features/curriculums/CurriculumDetailTable";
-import ComponentTester from "./features/componentTester/componentTester";
+// import ComponentTester from "./features/componentTester/componentTester";
 import CurrDtlByTmpHdrTable from "./features/curriculums/CurrDtlByTmpHdrTable";
 // import { PauseCircleFilledTwoTone } from "@mui/icons-material";
 
