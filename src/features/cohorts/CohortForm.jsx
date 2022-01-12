@@ -4,8 +4,6 @@ import makeStyles from '@mui/styles/makeStyles';
 import ClrPicker from '../../components/controls/ColorPicker';
 import Controls from '../../components/controls/Controls';
 import { useForm, Form } from '../../components/useForm';
-import { SketchPicker, PhotoshopPicker } from 'react-color';
-// import { Palette } from '@mui/icons-material';
 
 // * Styling
 const useStyles = makeStyles((theme) => ({
@@ -34,31 +32,7 @@ export default function CohortForm(props) {
     const classes = useStyles();
     const { addOrEdit, recordForEdit } = props
 
-    // const stdPalette = {
-    //     red: 'red',
-    //     blue: 'blue',
-    //     green: 'green',
-    //     yellow: 'yellow',
-    //     cyan: 'cyan',
-    //     lime: 'lime',
-    //     gray: 'gray',
-    //     orange: 'orange',
-    //     purple: 'purple',
-    //     black: 'black',
-    //     white: 'white',
-    //     pink: 'pink',
-    //     darkblue: 'darkblue',
-    // };
-
-    // const textPalette = {
-    //     white: 'white',
-    //     grey: 'grey',
-    //     near_black: '#302f2f',
-    //     black: 'black',
-
-    // };
-
-    // Validation function (to be passed as a callback)
+    // * Validation function (to be passed as a callback)
     const validate = (fieldValues = values) => {
         let temp = { ...errors };
         if ('name' in fieldValues)
@@ -79,7 +53,6 @@ export default function CohortForm(props) {
         if (fieldValues === values)
             return Object.values(temp).every(x => x === "")
     }
-
     const {
         values,
         setValues,
@@ -88,16 +61,6 @@ export default function CohortForm(props) {
         handleInputChange,
         resetForm,
     } = useForm(initialFValues);
-
-    const handleColorChange = (color) => {
-        console.log("Color value: ", color)
-        const { name, value } = color.target;
-        setValues({
-            ...values,
-            [name]: value,
-        });
-    }
-
     // SaveSubmit Callback handler - event driven
     const handleSubmit = (event) => {
         console.log("Cohort Submitted")
@@ -107,13 +70,11 @@ export default function CohortForm(props) {
         else
             addOrEdit(values, resetForm, false)
     };
-
     const handleReset = () => {
         if (recordForEdit == null)
             resetForm()
         else setValues({ ...recordForEdit })
     };
-
     useEffect(() => {
         if (recordForEdit != null)
             setValues({
@@ -121,6 +82,7 @@ export default function CohortForm(props) {
             })
     }, [recordForEdit])
 
+    // * Main Render
     return (
         <Form style={{ minHeight: '350px' }}>
             <Grid container alignItems="flex-start" spacing={2}>
