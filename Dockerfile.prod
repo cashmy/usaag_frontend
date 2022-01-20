@@ -1,3 +1,4 @@
+# *** The Build Environment ***
 # pull official base image
 FROM node:alpine as build
 
@@ -18,7 +19,7 @@ COPY . ./
 # build prod code
 RUN npm run build
 
-# The Production environment
+# *** The Production Environment ***
 FROM nginx:stable-alpine as prod
 COPY --from=build /app/build /usr/share/nginx/html
 
