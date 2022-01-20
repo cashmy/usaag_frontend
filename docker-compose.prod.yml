@@ -1,4 +1,4 @@
-# Specifiy the version
+# Specify the version
 version: '3.9'
 
 #Declare the service
@@ -7,6 +7,8 @@ services:
   # Define the service
   usaag-frontend-prod:
     container_name: usaag-frontend-prod
+
+    # Define the build context
     build:
       context: .
       dockerfile: Dockerfile.prod
