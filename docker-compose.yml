@@ -13,6 +13,10 @@ services:
       context: .
       dockerfile: Dockerfile
 
+    volumes:
+      - ./:/usr/app
+      - ./node_modules:/usr/src/app/node_modules
+
     # Map the ports
     ports:
       - '1561:80'
