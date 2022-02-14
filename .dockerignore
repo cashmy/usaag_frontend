@@ -9,6 +9,5 @@ docker-compose-dev.yml
 build
 node_modules
 .circleci
-.saved_src
 .vscode
 documents
