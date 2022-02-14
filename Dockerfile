@@ -10,11 +10,6 @@ COPY package.json ./
 # COPY package-lock.json ./
 COPY yarn.lock ./
 RUN yarn install
-<<<<<<< HEAD
-
-=======
-# RUN npm install react-scripts@4.0.3 -g 
->>>>>>> 4c35487a7b4e3f5afdd8139c4664d14470daf44b
 # Add modified webconfig file to dependency conflic
 COPY ./.saved_src/webpack.config.js ./node_modules/react-scripts/config/webpack.config.js
 
