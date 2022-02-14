@@ -6,9 +6,11 @@ WORKDIR /app
 
 # install app dependencies
 COPY package.json ./
-COPY package-lock.json ./
-RUN npm install
-RUN npm install react-scripts@4.0.3 -g 
+COPY yarn.lock ./
+RUN yarn install
+
+# Add modified webconfig file to dependency conflic
+COPY ./.saved_src/webpack.config.js ./node_modules/react-scripts/config/webpack.config.js
 
 # add app
 COPY . ./
