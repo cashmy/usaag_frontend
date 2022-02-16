@@ -1,0 +1,13 @@
+Dockerfile
+Dockerfile.dev
+docker-compose.yml
+docker-compose-dev.yml
+
+.dockerignore
+.gitignore
+
+build
+node_modules
+.circleci
+.vscode
+documents

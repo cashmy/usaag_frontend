@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useHistory, Link as RouterLink } from "react-router-dom";
+import { Scrollbars } from 'react-custom-scrollbars'
 import {
   Card,
   CardActions,
@@ -64,6 +65,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1.4),
   },
   cardContainer: {
+    marginTop: theme.spacing(3),
     marginLeft: theme.spacing(17),
     marginRight: theme.spacing(17),
     justifyContent: "flex-start",
@@ -316,63 +318,65 @@ export default function TemplateTable() {
 
         {/* //* Card Grid */}
         <Grid container className={classes.cardContainer} spacing={2}>
-          {/* // TODO: Map function goes here  */}
-          {/* {recordsAfterPagingAndSorting().map((item) => (
+          <Scrollbars style={{ height: "80vh" }}>
+            <Grid container spacing={2}>
+              {/* // TODO: Map function goes here  */}
+              {/* {recordsAfterPagingAndSorting().map((item) => (
           ))} */}
-          {isLoading ? (
-            <Typography> Loading ... </Typography>
-          ) : (
-            data.map((item, index) => (
-              <Grid item xl={2} key={index} >
-                <Card className={classes.cardDetails}>
-                  <CardContent>
-                    <Typography
-                      className={classes.title}
-                      color="textPrimary"
-                      gutterBottom
-                    >
-                      {item.name}
-                    </Typography>
-                    <Typography variant="h5" component="h2">
-                      {bull} {item.abbreviation} {bull}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      component="p"
-                      color="textSecondary"
-                    >
-                      Tech Stack: -- {item.technologyStack}
-                      <br />
-                      Tot/Weighted Pts: -- {item.totalPoints}/
-                      {item.totalWeightedPoints}
-                    </Typography>
-                    <Typography
-                      variant="caption"
-                      component="p"
-                      align="right"
-                      color={archiveStatus ? "error" : "textPrimary"}
-                    >
-                      <br />
-                      Version:{" "}
-                      {formatVersion(
-                        item.versionMain,
-                        item.versionMinor,
-                        item.versionSub
-                      )}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    {/* Edit */}
-                    <IconButton
-                      aria-label="edit template"
-                      onClick={() => {
-                        handleEdit(item);
-                      }}
-                      style={{ color: "darkcyan" }}
-                    >
-                      <EditOutlinedIcon />
-                    </IconButton>
-                    {/* <IconButton
+              {isLoading ? (
+                <Typography> Loading ... </Typography>
+              ) : (
+                data.map((item, index) => (
+                  <Grid item xl={2} key={index} >
+                    <Card className={classes.cardDetails}>
+                      <CardContent>
+                        <Typography
+                          className={classes.title}
+                          color="textPrimary"
+                          gutterBottom
+                        >
+                          {item.name}
+                        </Typography>
+                        <Typography variant="h5" component="h2">
+                          {bull} {item.abbreviation} {bull}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          component="p"
+                          color="textSecondary"
+                        >
+                          Tech Stack: -- {item.technologyStack}
+                          <br />
+                          Tot/Weighted Pts: -- {item.totalPoints}/
+                          {item.totalWeightedPoints}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          component="p"
+                          align="right"
+                          color={archiveStatus ? "error" : "textPrimary"}
+                        >
+                          <br />
+                          Version:{" "}
+                          {formatVersion(
+                            item.versionMain,
+                            item.versionMinor,
+                            item.versionSub
+                          )}
+                        </Typography>
+                      </CardContent>
+                      <CardActions>
+                        {/* Edit */}
+                        <IconButton
+                          aria-label="edit template"
+                          onClick={() => {
+                            handleEdit(item);
+                          }}
+                          style={{ color: "darkcyan" }}
+                        >
+                          <EditOutlinedIcon />
+                        </IconButton>
+                        {/* <IconButton
                       aria-label="delete template"
                       onClick={() => {
                         setConfirmDialog({
@@ -389,33 +393,36 @@ export default function TemplateTable() {
                     >
                       <DeleteIcon />
                     </IconButton> */}
-                    {/* Print */}
-                    <IconButton
-                      aria-label="print template"
-                      onClick={() => {
-                        handlePrint(item.id);
-                      }}
-                      color="primary"
-                    >
-                      <PrintIcon />
-                    </IconButton>
-                    {/* MoreVertical */}
-                    <IconButton
-                      aria-controls={open ? 'basic-menu' : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={open ? 'true' : undefined}
-                      onClick={(e) => handleMenuClick(e, item)}
-                      size="small"
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
+                        {/* Print */}
+                        <IconButton
+                          aria-label="print template"
+                          onClick={() => {
+                            handlePrint(item.id);
+                          }}
+                          color="primary"
+                        >
+                          <PrintIcon />
+                        </IconButton>
+                        {/* MoreVertical */}
+                        <IconButton
+                          aria-controls={open ? 'basic-menu' : undefined}
+                          aria-haspopup="true"
+                          aria-expanded={open ? 'true' : undefined}
+                          onClick={(e) => handleMenuClick(e, item)}
+                          size="small"
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
 
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))
-          )}
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                ))
+              )}
+            </Grid>
+          </Scrollbars>
         </Grid>
+
       </Grid>
 
       {/* //* Dialogs, Modals, and Popups */}
@@ -425,18 +432,20 @@ export default function TemplateTable() {
         setConfirmDialog={setConfirmDialog}
       />
       {/* PDF Viewer */}
-      {popup && (
-        <NewWindow
-          name="PDF Viewer"
-          title="PDF Viewer"
-          onUnload={handlePrint}
-          center="screen"
-        >
-          <PDFViewer width="100%" height="1200" showtoolbar="true">
-            <UserStoryTemplate id={currentRecordId} />
-          </PDFViewer>,
-        </NewWindow>
-      )}
+      {
+        popup && (
+          <NewWindow
+            name="PDF Viewer"
+            title="PDF Viewer"
+            onUnload={handlePrint}
+            center="screen"
+          >
+            <PDFViewer width="100%" height="1200" showtoolbar="true">
+              <UserStoryTemplate id={currentRecordId} />
+            </PDFViewer>,
+          </NewWindow>
+        )
+      }
       {/* Vertical Menu  */}
       <Menu
         id="basic-menu"
@@ -508,6 +517,6 @@ export default function TemplateTable() {
           </ListItemText>
         </MenuItem>
       </Menu>
-    </React.Fragment>
+    </React.Fragment >
   );
 }
