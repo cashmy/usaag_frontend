@@ -363,7 +363,7 @@ export default function App(props) {
             <Route path="/curriculumThemes" component={CurriculumThemeTable} />
             <Route path="/curriculumDetail" component={CurriculumDetail} />
             <Route path="/currDtlByTmp" component={CurrDtlByTmpHdrTable} />
-            <Route path="/componentTester" component={ComponentTester} />
+            {/* <Route path="/componentTester" component={ComponentTester} /> */}
             {/* Temporary call to component until Auth is added */}
             <SignInSide />
           </Switch>

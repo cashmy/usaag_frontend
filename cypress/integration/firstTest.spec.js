@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe("Initial test", () => {
+describe("Initial test suite", () => {
 
     it('First Test', () => {
         cy.visit('/')
