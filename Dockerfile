@@ -11,7 +11,7 @@ COPY package.json ./
 COPY yarn.lock ./
 RUN yarn install
 # Add modified webconfig file to dependency conflic
-COPY ./.saved_src/webpack.config.js ./node_modules/react-scripts/config/webpack.config.js
+COPY ./.node_overrides/webpack.config.js ./node_modules/react-scripts/config/webpack.config.js
 
 # add app
 COPY . ./
