@@ -1,3 +1,7 @@
+// Main App.jsx
+// Author: Cash Myers
+// Date: Feb 25, 2021
+
 import React, { useEffect, useState } from "react";
 
 import "./App.css";
