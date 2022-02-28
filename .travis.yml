@@ -1,14 +1,12 @@
 sudo: required
 
-language: node.js
-node_js:
-  - 16
+language: generic
 
 services:
   - docker
 
 before_install:
-  - docker build -t cashmyers/usaag-frontend -f Dockerfile .
+  - docker build -t cashmyers/usaag-frontend -f Dockerfile.dev .
 
 script:
   - docker run -e CI=true cashmyers/usaag-frontend npm run test
