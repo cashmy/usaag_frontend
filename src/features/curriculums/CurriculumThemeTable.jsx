@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Alert,
   InputAdornment,
@@ -87,7 +87,7 @@ const columnCells = [
 export default function CurriculumThemeTable() {
   // State Variables
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   // const scrollable = useScrollable();
   const [records, setRecords] = useState([]);
   const [loadData, setLoadData] = useState(true);
@@ -219,7 +219,7 @@ export default function CurriculumThemeTable() {
     });
   };
   const handleDetails = (record) => {
-    history.push({
+    navigate({
       pathname: "/curriculumDetail",
       state: {
         currThemeHdr: record,

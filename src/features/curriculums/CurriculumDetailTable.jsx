@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
     Chip,
     InputAdornment,
@@ -107,7 +107,7 @@ export default function CurriculumDetail(props) {
     console.log("Props-Location-State: ", props.location.state)
     const [themeInfo, setThemeInfo] = useState({})
     const classes = useStyles();
-    const history = useHistory();
+    const navigate = useNavigate();
     // const [mode, setMode] = useState("");
     const [records, setRecords] = useState([])
     const [loadData, setLoadData] = useState(true)
@@ -231,7 +231,7 @@ export default function CurriculumDetail(props) {
         })
     };
     const returnToParent = () => {
-        history.push({
+        navigate({
             pathname: "/curriculumThemes",
         });
     };

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
     Checkbox,
     Chip,
@@ -79,7 +79,7 @@ export default function CurrDtlByTmpHdrTable(props) {
         'currTempHdrName': props.location.state.templateInfo.name
     }
     const classes = useStyles();
-    const history = useHistory();
+    const navigate = useNavigate();
     const [records, setRecords] = useState([])
     const [isLoading, setIsLoading] = useState(false);
     const [notify, setNotify] = useState({ isOpen: false, message: '', type: 'info' })
@@ -162,7 +162,7 @@ export default function CurrDtlByTmpHdrTable(props) {
         });
     };
     const returnToParent = () => {
-        history.push({
+        navigate({
             pathname: "/templateTable",
         });
     };

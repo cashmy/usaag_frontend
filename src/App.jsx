@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 
 // Main Routing and Navigaion
-import { Switch, Route, Redirect, Link as RouterLink } from "react-router-dom";
+import { Routes, Route, Navigate, Link as RouterLink } from "react-router-dom";
 import jwtDecode from "jwt-decode";
 
 import clsx from "clsx";
@@ -344,12 +344,12 @@ export default function App(props) {
             [classes.paperContainerLight]: !darkMode,
           })}
         >
-          <Switch>
+          <Routes>
             <Route
               path="/profile"
               render={(props) => {
                 if (!user) {
-                  return <Redirect to="/login" />;
+                  return <Navigate to="/login" />;
                 } else {
                   return;
                 }
@@ -358,19 +358,19 @@ export default function App(props) {
             <Route
               exact={true}
               path="/registration"
-              component={RegistrationSide}
+              element={RegistrationSide}
             />
-            <Route path="/instDashBoard" component={InstDashBoard} />
-            <Route path="/cohortAssignment" component={CohortAssignment} />
-            <Route path="/template" component={Template} />
-            <Route path="/templateTable" component={TemplateTable} />
-            <Route path="/curriculumThemes" component={CurriculumThemeTable} />
-            <Route path="/curriculumDetail" component={CurriculumDetail} />
-            <Route path="/currDtlByTmp" component={CurrDtlByTmpHdrTable} />
-            {/* <Route path="/componentTester" component={ComponentTester} /> */}
+            <Route path="/instDashBoard" element={InstDashBoard} />
+            <Route path="/cohortAssignment" element={CohortAssignment} />
+            <Route path="/template" element={Template} />
+            <Route path="/templateTable" element={TemplateTable} />
+            <Route path="/curriculumThemes" element={CurriculumThemeTable} />
+            <Route path="/curriculumDetail" element={CurriculumDetail} />
+            <Route path="/currDtlByTmp" element={CurrDtlByTmpHdrTable} />
+            {/* <Route path="/componentTester" element={ComponentTester} /> */}
             {/* Temporary call to component until Auth is added */}
             <SignInSide />
-          </Switch>
+          </Routes>
         </Paper>
       </main>
     </div>

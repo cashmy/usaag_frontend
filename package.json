@@ -1,6 +1,6 @@
 {
   "name": "usaag-frontend",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@date-io/core": "^2.11.0",
@@ -33,7 +33,7 @@
     "react-dom": "^17.0.2",
     "react-new-window": "^0.2.1",
     "react-redux": "^7.2.6",
-    "react-router-dom": "^5.3.0",
+    "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.0",
     "stream-browserify": "^3.0.0",
     "util": "^0.12.4"

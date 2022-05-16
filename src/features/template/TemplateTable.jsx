@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory, Link as RouterLink } from "react-router-dom";
+import { useNavigate, Link as RouterLink } from "react-router-dom";
 import { Scrollbars } from 'react-custom-scrollbars'
 import {
   Card,
@@ -109,7 +109,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function TemplateTable() {
   const classes = useStyles();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const bull = <span className={classes.bullet}>•</span>;
   const open = Boolean(anchorEl);
@@ -168,17 +168,15 @@ export default function TemplateTable() {
       },
     });
   };
-
   const handleEdit = (record) => {
     // console.log("Record param: ", record);
-    history.push({
+    navigate({
       pathname: "/template",
       state: {
         recordForEdit: record,
       },
     });
   };
-
   // Process delete request and close modal
   const onDelete = (id) => {
     setConfirmDialog({
@@ -206,7 +204,6 @@ export default function TemplateTable() {
     });
     handleMenuClose();
   }
-
   // Toggles between Active and Archived status display
   const handleToggle = () => {
     setArchiveStatus(!archiveStatus);
@@ -248,7 +245,7 @@ export default function TemplateTable() {
     //    "display"
     //    "copy"
     //    "copyarch"
-    history.push({
+    navigate({
       pathname: "/currDtlByTmp",
       state: {
         templateInfo: record,
