@@ -347,29 +347,29 @@ export default function App(props) {
           <Routes>
             <Route
               path="/profile"
-              render={(props) => {
-                if (!user) {
-                  return <Navigate to="/login" />;
-                } else {
-                  return;
-                }
-              }}
+            render={(props) => {
+              if (!user) {
+                return <Navigate to="/login" />;
+              } else {
+                return;
+              }
+            }}
             />
+            <Route path="/" element={<SignInSide />} />
             <Route
               exact={true}
               path="/registration"
-              element={RegistrationSide}
+              element={<RegistrationSide />}
             />
-            <Route path="/instDashBoard" element={InstDashBoard} />
-            <Route path="/cohortAssignment" element={CohortAssignment} />
-            <Route path="/template" element={Template} />
-            <Route path="/templateTable" element={TemplateTable} />
-            <Route path="/curriculumThemes" element={CurriculumThemeTable} />
-            <Route path="/curriculumDetail" element={CurriculumDetail} />
-            <Route path="/currDtlByTmp" element={CurrDtlByTmpHdrTable} />
+            <Route path="/instDashBoard" element={<InstDashBoard />} />
+            <Route path="/cohortAssignment" element={<CohortAssignment />} />
+            <Route path="/template" element={<Template />} />
+            <Route path="/templateTable" element={<TemplateTable />} />
+            <Route path="/curriculumThemes" element={<CurriculumThemeTable />} />
+            <Route path="/curriculumDetail" element={<CurriculumDetail />} />
+            <Route path="/currDtlByTmp" element={<CurrDtlByTmpHdrTable />} />
             {/* <Route path="/componentTester" element={ComponentTester} /> */}
             {/* Temporary call to component until Auth is added */}
-            <SignInSide />
           </Routes>
         </Paper>
       </main>
