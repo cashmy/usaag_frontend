@@ -219,12 +219,8 @@ export default function CurriculumThemeTable() {
     });
   };
   const handleDetails = (record) => {
-    navigate({
-      pathname: "/curriculumDetail",
-      state: {
-        currThemeHdr: record,
-      },
-    });
+    console.log("Curr Theme Hdr", record)
+    navigate("/curriculumDetail", {state: record});
   }
   const handlePrint = (id) => {
     setCurrentRecordId(id)

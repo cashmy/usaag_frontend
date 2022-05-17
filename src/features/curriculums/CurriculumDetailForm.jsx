@@ -25,7 +25,7 @@ const initialFValues = {
     id: 0,                  // Record Id
     themeId: 0,             // Curriculum Theme Id
     lectureTopics: '',      // Topic of this item
-    currTypeId: "2",        // Curr Type Id (defaults to 2 = Lecture)
+    currTypeId: 2,        // Curr Type Id (defaults to 2 = Lecture)
     assignmentSequence: 10,  // Used to seq/re-seq order of execution
     dayToAssign: 0,         // Start day of this item
     headerId: "",         // User Story Template Header Id (opt)
