@@ -314,7 +314,7 @@ module.exports = function (webpackEnv) {
         zlib: require.resolve("browserify-zlib"),
         stream: require.resolve("stream-browserify"),
         util: require.resolve("util"),
-        buffer: require.resolve("buffer"),
+        buffer: require.resolve("buffer/"),
         asset: require.resolve("assert"),
       },
       // These are the reasonable defaults supported by the Node ecosystem.
