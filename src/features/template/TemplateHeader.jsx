@@ -217,7 +217,7 @@ export default function TemplateHeaderForm(props) {
               color="grey"
               text="Exit"
               component={RouterLink}
-              to={"templateTable"}
+              to={"/templateTable"}
             />
           </div>
         </Grid>

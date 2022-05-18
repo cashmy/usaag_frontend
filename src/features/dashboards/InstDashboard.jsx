@@ -137,7 +137,7 @@ export default function InstDashboard() {
                 <IconButton
                   aria-label="edit templates"
                   component={RouterLink}
-                  to={"templateTable"}
+                  to={"/templateTable"}
                   size="large">
                   <AssignmentIcon />
                 </IconButton>
@@ -199,7 +199,7 @@ export default function InstDashboard() {
                 <IconButton
                   aria-label="edit cohorts"
                   component={RouterLink}
-                  to={"cohortAssignment"}
+                  to={"/cohortAssignment"}
                   size="large">
                   <PeopleIcon />
                 </IconButton>
@@ -261,7 +261,7 @@ export default function InstDashboard() {
                 <IconButton
                   aria-label="edit curriculum themes"
                   component={RouterLink}
-                  to={"curriculumThemes"}
+                  to={"/curriculumThemes"}
                   size="large">
                   <MenuBookIcon />
                 </IconButton>

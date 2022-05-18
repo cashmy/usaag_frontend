@@ -213,7 +213,7 @@ export default function SignInSide() {
             <Grid container>
               <Grid item xs></Grid>
               <Grid item>
-                <Link component={RouterLink} to={""} variant="body2">
+                <Link component={RouterLink} to={"/"} variant="body2">
                   {"Already have an account? Sign In"}
                 </Link>
               </Grid>

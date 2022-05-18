@@ -162,7 +162,7 @@ export default function SignInSide() {
               <Grid item>
                 <Link
                   component={RouterLink}
-                  to={"registration"}
+                  to={"/registration"}
                   variant="body2"
                 >
                   {"Don't have an account? Sign Up"}

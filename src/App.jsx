@@ -287,21 +287,21 @@ export default function App(props) {
         <Divider />
         <List>
           {/* Home - Dashboard */}
-          <ListItem button component={RouterLink} to={"instDashBoard"}>
+          <ListItem button component={RouterLink} to={"/instDashBoard"}>
             <ListItemIcon className={classes.listItemIcon}>
               <HomeIcon />
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItem>
           {/* Cohorts */}
-          <ListItem button component={RouterLink} to={"cohortAssignment"}>
+          <ListItem button component={RouterLink} to={"/cohortAssignment"}>
             <ListItemIcon className={classes.listItemIcon}>
               <PeopleIcon />
             </ListItemIcon>
             <ListItemText primary="Cohorts" />
           </ListItem>
           {/* Curriculum */}
-          <ListItem button component={RouterLink} to={"curriculumThemes"}>
+          <ListItem button component={RouterLink} to={"/curriculumThemes"}>
             <ListItemIcon className={classes.listItemIcon}>
               <MenuBookIcon />
             </ListItemIcon>
@@ -315,7 +315,7 @@ export default function App(props) {
             <ListItemText primary="Projects" />
           </ListItem>{" "}
           {/* Templates */}
-          <ListItem button component={RouterLink} to={"templateTable"}>
+          <ListItem button component={RouterLink} to={"/templateTable"}>
             <ListItemIcon className={classes.listItemIcon}>
               <AssignmentIcon />
             </ListItemIcon>

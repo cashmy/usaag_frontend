@@ -170,12 +170,11 @@ export default function TemplateTable() {
   };
   const handleEdit = (record) => {
     // console.log("Record param: ", record);
-    navigate({
-      pathname: "/template",
-      state: {
+    navigate("/template", 
+      {state: {
         recordForEdit: record,
-      },
-    });
+      }},
+    );
   };
   // Process delete request and close modal
   const onDelete = (id) => {
@@ -298,7 +297,7 @@ export default function TemplateTable() {
                 />
                 <Fab
                   component={RouterLink}
-                  to={"template"}
+                  to={"/template"}
                   // to={{ pathname: "template", state: { recordForEdit: recordForEdit}, }}
                   className={classes.addButton}
                   color="primary"
