@@ -1,6 +1,6 @@
 {
   "name": "usaag-frontend",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "dependencies": {
     "@date-io/core": "^2.11.0",
