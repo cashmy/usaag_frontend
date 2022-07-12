@@ -220,7 +220,7 @@ export default function CurriculumThemeTable() {
   };
   const handleDetails = (record) => {
     console.log("Curr Theme Hdr", record)
-    navigate("/curriculumDetail", {state: record});
+    navigate("/curriculumDetail", { state: record });
   }
   const handlePrint = (id) => {
     setCurrentRecordId(id)
@@ -317,18 +317,21 @@ export default function CurriculumThemeTable() {
                           <TableCell>{item.level}</TableCell>
                           <TableCell>{item.dayTimeStatus === true ? "True" : "False"}</TableCell>
                           <TableCell>
+                            {/* //& Edit */}
                             <Controls.ActionButton
                               color="darkcyan"
                               size="large"
                               onClick={() => handleEdit(item)}>
                               <EditOutlinedIcon fontSize="small" />
                             </Controls.ActionButton>
+                            {/* //& Delete */}
                             <Controls.ActionButton
                               color="red"
                               onClick={() => handleDelete(item.id)}
                             >
                               <DeleteIcon fontSize="small" />
                             </Controls.ActionButton>
+                            {/* //& Archive */}
                             <Controls.ActionButton
                               color="darkorchid"
                               onClick={() => {
@@ -338,6 +341,7 @@ export default function CurriculumThemeTable() {
                               {!archiveStatus && <ArchiveIcon />}
                               {archiveStatus && <UnarchiveIcon />}
                             </Controls.ActionButton>
+                            {/* //& Print */}
                             <Controls.ActionButton
                               disabled={true}
                               color="primary"
@@ -345,6 +349,7 @@ export default function CurriculumThemeTable() {
                             >
                               <PrintIcon fontSize="small" />
                             </Controls.ActionButton>
+                            {/* //& Info/Details */}
                             <Controls.ActionButton
                               color="info"
                               onClick={() => handleDetails(item)}

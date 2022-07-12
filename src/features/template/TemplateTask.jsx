@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     // flexDirection: "column",
     // backgroundColor: theme.palette.text.primary,
-    // color: theme.palette.getContrastText(theme.palette.text.primary),
+    color: theme.palette.getContrastText(theme.palette.text.primary),
   },
   taskColorStandard: {
     backgroundColor:

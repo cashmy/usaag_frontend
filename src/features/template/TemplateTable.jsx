@@ -257,7 +257,7 @@ export default function TemplateTable() {
   return (
     <React.Fragment>
       <Grid container className={classes.root} spacing={1}>
-        {/* //* Header Bar */}
+        {/* //& Header Bar */}
         <Grid container className={classes.headingContainer} spacing={2}>
           <Grid item xl={4} >
             <Paper className={classes.titlePaper}>
@@ -312,7 +312,7 @@ export default function TemplateTable() {
           </Grid>
         </Grid>
 
-        {/* //* Card Grid */}
+        {/* //& Card Grid */}
         <Grid container className={classes.cardContainer} spacing={2}>
           <Scrollbars style={{ height: "80vh" }}>
             <Grid container spacing={2}>
@@ -362,7 +362,8 @@ export default function TemplateTable() {
                         </Typography>
                       </CardContent>
                       <CardActions>
-                        {/* Edit */}
+                        
+                        {/* //& Edit */}
                         <IconButton
                           aria-label="edit template"
                           onClick={() => {
@@ -372,24 +373,8 @@ export default function TemplateTable() {
                         >
                           <EditOutlinedIcon />
                         </IconButton>
-                        {/* <IconButton
-                      aria-label="delete template"
-                      onClick={() => {
-                        setConfirmDialog({
-                          isOpen: true,
-                          title:
-                            "Are you sure you want to delete this Template and all of its Detail?",
-                          subTitle: "You can't undo this action.",
-                          onConfirm: () => {
-                            onDelete(item.id);
-                          },
-                        });
-                      }}
-                      style={{ color: "red" }}
-                    >
-                      <DeleteIcon />
-                    </IconButton> */}
-                        {/* Print */}
+
+                        {/* //& Print */}
                         <IconButton
                           aria-label="print template"
                           onClick={() => {
@@ -399,7 +384,8 @@ export default function TemplateTable() {
                         >
                           <PrintIcon />
                         </IconButton>
-                        {/* MoreVertical */}
+
+                        {/* //& MoreVertical */}
                         <IconButton
                           aria-controls={open ? 'basic-menu' : undefined}
                           aria-haspopup="true"
@@ -428,8 +414,7 @@ export default function TemplateTable() {
         setConfirmDialog={setConfirmDialog}
       />
       {/* PDF Viewer */}
-      {
-        popup && (
+      {popup && (
           <NewWindow
             name="PDF Viewer"
             title="PDF Viewer"
@@ -440,8 +425,8 @@ export default function TemplateTable() {
               <UserStoryTemplate id={currentRecordId} />
             </PDFViewer>,
           </NewWindow>
-        )
-      }
+        )}
+
       {/* Vertical Menu  */}
       <Menu
         id="basic-menu"
